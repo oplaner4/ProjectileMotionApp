@@ -69,6 +69,10 @@ namespace ProjectileMotionSource.Point
                 prevComputation.Point.IsFarthest = true;
                 WasFarthest = true;
             }
+            else if (Y < prevComputation.Point.Y && Y.Val == 0)
+            {
+                IsFarthest = true;
+            }
         }
 
         public ProjectileMotionPoint(ProjectileMotion motion, Time t)
