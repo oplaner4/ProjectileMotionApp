@@ -1,0 +1,17 @@
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\bin\Debug\Utilities.dll.config
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\bin\Debug\Utilities.dll
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\bin\Debug\Utilities.pdb
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\bin\Debug\Newtonsoft.Json.dll
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\bin\Debug\Newtonsoft.Json.xml
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\obj\Debug\Utilities.csproj.CoreCompileInputs.cache
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\obj\Debug\Utilities.csproj.CopyComplete
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\obj\Debug\Utilities.dll
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\obj\Debug\Utilities.pdb
+C:\Users\oplan\source\repos\ConsoleApp\Utilities\obj\Debug\Utilities.csprojAssemblyReference.cache
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\bin\Debug\Utilities.dll.config
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\bin\Debug\Utilities.dll
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\bin\Debug\Utilities.pdb
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\obj\Debug\Utilities.csproj.CoreCompileInputs.cache
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\obj\Debug\Utilities.dll
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\obj\Debug\Utilities.pdb
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\obj\Debug\Utilities.csprojAssemblyReference.cache

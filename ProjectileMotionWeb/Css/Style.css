@@ -1,0 +1,96 @@
+﻿html {
+    height:100%;
+}
+
+
+body {
+    position: relative;
+    min-height: 100%;
+}
+
+
+footer {
+    position:absolute;
+    width:100%;
+    bottom:0;
+}
+
+
+
+.dropdown-item {
+    text-align:center;
+}
+
+
+
+body * {
+    margin: auto;
+}
+
+body .modal-dialog * {
+    margin:initial;
+}
+
+body p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+
+.form-control:focus {
+    border-color: #17a2b8;
+    outline: 0;
+    box-shadow: 0 0 0 0.1rem rgba(23, 162, 184, 0.83);
+}
+
+
+.copy-to-clipboard.copy-to-clipboard-absolute {
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:.32rem;
+    margin:auto;
+    display:flex;
+    align-items:center;
+}
+
+.alert-success.alert-success-message.fixed-bottom {
+    display:none;
+}
+
+
+.formQuantityGroupCollapse.collapsing {
+    transition:none;
+}
+
+
+.formQuantityGroupCollapseGroup.formQuantityGroupCollapseGroup-hidden {
+    display: none;
+}
+
+.pretty {
+    margin-right: 0;
+}
+
+
+@media (min-width: 576px) {
+}
+
+
+@media (min-width: 768px) {
+    .dropdown-item {
+        text-align: left;
+    }
+
+    body * {
+        margin: initial;
+    }
+}
+
+
+@media (min-width: 992px) {
+}
+
+
+@media (min-width: 1200px) {
+}

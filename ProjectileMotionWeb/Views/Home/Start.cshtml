@@ -1,0 +1,104 @@
+﻿@using ProjectileMotionData;
+
+<h5 class="mb-3">About application</h5>
+
+<div class="row flex-lg-row-reverse align-items-center">
+    <div class="col-12 col-lg-3">
+        @if (Model.PagePreviouslyVisited)
+        {
+            <div class="text-center text-lg-right mb-3">
+                <a class="btn btn-secondary btn-lg mb-2" title="Choose neglection" href="@Url.Action("Index", "Choose")">Skip <i class="fa fa-arrow-right"></i></a>
+            </div>
+        }
+    </div>
+    <div class="col-12 col-lg-9">
+        <div class="carousel slide carousel-fade carousel-toggle-carousel-fade" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="img-fluid" src="~/Assets/Images/ExampleCharts/exampleChartTooltip.png" />
+                </div>
+                <div class="carousel-item">
+                    <img class="img-fluid" src="~/Assets/Images/ExampleCharts/exampleChartWithoutRezistance.png" />
+                </div>
+                <div class="carousel-item">
+                    <img class="img-fluid" src="~/Assets/Images/ExampleCharts/exampleChartWithRezistance.png" />
+                </div>
+                <div class="carousel-item">
+                    <img class="img-fluid" src="~/Assets/Images/ExampleCharts/exampleChartBoth.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mb-4">
+    <div class="col-lg-6 mb-3">
+        <h6 class="mb-2"><i class="fa fa-calculator"></i> Computes:</h6>
+        <div class="row no-gutters">
+            <div class="col-lg-8 col-md-9">
+                <ul class="list-group ml-md-1">
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Trajectory</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Coordinates</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Duration</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Length</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An arc length</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An area under arc</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Max distance from the beginning</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Max height</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> The time and coordinates of the highest point</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> The time and coordinates of the farthest point</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 mb-3">
+        <h6 class="mb-2"><i class="fa fa-globe"></i> Supports:</h6>
+
+        <div class="row no-gutters mb-3">
+            <div class="col-lg-8 col-md-9">
+                <ul class="list-group ml-md-1">
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Motions neglecting or including rezistance</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> A lot of units for an international use</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Easy to recalculate value on unit change</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Displaying both trajectories in the one chart</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> many predefined values of gravitation acceleration, density and drag coefficient</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Real animation of motion</li>
+                </ul>
+            </div>
+        </div>
+
+        <h6 class="mb-2"><i class="fa fa-file-export"></i> Exports:</h6>
+
+        <div class="row no-gutters">
+            <div class="col-lg-8 col-md-9">
+                <ul class="list-group ml-md-1">
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Info to .txt file</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Info to .pdf file</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Data to .csv file</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Chart to .png file</li>
+                    <li class="list-group-item"><i class="fa fa-check text-secondary"></i> Chart to .pdf file</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-9 mb-3 mx-lg-auto">
+        <h6 class="mb-2"><i class="fa fa-cogs"></i> Many possible assignments for motions neglecting rezistance:</h6>
+        <ul class="list-group ml-md-1">
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An initial height by duration</li>
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An elevation angle by duration</li>
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An initial velocity by duration</li>
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An initial height by length</li>
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An elevation angle by length</li>
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An initial velocity by length</li>
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An initial height by max height</li>
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An elevation angle by max height</li>
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An initial velocity by max height</li>
+            <li class="list-group-item"><i class="fa fa-check text-secondary"></i> An elevation angle to get max range</li>
+        </ul>
+    </div>
+</div>
+
+<div class="text-center">
+    <a class="btn btn-success btn-lg" title="Choose neglection" href="@Url.Action("Index", "Choose")">Start <i class="fa fa-arrow-right"></i></a>
+</div>

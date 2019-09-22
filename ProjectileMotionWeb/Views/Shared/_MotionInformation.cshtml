@@ -1,0 +1,24 @@
+﻿@using ProjectileMotionWeb.Models;
+@model _MotionInformationModel
+
+<h5 class="mb-4">Information</h5>
+<div class="ml-md-2 mb-3">
+    @{
+        int i = 0;
+        foreach (KeyValuePair<string, string> info in Model.Information)
+        {
+            <div class="form-group">
+                <label class="d-inline-block" for="info@(i)">@info.Key:</label>
+                <div class="position-relative d-md-inline-block">
+                    <input id="info@(i)" readonly name="info@(i)" class="form-control pr-4" value="@info.Value" />
+                    <a href="#" class="copy-to-clipboard copy-to-clipboard-absolute" title="copy to clipboard" data-copy-from="#info@(i)"><i class="fa fa-copy text-black-50"></i></a>
+                </div>
+            </div>
+            i++;
+        }
+    }
+
+    <div class="text-center">
+        <a class="btn btn-info" href="@Url.Action("Information", "SavingAndExport")"><i class="fa fa-file-export"></i> Export data</a>
+    </div>
+</div>

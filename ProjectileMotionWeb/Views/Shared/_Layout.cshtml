@@ -1,0 +1,93 @@
+﻿@using ProjectileMotionWeb.Models;
+@using ProjectileMotionData;
+@model BaseModel
+@{
+    SessionStore session = new SessionStore(Context);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Layout.Title - ProjectileMotion tools & vizualization</title>
+    <link href="~/Css/External/bootstrapRoot.css" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/bundles/Styles")
+    @Scripts.Render("~/bundles/Scripts")
+</head>
+<body class="text-center text-md-left">
+    <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 justify-content-center justify-content-md-between">
+        <a class="navbar-brand" href="@Url.Action("Index", "Home")">Projectile motion tools & vizualization</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item @(Model.Layout.ActiveMenuItem == LayoutModel.ActiveNavItem.Home ? "active" : string.Empty)">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item @(Model.Layout.ActiveMenuItem == LayoutModel.ActiveNavItem.Choose ? "active" : string.Empty)">
+                    <a class="nav-link" href="@Url.Action("Index", "Choose")"><i class="fa fa-balance-scale"></i> Choose</a>
+                </li>
+                <li class="nav-item @(Model.Layout.ActiveMenuItem == LayoutModel.ActiveNavItem.Set ? "active" : string.Empty)">
+                    <a class="nav-link" href="@Url.Action("Properties", "Set", new { SetwithRezistance = false })"><i class="fa fa-sliders-h"></i> Set</a>
+                </li>
+            </ul>
+            @*<form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>*@
+
+            <ul class="navbar-nav">
+                @if (session.IsSavedAnyMotion())
+                {
+                    <li class="nav-item dropdown @(Model.Layout.ActiveMenuItem == LayoutModel.ActiveNavItem.MotionDropdown ? "active" : string.Empty)">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarMotionDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-tools"></i> @(session.IsSavedProjectileMotion() ? "Motion" : "Motion with rezistance")
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarMotionDropdown">
+                            <a class="dropdown-item" href="@Url.Action(session.IsSavedProjectileMotion() ? "Motion" : "MotionWithRezistance", "Display")"><i class="fa fa-eye"></i> Display</a>
+                            <a class="dropdown-item" href="@Url.Action("Properties", "Set", new { setWithRezistance = false })"><i class="fa fa-edit"></i> Edit</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Index", "SavingAndExport")"><i class="fa fa-save"></i> Saving & Export</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container@(Model.Layout.FluidContainer ? "-fluid" : string.Empty) body-content">
+        <h3 class="mb-5">@Model.Layout.Title</h3>
+        @RenderBody()
+        <hr class="mt-4" />
+    </div>
+
+    <footer class="text-center py-3 px-1">
+        <p class="m-0">&copy; @DateTime.Now.Year - <a href="mailto:oplaner4@gmail.com">oplaner4@gmail.com</a></p>
+    </footer>
+
+
+    <div class="modal fade modal-confirm" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm, please...</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger btn-ok">Ok</a>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed-bottom alert-success-message alert alert-success alert-dismissible fade show m-0 text-center" role="alert"></div>
+
+
+    @RenderSection("pageSpecialScript", required: false)
+</body>
+</html>
