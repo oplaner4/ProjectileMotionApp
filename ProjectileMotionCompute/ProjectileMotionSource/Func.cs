@@ -346,7 +346,6 @@ namespace ProjectileMotionSource.Func
         private void SetDefaults()
         {
             RoundDigits = 6;
-            ChartWidth = 400;
             PathToFiles = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             PointsForFunctionCourse = 150;
             TxtInfoFileName = GetDefaultFileName("txt");
@@ -384,27 +383,6 @@ namespace ProjectileMotionSource.Func
                 _RoundDigits = value;
             }
         }
-
-
-        private int _ChartWidth { get; set; }
-
-
-        /// <summary>
-        /// The width of the chart (in pixels).
-        /// </summary>
-        public int ChartWidth
-        {
-            get { return _ChartWidth; }
-            set
-            {
-                if (value < 0)
-                {
-                    throw new Exception("The width of the chart must be larger than zero");
-                }
-                _ChartWidth = value;
-            }
-        }
-
 
         private int _PointsForFunctionCourse { get; set; }
 
@@ -839,25 +817,21 @@ namespace ProjectileMotionSource.Func
             ProjectileMotionPoint highestPoint = GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Highest);
             ProjectileMotionPoint farthestPoint = GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest);
 
-            bool removeNext = false;
-
             for (int i = 0; i < Settings.PointsForFunctionCourse - 1; i++)
             {
                 Time now = new Time(finalPoint.T.Val / (Settings.PointsForFunctionCourse - 1) * i, UnitTime.Basic);
                 Time next = new Time(finalPoint.T.Val / (Settings.PointsForFunctionCourse - 1) * (i + 1), UnitTime.Basic);
 
+                ret.Add(GetPoint(now));
+
                 if (next >= highestPoint.T && now <= highestPoint.T)
                 {
                     ret.Add(highestPoint);
-                    removeNext = true;
                 }
                 else if (next >= farthestPoint.T && now <= farthestPoint.T)
                 {
                     ret.Add(farthestPoint);
-                    removeNext = true;
                 }
-                else if (!removeNext) ret.Add(GetPoint(now));
-                else removeNext = false;
             }
 
             if (ret.Last().Y.Val > 0) ret.Add(finalPoint);

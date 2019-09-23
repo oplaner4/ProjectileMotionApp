@@ -64,14 +64,17 @@ namespace ProjectileMotionSource.Point
                 WasHighest = true;
             }
 
-            if (GetDistance(UnitLength.Basic) < prevComputation.Point.GetDistance(UnitLength.Basic) && !prevComputation.Point.WasFarthest)
+            if (!prevComputation.Point.WasFarthest)
             {
-                prevComputation.Point.IsFarthest = true;
-                WasFarthest = true;
-            }
-            else if (Y < prevComputation.Point.Y && Y.Val == 0)
-            {
-                IsFarthest = true;
+                if (GetDistance(UnitLength.Basic) < prevComputation.Point.GetDistance(UnitLength.Basic))
+                {
+                    prevComputation.Point.IsFarthest = true;
+                    WasFarthest = true;
+                }
+                else if (Y.Val == 0 && X.Val > 0)
+                {
+                    IsFarthest = true;
+                }
             }
         }
 
