@@ -10,7 +10,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Model.Layout.Title - ProjectileMotion tools & vizualization</title>
-    <link href="~/Css/External/bootstrapRoot.css" rel="stylesheet" type="text/css" />
     @Styles.Render("~/bundles/Styles")
     @Scripts.Render("~/bundles/Scripts")
 </head>
@@ -22,31 +21,26 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item @(Model.Layout.ActiveMenuItem == LayoutModel.ActiveNavItem.Home ? "active" : string.Empty)">
+                <li class="nav-item @(Model.Layout.Menu.ActiveMenuItem == LayoutMenuModel.ActiveNavItem.Home ? "active" : string.Empty)">
                     <a class="nav-link" href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Home</a>
                 </li>
-                <li class="nav-item @(Model.Layout.ActiveMenuItem == LayoutModel.ActiveNavItem.Choose ? "active" : string.Empty)">
+                <li class="nav-item @(Model.Layout.Menu.ActiveMenuItem == LayoutMenuModel.ActiveNavItem.Choose ? "active" : string.Empty)">
                     <a class="nav-link" href="@Url.Action("Index", "Choose")"><i class="fa fa-balance-scale"></i> Choose</a>
                 </li>
-                <li class="nav-item @(Model.Layout.ActiveMenuItem == LayoutModel.ActiveNavItem.Set ? "active" : string.Empty)">
-                    <a class="nav-link" href="@Url.Action("Properties", "Set", new { SetwithRezistance = false })"><i class="fa fa-sliders-h"></i> Set</a>
+                <li class="nav-item @(Model.Layout.Menu.ActiveMenuItem == LayoutMenuModel.ActiveNavItem.Set ? "active" : string.Empty)">
+                    <a class="nav-link" href="@Url.Action("Properties", "Set", new { setwithRezistance = Model.Layout.Menu.SetWithRezistance })"><i class="fa fa-sliders-h"></i> Set</a>
                 </li>
             </ul>
-            @*<form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>*@
-
             <ul class="navbar-nav">
                 @if (session.IsSavedAnyMotion())
                 {
-                    <li class="nav-item dropdown @(Model.Layout.ActiveMenuItem == LayoutModel.ActiveNavItem.MotionDropdown ? "active" : string.Empty)">
+                    <li class="nav-item dropdown @(Model.Layout.Menu.ActiveMenuItem == LayoutMenuModel.ActiveNavItem.MotionDropdown ? "active" : string.Empty)">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarMotionDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-tools"></i> @(session.IsSavedProjectileMotion() ? "Motion" : "Motion with rezistance")
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarMotionDropdown">
                             <a class="dropdown-item" href="@Url.Action(session.IsSavedProjectileMotion() ? "Motion" : "MotionWithRezistance", "Display")"><i class="fa fa-eye"></i> Display</a>
-                            <a class="dropdown-item" href="@Url.Action("Properties", "Set", new { setWithRezistance = false })"><i class="fa fa-edit"></i> Edit</a>
+                            <a class="dropdown-item" href="@Url.Action("Properties", "Set", new { setwithRezistance = Model.Layout.Menu.SetWithRezistance })"><i class="fa fa-edit"></i> Edit</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="@Url.Action("Index", "SavingAndExport")"><i class="fa fa-save"></i> Saving & Export</a>
                         </div>

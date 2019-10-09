@@ -1,5 +1,4 @@
 ﻿@using ProjectileMotionWeb.Models;
-@using ProjectileMotionWeb.Controllers;
 @model DisplayMotionWithRezistanceModel
 
 
@@ -8,14 +7,11 @@
         @Html.Partial("_MotionInformation", new _MotionInformationModel(Model.Motion.Saving.GetDataToFiles()))
     </div>
     <div class="@(Model.ShowLargerMotionChart ? "col-12" : "col-xl-7")">
-        @Html.Partial("_MotionChart", new _MotionChartModel(
-            Model.Motion,
-            Model.ShowMotionWithoutRezistanceCourseToo
-            )
+        @Html.Partial("_MotionChart", new _MotionChartModel(Model.Motion)
         )
 
         <div class="text-center">
-            @Html.Partial("_MotionChartTools", new _MotionChartToolsModel(Model.ShowLargerMotionChart, Model.ShowMotionWithoutRezistanceCourseToo, true))
+            @Html.Partial("_MotionChartTools", Model)
         </div>
     </div>
 </div>

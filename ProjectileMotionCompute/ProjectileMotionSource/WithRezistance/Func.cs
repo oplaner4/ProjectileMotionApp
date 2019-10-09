@@ -1,13 +1,12 @@
-﻿using System;
-using Utilities.Quantities;
-using Utilities.Units;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ProjectileMotionSource.Exceptions;
 using ProjectileMotionSource.Func;
-using ProjectileMotionSource.Exceptions;
-using ProjectileMotionSource.Saving;
 using ProjectileMotionSource.Point;
 using ProjectileMotionSource.WithRezistance.PointsComputation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Utilities.Quantities;
+using Utilities.Units;
 
 namespace ProjectileMotionSource.WithRezistance.Func
 {
@@ -32,6 +31,16 @@ namespace ProjectileMotionSource.WithRezistance.Func
 
     public class ProjectileMotionWithRezistanceSettings : ProjectileMotionSettings
     {
+        public ProjectileMotionWithRezistanceSettings(ProjectileMotionWithRezistanceQuantities quantities) : base(quantities)
+        {
+            Quantities = quantities;
+
+            TxtInfoFileName = GetDefaultFileName("txt");
+            CsvDataFileName = GetDefaultFileName("csv");
+            PdfInfoFileName = GetDefaultFileName("pdf");
+            HexColorOfTrajectory = "#007bff";
+        }
+
         private new string GetDefaultFileName(string extension)
         {
             return string.Format(
@@ -58,17 +67,11 @@ namespace ProjectileMotionSource.WithRezistance.Func
         /// </summary>
         public override string GetChartFileNameForExport(string extension)
         {
-            return GetDefaultFileName(extension);
+            return "Chart-" + GetDefaultFileName(extension);
         }
 
 
-        public ProjectileMotionWithRezistanceSettings(ProjectileMotionWithRezistanceQuantities quantities) : base(quantities)
-        {
-            Quantities = quantities;
-
-            TxtInfoFileName = GetDefaultFileName("txt");
-            CsvDataFileName = GetDefaultFileName("csv");
-        }
+        public bool ShowMotionWithoutRezistanceTrajectoryToo { get; set; }
 
         public new ProjectileMotionWithRezistanceQuantities Quantities { get; private set; }
     }
@@ -78,29 +81,46 @@ namespace ProjectileMotionSource.WithRezistance.Func
         public ProjectileMotionWithRezistance(ProjectileMotionWithRezistanceSettings settings) : base(settings)
         {
             Settings = settings;
-            Saving = new ProjectileMotionFilesSaving(this);
-            _ListFunctionCourseAllPoints = new List<ProjectileMotionPoint>();
+            _ListAllPointsOfTrajectory = new List<ProjectileMotionPoint>();
         }
 
         public override Length GetLength()
         {
-            return GetLastPoint().Round().X.Convert(Settings.Quantities.Units.Length);
+            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Final).Round().X;
         }
 
 
         public override Time GetDur()
         {
-            return GetLastPoint().Round().T.Convert(Settings.Quantities.Units.Time);
+            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Final).Round().T;
         }
 
-        public override Time GetTimeHighest()
+        public override Length GetX(double t)
         {
-            return GetHighestPoint().Round().T.Convert(Settings.Quantities.Units.Time);
+            return GetPoint(new Time(t, Settings.Quantities.Units.Time)).Round().X;
         }
 
-        public override double[] GetCoordsHighest()
+
+        public override Length GetY(double t)
         {
-            return GetHighestPoint().Round().GetCoords(Settings.Quantities.Units.Length);
+            return GetPoint(new Time(t, Settings.Quantities.Units.Time)).Round().Y;
+        }
+
+
+        public override Length GetMaxDistance()
+        {
+            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest).GetDistance(Settings.Quantities.Units.Length).RoundVal(Settings.RoundDigits);
+        }
+
+
+        public override Length GetMaxHeight()
+        {
+            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Highest).Round().Y;
+        }
+
+        public override Time GetTimeFallen()
+        {
+            return GetDur();
         }
 
         public override double[] GetCoords(double t)
@@ -108,21 +128,31 @@ namespace ProjectileMotionSource.WithRezistance.Func
             return GetPoint(new Time(t, Settings.Quantities.Units.Time)).Round().GetCoords(Settings.Quantities.Units.Length);
         }
 
-        public override Length GetX(double t)
-        {
-            return GetPoint(new Time(t, Settings.Quantities.Units.Time)).Round().X.Convert(Settings.Quantities.Units.Length);
-        }
-
-
-        public override Length GetY(double t)
-        {
-            return GetPoint(new Time(t, Settings.Quantities.Units.Time)).Round().Y.Convert(Settings.Quantities.Units.Length);
-        }
-
-
         public override double[] GetCoordsFallen()
         {
-            return GetLastPoint().Round().GetCoords(Settings.Quantities.Units.Length);
+            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Final).Round().GetCoords(Settings.Quantities.Units.Length);
+        }
+
+        public override Time GetTimeHighest()
+        {
+            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Highest).Round().T;
+        }
+
+        public override double[] GetCoordsHighest()
+        {
+            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Highest).Round().GetCoords(Settings.Quantities.Units.Length);
+        }
+
+
+        public override Time GetTimeFarthest()
+        {
+            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest).Round().T;
+        }
+
+
+        public override double[] GetCoordsFarthest()
+        {
+            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest).Round().GetCoords(Settings.Quantities.Units.Length);
         }
 
 
@@ -134,13 +164,13 @@ namespace ProjectileMotionSource.WithRezistance.Func
 
         public Velocity GetVelocityX(double t)
         {
-            return GetPoint(new Time(t, Settings.Quantities.Units.Time)).Round().Vx.Convert(Settings.Quantities.Units.Velocity);
+            return GetPoint(new Time(t, Settings.Quantities.Units.Time)).Round().Vx;
         }
 
 
         public override Velocity GetVelocityY(double t)
         {
-            return GetPoint(new Time(t, Settings.Quantities.Units.Time)).Round().Vy.Convert(Settings.Quantities.Units.Velocity);
+            return GetPoint(new Time(t, Settings.Quantities.Units.Time)).Round().Vy;
         }
 
 
@@ -161,35 +191,6 @@ namespace ProjectileMotionSource.WithRezistance.Func
             return GetPoint(new Time(t1, Settings.Quantities.Units.Time)).GetDistanceFromPoint(GetPoint(new Time(t2, Settings.Quantities.Units.Time)), Settings.Quantities.Units.Length).RoundVal(Settings.RoundDigits);
         }
 
-        public override Time GetTimeFallen()
-        {
-            return GetDur();
-        }
-
-
-        public override Length GetMaxHeight()
-        {
-            return GetHighestPoint().Round().Y.Convert(Settings.Quantities.Units.Length);
-        }
-
-
-        public override Time GetTimeFarthest()
-        {
-            return GetFarthestPoint().Round().T.Convert(Settings.Quantities.Units.Time);
-        }
-
-
-        public override Length GetMaxDistance()
-        {
-            return GetFarthestPoint().GetDistance(Settings.Quantities.Units.Length).RoundVal(Settings.RoundDigits);
-        }
-
-
-        public override double[] GetCoordsFarthest()
-        {
-            return GetFarthestPoint().Round().GetCoords(Settings.Quantities.Units.Length);
-        }
-
 
         public override Area GetAreaUnderArc()
         {
@@ -205,7 +206,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
             {
                 ProjectileMotionPoint prevPoint = ProjectileMotionWithRezistanceComputation.Start(this).Point;
                 double a = 0;
-                foreach (ProjectileMotionPoint point in GetListFunctionCourseAllPoints())
+                foreach (ProjectileMotionPoint point in GetListAllPointsOfTrajectory())
                 {
                     a += (point.Y.GetBasicVal() + prevPoint.Y.GetBasicVal()) * (point.X.GetBasicVal() - prevPoint.X.GetBasicVal()) / 2.0;
                     prevPoint = point;
@@ -232,7 +233,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
             {
                 ProjectileMotionPoint prevPoint = ProjectileMotionWithRezistanceComputation.Start(this).Point;
                 double l = 0;
-                foreach (ProjectileMotionPoint point in GetListFunctionCourseAllPoints())
+                foreach (ProjectileMotionPoint point in GetListAllPointsOfTrajectory())
                 {
                     l += point.GetDistanceFromPoint(prevPoint, UnitLength.Basic).Val;
                     prevPoint = point;
@@ -244,101 +245,67 @@ namespace ProjectileMotionSource.WithRezistance.Func
             return _ArcLength;
         }
 
-
-        private ProjectileMotionPoint _HighestPoint { get; set; }
-
-        private ProjectileMotionPoint GetHighestPoint()
-        {
-            if (_HighestPoint == null)
-            {
-                _HighestPoint = ProjectileMotionWithRezistanceComputation.Start(this).Point;
-                Length y = _HighestPoint.Y;
-                foreach (ProjectileMotionPoint point in GetListFunctionCourseAllPoints())
-                {
-                    if (point.Y >= y) {
-                        y = point.Y;
-                        _HighestPoint = point;
-                    }
-                    else return _HighestPoint;
-                }
-            }
-
-            return _HighestPoint;
-        }
-
-
-        private ProjectileMotionPoint _FarthestPoint { get; set; }
-
-        private ProjectileMotionPoint GetFarthestPoint()
-        {
-            if (_FarthestPoint == null)
-            {
-                _FarthestPoint = ProjectileMotionWithRezistanceComputation.Start(this).Point;
-                double d = _FarthestPoint.GetDistance(UnitLength.Basic).Val;
-                foreach (ProjectileMotionPoint point in GetListFunctionCourseAllPoints())
-                {
-                    if (point.GetDistance(UnitLength.Basic).Val >= d) {
-                        d = point.GetDistance(UnitLength.Basic).Val;
-                        _FarthestPoint = point;
-                    }
-                    else return _FarthestPoint;
-                }
-            }
-
-            return _FarthestPoint;
-        }
-
-        private ProjectileMotionPoint GetLastPoint()
-        {
-            return GetListFunctionCourseAllPoints().Last();
-        }
-
         public override ProjectileMotionPoint GetPoint(Time t)
         {
             if (t >= GetDur())
             {
-                return GetLastPoint();
+                return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Final);
             }
-            return GetListFunctionCourseAllPoints().Where(x => t.GetBasicVal() - x.T.GetRoundedVal(Settings.RoundDigits) <= ProjectileMotionWithRezistanceComputation.Dt).First();
+            return GetListAllPointsOfTrajectory().Where(x => t.GetBasicVal() - x.T.GetRoundedVal(Settings.RoundDigits) <= ProjectileMotionWithRezistanceComputation.Dt).First();
 
         }
 
+
+        
         public override ProjectileMotionPoint GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes type)
         {
-            throw new OnlySuperClassMethodException("This method cannot be used for motions with rezistance");
+            switch (type)
+            {
+                case ProjectileMotionPoint.ProjectileMotionPointTypes.Highest:
+                    return GetListAllPointsOfTrajectory().Where(p => p.IsHighest).First();
+                case ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest:
+                    return GetListAllPointsOfTrajectory().Where(p => p.IsFarthest).First();
+                case ProjectileMotionPoint.ProjectileMotionPointTypes.Initial:
+                    return GetListAllPointsOfTrajectory().First();
+                case ProjectileMotionPoint.ProjectileMotionPointTypes.Final:
+                    return GetListAllPointsOfTrajectory().Last();
+            }
+
+            return null;
         }
 
-        private List<ProjectileMotionPoint> _ListFunctionCourseAllPoints { get; set; }
 
-        private List<ProjectileMotionPoint> GetListFunctionCourseAllPoints()
+        private List<ProjectileMotionPoint> _ListAllPointsOfTrajectory { get; set; }
+
+        private List<ProjectileMotionPoint> GetListAllPointsOfTrajectory()
         {
-            if (!_ListFunctionCourseAllPoints.Any())
+            if (!_ListAllPointsOfTrajectory.Any())
             {
                 ProjectileMotionWithRezistanceComputation computation = ProjectileMotionWithRezistanceComputation.Start(this);
-                _ListFunctionCourseAllPoints.Add(computation.Point);
+                _ListAllPointsOfTrajectory.Add(computation.Point);
 
                 while (computation.IsNextReal)
                 {
                     ProjectileMotionWithRezistanceComputation nextComputation = computation.Continue();
-                    _ListFunctionCourseAllPoints.Add(nextComputation.Point);
+                    _ListAllPointsOfTrajectory.Add(nextComputation.Point);
                     computation = nextComputation;
                 }
             }
 
-            return _ListFunctionCourseAllPoints;
+            return _ListAllPointsOfTrajectory;
         }
 
 
-        public override List<ProjectileMotionPoint> GetListFunctionCourse()
+        public override List<ProjectileMotionPoint> GetListPointsOfTrajectory()
         {
-            return GetListFunctionCourseAllPoints()
-                .Where((p, i) => i % Math.Round((double)GetListFunctionCourseAllPoints().Count / Settings.PointsForFunctionCourse) == 0 || i == GetListFunctionCourseAllPoints().Count - 1 || p.IsFarthest || p.IsHighest)
+            return GetListAllPointsOfTrajectory()
+                .Where((p, i) => i % Math.Round((double)GetListAllPointsOfTrajectory().Count / Settings.PointsForTrajectory) == 0 || i == GetListAllPointsOfTrajectory().Count - 1 || p.IsFarthest || p.IsHighest)
                 .ToList();
         }
 
-        public override double[][] GetFunctionCourse()
+        public override double[][] GetTrajectory()
         {
-            return GetListFunctionCourse().Select(p => p.Round().GetCoords(Settings.Quantities.Units.Length)).ToArray();
+            return GetListPointsOfTrajectory().Select(p => p.Round().GetCoords(Settings.Quantities.Units.Length)).ToArray();
         }
 
 
@@ -360,7 +327,14 @@ namespace ProjectileMotionSource.WithRezistance.Func
 
         public ProjectileMotion Degrade()
         {
-            return new ProjectileMotion(Settings as ProjectileMotionSettings);
+            ProjectileMotion DegradedMotion = new ProjectileMotion(new ProjectileMotionSettings(Settings.Quantities)
+            {
+                RoundDigits = Settings.RoundDigits
+            });
+
+            DegradedMotion.Settings.PointsForTrajectory = (int)(Settings.PointsForTrajectory * DegradedMotion.GetLength().Val / GetLength().Val);
+
+            return DegradedMotion;
         }
     }
 }

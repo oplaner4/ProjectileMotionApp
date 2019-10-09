@@ -29,7 +29,10 @@ namespace ProjectileMotionWeb.Controllers
                 {
                     Layout = new LayoutModel("Saving and export")
                     {
-                        ActiveMenuItem = LayoutModel.ActiveNavItem.MotionDropdown
+                       Menu = new LayoutMenuModel ()
+                       {
+                           ActiveMenuItem = LayoutMenuModel.ActiveNavItem.MotionDropdown
+                       }
                     }
                 }
             );

@@ -43,13 +43,8 @@
             <h5 class="mb-3">Neglect rezistance</h5>
             <div class=" ml-md-2">
                 <div class="form-group d-flex justify-content-center justify-content-md-start">
-                    <div class="m-0">
-                        <div class="pretty p-switch p-fill">
-                            @Html.CheckBoxFor(m => m.Quantities.WithRezistance, Model.Quantities.WithRezistance ? new _EditorForHtmlAttributesModel_Checked() : null)
-                            <div class="state"><label></label></div>
-                        </div>
-                    </div>
-                    <div class="pl-1 text-left m-0">
+                    <div class="alternative-checkbox alternative-checkbox-switch-toggler">
+                        @Html.CheckBoxFor(m => m.Quantities.WithRezistance, Model.Quantities.WithRezistance ? new _EditorForHtmlAttributesModel_Checked() : null)
                         @Html.LabelFor(m => m.Quantities.WithRezistance)
                     </div>
                 </div>
@@ -59,14 +54,9 @@
             <h5 class="mb-3">Recalculate values on unit change</h5>
             <div class="ml-md-2">
                 <div class="form-group d-flex justify-content-center justify-content-md-start">
-                    <div class="m-0">
-                        <div class="pretty p-switch p-fill">
-                            <input type="checkbox" id="recalculateValuesOnUnitChange" name="recalculateValuesOnUnitChange">
-                            <div class="state"><label></label></div>
-                        </div>
-                    </div>
-                    <div class="pl-1 text-left m-0">
-                        <label for="recalculateValuesOnUnitChange">Recalculate</label>
+                    <div class="alternative-checkbox alternative-checkbox-switch-toggler">
+                        @Html.CheckBoxFor(m => m.RecalculateOnUnitChange, Model.RecalculateOnUnitChange ? new _EditorForHtmlAttributesModel_Checked() : null)
+                        @Html.LabelFor(m => m.RecalculateOnUnitChange)
                     </div>
                 </div>
             </div>
@@ -376,22 +366,27 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.PointsForFunctionCourse)
-                @Html.EditorFor(m => m.PointsForFunctionCourse, Model.DefaultEditorForAdditionalData)
-                <small class="form-text text-danger">@Html.ValidationMessageFor(m => m.PointsForFunctionCourse)</small>
+                @Html.LabelFor(m => m.PointsForTrajectory)
+                @Html.EditorFor(m => m.PointsForTrajectory, Model.DefaultEditorForAdditionalData)
+                <small class="form-text text-danger">@Html.ValidationMessageFor(m => m.PointsForTrajectory)</small>
             </div>
+
+            <div class="form-group">
+
+                @Html.LabelFor(m => m.HexColorOfTrajectory)
+                <div class="color-picker">
+                    @Html.EditorFor(m => m.HexColorOfTrajectory, Model.DefaultEditorForAdditionalData)
+                </div>
+                <small class="form-text text-danger">@Html.ValidationMessageFor(m => m.HexColorOfTrajectory)</small>
+            </div>
+
         </div>
         <div class="col-12">
             <div class="WithRezistancecollapse collapse" aria-expanded="false">
                 <div class="form-group d-flex justify-content-center justify-content-md-start">
-                    <div class="m-0">
-                        <div class="pretty p-switch p-fill">
-                            @Html.CheckBoxFor(m => m.ShowMotionWithoutRezistanceCourseToo)
-                            <div class="state"><label></label></div>
-                        </div>
-                    </div>
-                    <div class="pl-1 text-left m-0">
-                        @Html.LabelFor(m => m.ShowMotionWithoutRezistanceCourseToo)
+                    <div class="alternative-checkbox alternative-checkbox-switch-toggler">
+                        @Html.CheckBoxFor(m => m.ShowMotionWithoutRezistanceTrajectoryToo)
+                        @Html.LabelFor(m => m.ShowMotionWithoutRezistanceTrajectoryToo)
                     </div>
                 </div>
             </div>
@@ -419,7 +414,7 @@
             }
 
             var formQuantityGroup = $('.form-quantity-group');
-            var recalculateValuesOnUnitChange = $('input[name="recalculateValuesOnUnitChange"]');
+            var recalculateValuesOnUnitChange = $('input[name="@Html.NameFor(m => m.RecalculateOnUnitChange)"]');
             const prevValData = 'val-prev';
 
             $('input', formQuantityGroup).on('change input', function () {

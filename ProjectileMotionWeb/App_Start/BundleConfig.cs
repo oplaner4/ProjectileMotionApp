@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace ProjectileMotionWeb
 {
@@ -15,13 +14,14 @@ namespace ProjectileMotionWeb
                         "~/fontawesome/js/all.js",
                          "~/Scripts/ChartjsDefiningVariables.js",
                         "~/Scripts/External/Chart.js",
+                        "~/Scripts/shadeHexColor.js",
+                        "~/Scripts/External/vanilla-picker.js",
                         "~/Scripts/Script.js"
                         )
             );
 
             bundles.Add(new StyleBundle("~/bundles/Styles").Include(
                     "~/Css/External/bootstrap.css",
-                    "~/Css/External/pretty-checkbox.min.css",
                     "~/Css/External/Chart.css",
                     "~/Css/Style.css"
                 )

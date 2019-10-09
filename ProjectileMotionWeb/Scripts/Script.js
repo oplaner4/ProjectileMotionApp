@@ -13,9 +13,7 @@
 
     window.initAndDisplayAlertSuccessMessage = function (strongText, successText) {
         alertSuccessMessage.html('<strong>' + strongText + '</strong> ' + successText).slideDown().delay(3500).slideUp();
-    }
-
-
+    };
 
 
     $(window).on('resize', function () {
@@ -41,7 +39,7 @@
         if (e.from === $('img', $this).length - 1) {
             $this.toggleClass('carousel-fade');
         }
-        });
+    });
 
     $('a.copy-to-clipboard').on('click', function (e) {
         e.preventDefault();
@@ -51,5 +49,21 @@
             window.initAndDisplayAlertSuccessMessage('Done!', 'Content has been successfully copied.');
         }
         return false;
+    });
+
+
+    $('.color-picker').each(function () {
+        var inp = $('input[type="text"]', this);
+
+        var picker = new Picker({
+            parent: this,
+            alpha: false,
+            color: inp.val(),
+            popup: 'bottom',
+            editorFormat: 'hex'
+        }).onDone = function (color) {
+            inp.val(color.hex.substring(0, 7)).css({ 'color': color.hex, 'border-color' : color.hex });
+        };
+        inp.css({ 'color': inp.val(), 'border-color': inp.val() });
     });
 });

@@ -21,16 +21,11 @@ namespace ProjectileMotionWeb.Controllers
 
 
         [HttpGet]
-        public ActionResult Properties(bool? setWithRezistance = null)
+        public ActionResult Properties(bool? setWithRezistance =  null)
         {
-            if (setWithRezistance == null)
-            {
-                return RedirectToAction(nameof(ChooseController.Neglection), "Choose");
-            }
-
             SetPropertiesModel viewModel = new SetPropertiesModel()
             {
-                Layout = new LayoutModel("Set properties") { ActiveMenuItem = LayoutModel.ActiveNavItem.Set },
+                Layout = new LayoutModel("Set properties"),
                 Quantities = new SetPropertiesQuantitiesModel()
                 {
                     InitialVelocity = 15.0,
@@ -41,15 +36,16 @@ namespace ProjectileMotionWeb.Controllers
                     DragCoefficient = DragCoefficient.GetDragCoefficientValue(DragCoefficient.DragCoefficients.Sphere),
                     Mass = 0.5,
                     Density = Density.GetDensityValue(Density.Densities.Air),
-                    WithRezistance = setWithRezistance.Value
+                    WithRezistance = setWithRezistance ?? false,
                 },
                 RoundDigits = 6,
-                PointsForFunctionCourse = 80
+                PointsForTrajectory = 80,
+                ShowMotionWithoutRezistanceTrajectoryToo = false
             };
 
+            viewModel.HexColorOfTrajectory = viewModel.Quantities.WithRezistance ? "#007bff" : "#6c757d";
 
             SessionStore session = GetSession();
-
 
             if (session.IsSavedProjectileMotionWithRezistance())
             {
@@ -66,7 +62,7 @@ namespace ProjectileMotionWeb.Controllers
                 viewModel.RoundDigits = savedMotion.Settings.RoundDigits;
                 viewModel.Quantities.WithRezistance = true;
 
-                viewModel.PointsForFunctionCourse = savedMotion.Settings.PointsForFunctionCourse;
+                viewModel.PointsForTrajectory = savedMotion.Settings.PointsForTrajectory;
 
                 viewModel.Quantities.InitialVelocityUnit = savedMotion.Settings.Quantities.V.Unit.Name;
                 viewModel.Quantities.InitialHeightUnit = savedMotion.Settings.Quantities.H.Unit.Name;
@@ -86,6 +82,8 @@ namespace ProjectileMotionWeb.Controllers
                 viewModel.TxtInfoFileName = savedMotion.Settings.TxtInfoFileName;
                 viewModel.CsvDataFileName = savedMotion.Settings.CsvDataFileName;
                 viewModel.PdfInfoFileName = savedMotion.Settings.PdfInfoFileName;
+                viewModel.HexColorOfTrajectory = savedMotion.Settings.HexColorOfTrajectory;
+                viewModel.ShowMotionWithoutRezistanceTrajectoryToo = savedMotion.Settings.ShowMotionWithoutRezistanceTrajectoryToo;
 
                 viewModel.Layout.Title = "Edit properties";
             }
@@ -102,7 +100,7 @@ namespace ProjectileMotionWeb.Controllers
 
                 viewModel.RoundDigits = savedMotion.Settings.RoundDigits;
 
-                viewModel.PointsForFunctionCourse = savedMotion.Settings.PointsForFunctionCourse;
+                viewModel.PointsForTrajectory = savedMotion.Settings.PointsForTrajectory;
 
                 viewModel.Quantities.InitialVelocityUnit = savedMotion.Settings.Quantities.V.Unit.Name;
                 viewModel.Quantities.InitialHeightUnit = savedMotion.Settings.Quantities.H.Unit.Name;
@@ -126,12 +124,20 @@ namespace ProjectileMotionWeb.Controllers
                 viewModel.TxtInfoFileName = savedMotion.Settings.TxtInfoFileName;
                 viewModel.CsvDataFileName = savedMotion.Settings.CsvDataFileName;
                 viewModel.PdfInfoFileName = savedMotion.Settings.PdfInfoFileName;
+                viewModel.HexColorOfTrajectory = savedMotion.Settings.HexColorOfTrajectory;
+                viewModel.ShowMotionWithoutRezistanceTrajectoryToo = false;
 
                 viewModel.Quantities.SelectedAssignmentType = savedMotion.Settings.Quantities.UsedAssignmentType;
 
                 viewModel.Layout.Title = "Edit properties";
             }
+            else if (setWithRezistance == null)
+            {
+                return RedirectToAction(nameof(ChooseController.Neglection), "Choose");
+            }
 
+            viewModel.Layout.Menu.SetWithRezistance = viewModel.Quantities.WithRezistance;
+            viewModel.Layout.Menu.ActiveMenuItem = LayoutMenuModel.ActiveNavItem.Set;
 
             return View(viewModel);
         }
@@ -173,14 +179,16 @@ namespace ProjectileMotionWeb.Controllers
                    )
                     {
                         RoundDigits = postModel.RoundDigits,
-                        PointsForFunctionCourse = postModel.PointsForFunctionCourse,
+                        PointsForTrajectory = postModel.PointsForTrajectory,
                         TxtInfoFileName = postModel.TxtInfoFileName,
                         CsvDataFileName = postModel.CsvDataFileName,
-                        PdfInfoFileName = postModel.PdfInfoFileName
+                        PdfInfoFileName = postModel.PdfInfoFileName,
+                        HexColorOfTrajectory = postModel.HexColorOfTrajectory,
+                        ShowMotionWithoutRezistanceTrajectoryToo = postModel.ShowMotionWithoutRezistanceTrajectoryToo
 
                 })).SaveProjectileMotion(null);
 
-                    return RedirectToAction(nameof(DisplayController.MotionWithRezistance), "Display", new { postModel.ShowMotionWithoutRezistanceCourseToo });
+                    return RedirectToAction(nameof(DisplayController.MotionWithRezistance), "Display");
                 }
 
 
@@ -262,10 +270,11 @@ namespace ProjectileMotionWeb.Controllers
                             new ProjectileMotionSettings(quantitiesWithoutRezistance)
                             {
                                 RoundDigits = postModel.RoundDigits,
-                                PointsForFunctionCourse = postModel.PointsForFunctionCourse,
+                                PointsForTrajectory = postModel.PointsForTrajectory,
                                 TxtInfoFileName = postModel.TxtInfoFileName,
                                 CsvDataFileName = postModel.CsvDataFileName,
-                                PdfInfoFileName = postModel.PdfInfoFileName
+                                PdfInfoFileName = postModel.PdfInfoFileName,
+                                HexColorOfTrajectory = postModel.HexColorOfTrajectory
                             })).SaveProjectileMotionWithRezistance(null);
 
                     return RedirectToAction(nameof(DisplayController.Motion), "Display");
@@ -276,7 +285,9 @@ namespace ProjectileMotionWeb.Controllers
                 }
             }
 
-            postModel.Layout = new LayoutModel("Repair properties") { ActiveMenuItem = LayoutModel.ActiveNavItem.Set };
+            postModel.Layout = new LayoutModel("Repair properties");
+            postModel.Layout.Menu.SetWithRezistance = postModel.Quantities.WithRezistance;
+            postModel.Layout.Menu.ActiveMenuItem = LayoutMenuModel.ActiveNavItem.Set;
             return View(postModel);
         }
     }

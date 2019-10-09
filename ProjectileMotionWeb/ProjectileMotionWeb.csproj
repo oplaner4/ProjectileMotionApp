@@ -138,10 +138,10 @@
     <Compile Include="Models\DisplayMotionBaseModel.cs" />
     <Compile Include="Models\DisplayMotionWithRezistanceModel.cs" />
     <Compile Include="Models\DisplayMotionModel.cs" />
+    <Compile Include="Models\LayoutMenuModel.cs" />
     <Compile Include="Models\SetPropertiesQuantitiesModel.cs" />
     <Compile Include="Models\_FormResultUnitGroupModel.cs" />
     <Compile Include="Models\_FormQuantityGroupModel.cs" />
-    <Compile Include="Models\_MotionChartToolsModel.cs" />
     <Compile Include="Models\_MotionChartModel.cs" />
     <Compile Include="Models\_MotionInformationModel.cs" />
     <Compile Include="Models\_EditorForHtmlAdditionalDataModel.cs" />
@@ -162,7 +162,6 @@
     <Content Include="Css\External\bootstrap.css" />
     <Content Include="Css\External\bootstrapRoot.css" />
     <Content Include="Css\External\Chart.css" />
-    <Content Include="Css\External\pretty-checkbox.min.css" />
     <Content Include="Css\Style.css" />
     <Content Include="favicon.ico" />
     <Content Include="fontawesome\css\all.css" />
@@ -1741,7 +1740,9 @@
     <Content Include="Scripts\External\Chart.js" />
     <Content Include="Scripts\External\jquery-3.4.1.js" />
     <Content Include="Scripts\External\popper.js" />
+    <Content Include="Scripts\External\vanilla-picker.js" />
     <Content Include="Scripts\Script.js" />
+    <Content Include="Scripts\shadeHexColor.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

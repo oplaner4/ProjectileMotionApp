@@ -149,7 +149,7 @@ namespace ProjectileMotionWeb.Helpers
                                 0, 
                                 gfx.PageSize.Width,
                                 gfx.PageSize.Width * ((double)chartHeightToRender / chart.Size.Width)
-                            );                    
+                            );
 
                             chartHeightRendered += chartHeightToRender;
                         }

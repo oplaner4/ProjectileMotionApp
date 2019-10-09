@@ -116,7 +116,7 @@ namespace ProjectileMotionSource.Saving
 
 
                     writer.WriteLine("Function course (in " + Motion.Settings.Quantities.Units.Length.Name + "s)");
-                    foreach (double[] coords in Motion.GetFunctionCourse())
+                    foreach (double[] coords in Motion.GetTrajectory())
                     {
                         writer.WriteLine("( " + coords[0].ToString(CultureInfo.InvariantCulture) + ", " + coords[1].ToString(CultureInfo.InvariantCulture) + " )");
                     }
@@ -143,7 +143,7 @@ namespace ProjectileMotionSource.Saving
 
                     writer.WriteLine(GetFunctionCourseTitle());
                     writer.WriteLine(FormatForCsv(new string[] { GetChartCategoryTitle(), GetChartValueTitle() }));
-                    foreach (double[] coords in Motion.GetFunctionCourse())
+                    foreach (double[] coords in Motion.GetTrajectory())
                     {
                         writer.WriteLine(FormatForCsv(new string[] { coords[0].ToString(), coords[1].ToString() }));
                     }

@@ -32,13 +32,13 @@ namespace ProjectileMotionWeb.Models
 
         [Required(ErrorMessage = REQUIREDTEXT)]
         [Range(1, int.MaxValue, ErrorMessage = LARGERTHANZEROTEXT)]
-        [Display(Name = "Round to digits")]
+        [Display(Name = "Round to the number of digits")]
         public int RoundDigits { get; set; }
 
         [Required(ErrorMessage = REQUIREDTEXT)]
         [Range(1, int.MaxValue, ErrorMessage = LARGERTHANZEROTEXT)]
-        [Display(Name = "Points for function course")]
-        public int PointsForFunctionCourse { get; set; }
+        [Display(Name = "Points to use to draw trajectory")]
+        public int PointsForTrajectory { get; set; }
 
         [Display(Name = ".txt file name")]
         public string TxtInfoFileName { get; set; }
@@ -49,8 +49,14 @@ namespace ProjectileMotionWeb.Models
         [Display(Name = ".pdf file name")]
         public string PdfInfoFileName { get; set; }
 
-        [Display(Name = "Display also course of motion neglecting rezistance")]
-        public bool ShowMotionWithoutRezistanceCourseToo { get; set; }
+        [Display(Name = "Display also trajectory of the motion neglecting rezistance")]
+        public bool ShowMotionWithoutRezistanceTrajectoryToo { get; set; }
+
+        [Display(Name = "Recalculate")]
+        public bool RecalculateOnUnitChange { get; set; }
+
+        [Display(Name = "The color of the trajectory")]
+        public string HexColorOfTrajectory { get; set; }
 
         public SetPropertiesQuantitiesModel Quantities { get; set; }
     }

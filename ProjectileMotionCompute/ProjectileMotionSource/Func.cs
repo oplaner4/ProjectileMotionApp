@@ -3,7 +3,6 @@ using Utilities.Quantities;
 using Utilities.Units;
 using Utilities.Files;
 using MathNet.Numerics;
-using MathNet.Numerics.RootFinding;
 using System.IO;
 using System.Collections.Generic;
 using ProjectileMotionSource.Exceptions;
@@ -11,6 +10,7 @@ using System.Linq;
 using ProjectileMotionSource.Saving;
 using EquationSolver = Solver1D.Solver1D;
 using ProjectileMotionSource.Point;
+using System.Drawing;
 
 namespace ProjectileMotionSource.Func
 {
@@ -347,9 +347,11 @@ namespace ProjectileMotionSource.Func
         {
             RoundDigits = 6;
             PathToFiles = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            PointsForFunctionCourse = 150;
+            PointsForTrajectory = 150;
             TxtInfoFileName = GetDefaultFileName("txt");
             CsvDataFileName = GetDefaultFileName("csv");
+            PdfInfoFileName = GetDefaultFileName("pdf");
+            HexColorOfTrajectory = "#6c757d";
         }
 
 
@@ -384,22 +386,28 @@ namespace ProjectileMotionSource.Func
             }
         }
 
-        private int _PointsForFunctionCourse { get; set; }
+        private int _PointsForTrajectory { get; set; }
 
+        protected bool CheckValidPointsForTrajectoryWithException (int val)
+        {
+            if (val < 0)
+            {
+                throw new Exception("The number of points to use to draw the function course cannot be smaller than zero");
+            }
+
+            return true;
+        }
 
         /// <summary>
-        /// The number of points to use to draw the function course.
+        /// The number of points to use to draw trajectory.
         /// </summary>
-        public int PointsForFunctionCourse
+        public virtual int PointsForTrajectory
         {
-            get { return _PointsForFunctionCourse; }
+            get { return _PointsForTrajectory; }
             set
             {
-                if (value < 0)
-                {
-                    throw new Exception("The number of points to use to draw the function course cannot be smaller than zero");
-                }
-                _PointsForFunctionCourse = value;
+                CheckValidPointsForTrajectoryWithException(value);
+                _PointsForTrajectory = value;
             }
         }
 
@@ -459,6 +467,34 @@ namespace ProjectileMotionSource.Func
             }
         }
 
+
+        private string _HexColorOfFunctionCourse { get; set; }
+
+        /// <summary>
+        /// The file in which is function course of projectile motion saved (excel).
+        /// </summary>
+        public string HexColorOfTrajectory
+        {
+            get
+            {
+                return _HexColorOfFunctionCourse;
+            }
+            set
+            {
+                try
+                {
+                    if (!ColorTranslator.FromHtml(value).IsEmpty)
+                    {
+                        _HexColorOfFunctionCourse = value;
+                    }
+                    else throw new Exception();
+                }
+                catch (Exception) {
+                    _HexColorOfFunctionCourse = "#6c757d";
+                }
+            }
+        }
+
         private string _PdfDataFileName { get; set; }
 
         /// <summary>
@@ -482,7 +518,7 @@ namespace ProjectileMotionSource.Func
         /// </summary>
         public virtual string GetChartFileNameForExport (string extension)
         {
-            return GetDefaultFileName(extension);
+            return "chart-" + GetDefaultFileName(extension);
         }
 
 
@@ -803,13 +839,13 @@ namespace ProjectileMotionSource.Func
         /// Gets the course of the function with the set number of points that describe the projectile motion.
         /// </summary>
         /// <returns>An array of the points coordinates.</returns>
-        public virtual double[][] GetFunctionCourse()
+        public virtual double[][] GetTrajectory()
         {
-            return GetListFunctionCourse().Select(p => p.Round().GetCoords(Settings.Quantities.Units.Length)).ToArray();
+            return GetListPointsOfTrajectory().Select(p => p.Round().GetCoords(Settings.Quantities.Units.Length)).ToArray();
         }
 
 
-        public virtual List<ProjectileMotionPoint> GetListFunctionCourse()
+        public virtual List<ProjectileMotionPoint> GetListPointsOfTrajectory()
         {
             List<ProjectileMotionPoint> ret = new List<ProjectileMotionPoint>();
 
@@ -817,13 +853,15 @@ namespace ProjectileMotionSource.Func
             ProjectileMotionPoint highestPoint = GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Highest);
             ProjectileMotionPoint farthestPoint = GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest);
 
-            for (int i = 0; i < Settings.PointsForFunctionCourse - 1; i++)
+            for (int i = 0; i < Settings.PointsForTrajectory - 1; i++)
             {
-                Time now = new Time(finalPoint.T.Val / (Settings.PointsForFunctionCourse - 1) * i, UnitTime.Basic);
-                Time next = new Time(finalPoint.T.Val / (Settings.PointsForFunctionCourse - 1) * (i + 1), UnitTime.Basic);
+                Time now = new Time(finalPoint.T.GetBasicVal() / (Settings.PointsForTrajectory - 1) * i, UnitTime.Basic).RoundVal(Settings.RoundDigits);
+                Time next = new Time(finalPoint.T.GetBasicVal() / (Settings.PointsForTrajectory - 1) * (i + 1), UnitTime.Basic).RoundVal(Settings.RoundDigits);
 
-                ret.Add(GetPoint(now));
-
+                if (now != highestPoint.T && now != farthestPoint.T)
+                {
+                    ret.Add(GetPoint(now));
+                }
                 if (next >= highestPoint.T && now <= highestPoint.T)
                 {
                     ret.Add(highestPoint);

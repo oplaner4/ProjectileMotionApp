@@ -1,32 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace ProjectileMotionWeb.Models
+﻿namespace ProjectileMotionWeb.Models
 {
     public class LayoutModel
     {
         public LayoutModel (string title)
         {
             Title = title;
-            ActiveMenuItem = ActiveNavItem.Home;
             FluidContainer = false;
+            Menu = new LayoutMenuModel();
         }
 
 
-        public enum ActiveNavItem
+        public LayoutModel(string title, LayoutMenuModel menu)
         {
-            Home,
-            Choose,
-            Set,
-            MotionDropdown
+            Title = title;
+            FluidContainer = false;
+            Menu = menu;
         }
+
 
         public string Title { get; set; }
 
-        public ActiveNavItem ActiveMenuItem { get; set; }
-
         public bool FluidContainer { get; set; }
+
+        public LayoutMenuModel Menu { get; set; }
     }
 }

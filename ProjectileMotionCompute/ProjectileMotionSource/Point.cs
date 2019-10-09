@@ -25,7 +25,7 @@ namespace ProjectileMotionSource.Point
 
         private bool WasFarthest { get; set; }
 
-        public void ComputeProperties()
+        private void ComputeProperties()
         {
             Vx = GetVelocityX();
             Vy = GetVelocityY();
@@ -33,16 +33,27 @@ namespace ProjectileMotionSource.Point
 
             if (T >= GetTimeFinal())
             {
-                X = new Length(Motion.GetLength().Val, UnitLength.Basic);
+                X = Motion.GetLength();
                 Y = new Length(0, UnitLength.Basic);
             }
             else
             {
                 X = new Length(T.GetBasicVal() * GetVelocityX().Val, UnitLength.Basic);
-
                 double computedLength = T.GetBasicVal() * Motion.Settings.Quantities.V.GetBasicVal() * Math.Sin(Motion.Settings.Quantities.Α.GetBasicVal()) - 0.5 * Motion.Settings.Quantities.G.GetBasicVal() * Math.Pow(T.GetBasicVal(), 2) + Motion.Settings.Quantities.H.GetBasicVal();
                 Y = new Length(computedLength < 0 ? 0 : computedLength, UnitLength.Basic);
             }
+
+            ConvertToResultUnits();
+        }
+
+
+        private void ConvertToResultUnits ()
+        {
+            X = X.Convert(Motion.Settings.Quantities.Units.Length);
+            Y = Y.Convert(Motion.Settings.Quantities.Units.Length);
+            Vx = Vx.Convert(Motion.Settings.Quantities.Units.Velocity);
+            Vy = Vy.Convert(Motion.Settings.Quantities.Units.Velocity);
+            T = T.Convert(Motion.Settings.Quantities.Units.Time);
         }
 
 
@@ -76,6 +87,8 @@ namespace ProjectileMotionSource.Point
                     IsFarthest = true;
                 }
             }
+
+            ConvertToResultUnits();
         }
 
         public ProjectileMotionPoint(ProjectileMotion motion, Time t)
@@ -152,10 +165,10 @@ namespace ProjectileMotionSource.Point
 
         public Length X { get; private set; }
         public Length Y { get; private set; }
-        public ProjectileMotion Motion { get; private set; }
         public Velocity Vx { get; private set; }
         public Velocity Vy { get; private set; }
         public Time T { get; private set; }
+        private ProjectileMotion Motion { get; set; }
 
         public double[] GetCoords(UnitLength unitLength)
         {
@@ -180,7 +193,7 @@ namespace ProjectileMotionSource.Point
 
         public Length GetDistanceFromPoint(ProjectileMotionPoint p, UnitLength unitLength)
         {
-           return new Length(Math.Sqrt(Math.Pow(p.X.Val - X.Val, 2.0) + Math.Pow(p.Y.Val - Y.Val, 2.0)), UnitLength.Basic).Convert(unitLength);
+           return new Length(Math.Sqrt(Math.Pow(p.X.GetBasicVal() - X.GetBasicVal(), 2.0) + Math.Pow(p.Y.GetBasicVal() - Y.GetBasicVal(), 2.0)), UnitLength.Basic).Convert(unitLength);
         }
 
         public Length GetDistance(UnitLength unitLength)

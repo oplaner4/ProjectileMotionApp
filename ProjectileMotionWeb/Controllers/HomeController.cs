@@ -16,10 +16,12 @@ namespace ProjectileMotionWeb.Controllers
         {
 
             SessionStore session = GetSession();
-            BaseModel viewModel = new BaseModel(new LayoutModel("Welcome") { ActiveMenuItem = LayoutModel.ActiveNavItem.Home })
+            BaseModel viewModel = new BaseModel(new LayoutModel("Welcome"))
             {
                 PagePreviouslyVisited = session.WasActionVisited("Home", nameof(HomeController.Start))
             };
+
+            viewModel.Layout.Menu.ActiveMenuItem = LayoutMenuModel.ActiveNavItem.Home;
 
             session.SaveActionVisited("Home", nameof(HomeController.Start));
 

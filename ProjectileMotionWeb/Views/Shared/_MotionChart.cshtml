@@ -1,11 +1,10 @@
 ﻿@using ProjectileMotionWeb.Models;
-@using ProjectileMotionSource.WithRezistance.Func;
 @model _MotionChartModel
 
 <h5 class="mb-2">Chart</h5>
 
 <div class="ml-md-2">
-    <canvas id="motionChart" class="mb-3" style="height:@(Math.Round(1000 * (Model.ShowMotionWithoutRezistanceCourseToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val / (Model.ShowMotionWithoutRezistanceCourseToo ? Model.DegradedMotion : Model.Motion).GetLength().Val))px; width:1000px;"></canvas>
+    <canvas id="motionChart" class="mb-3" style="height:@(Math.Round(1000 * (Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val / (Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val))px; width:1000px;"></canvas>
 </div>
 
 <script>
@@ -20,19 +19,18 @@
             var easings = ["linear", "easeInQuad", "easeOutQuad", "easeInOutQuad", "easeInCubic", "easeOutCubic", "easeOutQuart", "easeInQuint", "easeOutQuint", "easeOutExpo"];
             Chart.defaults.global.animation.easing = easings[Math.ceil(Math.random() * easings.length) - 1];
 
-            var defaultStepSize = @((Model.ShowMotionWithoutRezistanceCourseToo ? Model.DegradedMotion : Model.Motion).GetLength().Val / 11);
+            var defaultStepSize = @((Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val / 11);
 
-            function getPointsBackgroundsWithBgColorForMaximalPoint(data, defPointBgColor, specialPointBgColor) {
+            function getPointsBackgroundsWithBgColorForMaximalPoint(data, defPointBgColor) {
                 var pointBackgroundColor = new Array();
                 data.forEach(function (v) {
-                    pointBackgroundColor.push(v.isFarthest || v.isHighest ? specialPointBgColor : defPointBgColor);
+                    pointBackgroundColor.push(v.isFarthest || v.isHighest ? shadeHexColor(defPointBgColor, -25) : defPointBgColor);
                 });
                 return pointBackgroundColor;
             };
 
-            var dataForMotion = @Html.Raw(Model.GetSpeciallySerializedFunctionCourse(Model.Motion.GetListFunctionCourse()));
-            var dataForSecondMotion =  @Html.Raw(Model.GetSpeciallySerializedFunctionCourse(Model.DegradedMotion.GetListFunctionCourse()));
-            var specialPointsBgColors = new Array("#3700ff", "#4b504c");
+            var dataForMotion = @Html.Raw(Model.GetSpeciallySerializedTrajectory(Model.Motion.GetListPointsOfTrajectory()));
+            var dataForSecondMotion =  @Html.Raw(Model.GetSpeciallySerializedTrajectory(Model.DegradedMotion.GetListPointsOfTrajectory()));
             var ticksRenderCallback = function (value) {
                 if (value !== this.max)
                     return value.getRoundedVal(2);
@@ -46,16 +44,16 @@
                 data: {
                     datasets: [
                         {
-                            label: '@(Model.ShowMotionWithoutRezistanceCourseToo ? "With rezistance" : string.Empty)',
-                            pointBackgroundColor: getPointsBackgroundsWithBgColorForMaximalPoint(dataForMotion, "@(Model.Motion is ProjectileMotionWithRezistance ? "#007bff" : "#6c757d")", specialPointsBgColors[@(Model.Motion is ProjectileMotionWithRezistance ? 0 : 1)]),
-                            backgroundColor: "@(Model.Motion is ProjectileMotionWithRezistance ? "#007bff" : "#6c757d")",
-                            borderColor: "@(Model.Motion is ProjectileMotionWithRezistance ? "#00a0ff" : "#848c94")",
-                        }@if (Model.ShowMotionWithoutRezistanceCourseToo)
+                            label: '@(Model.ShowMotionWithoutRezistanceTrajectoryToo ? "With rezistance" : "")',
+                            pointBackgroundColor: getPointsBackgroundsWithBgColorForMaximalPoint(dataForMotion, "@(Model.Motion.Settings.HexColorOfTrajectory)"),
+                            backgroundColor: "@(Model.Motion.Settings.HexColorOfTrajectory)",
+                            borderColor: "@(Model.Motion.Settings.HexColorOfTrajectory)",
+                        }@if (Model.ShowMotionWithoutRezistanceTrajectoryToo)
                         {
                         <text>
                         , {
                             label: 'Without rezistance',
-                            pointBackgroundColor: getPointsBackgroundsWithBgColorForMaximalPoint(dataForSecondMotion, "#6c757d", specialPointsBgColors[1]),
+                            pointBackgroundColor: getPointsBackgroundsWithBgColorForMaximalPoint(dataForSecondMotion, "#6c757d"),
                             backgroundColor: "#6c757d",
                             borderColor: "#848c94",
                         }
@@ -71,6 +69,9 @@
                     tooltips: {
                         callbacks: {
                             label: function (tooltipItem, data) {
+                                if (window.pointsDrawingAnimationProgress === true)
+                                    return '';
+
                                 var pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                                 var specialPointTitle = '';
                                 if (pointData.isFarthest) {
@@ -79,9 +80,9 @@
                                 else if (pointData.isHighest) {
                                     specialPointTitle = "highest point";
                                 }
-                                
+
                                 var label = data.datasets[tooltipItem.datasetIndex].label || '';
-                                return (label ? (label + (specialPointTitle ? " - " : ": ")) : "") + (specialPointTitle ? specialPointTitle + ": " : "") + 'x = ' + tooltipItem.xLabel + '; y = ' + tooltipItem.yLabel;
+                                return (label ? (label + (specialPointTitle ? " - " : ": ")) : "") + (specialPointTitle ? specialPointTitle + ": " : "") + 'x = ' + tooltipItem.xLabel + '; y = ' + tooltipItem.yLabel + '; t = ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].t;
                             }
                         }
                     },
@@ -97,7 +98,7 @@
                             },
                             ticks: {
                                 min: 0,
-                                max: @((Model.ShowMotionWithoutRezistanceCourseToo ? Model.DegradedMotion : Model.Motion).GetLength().Val),
+                                max: @((Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val),
                                 beginAtZero: true,
                                 callback: ticksRenderCallback
                             },
@@ -110,7 +111,7 @@
                             },
                             ticks: {
                                 min: 0,
-                                max: @((Model.ShowMotionWithoutRezistanceCourseToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val),
+                                max: @((Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val),
                                 beginAtZero: true,
                                 callback: ticksRenderCallback
                             },

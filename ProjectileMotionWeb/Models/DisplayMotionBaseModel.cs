@@ -7,6 +7,6 @@
             ShowLargerMotionChart = showLargerMotionChart;
         }
 
-        public bool ShowLargerMotionChart { get; set; }
+        public bool ShowLargerMotionChart { get; private set; }
     }
 }

@@ -20,8 +20,8 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
             Motion = motion;
             IsNextReal = true;
 
-            Point = Motion.Degrade().GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Initial);
-            VyComputed = Point.Vy.Val;
+            Point = new ProjectileMotionPoint(Motion, ProjectileMotionPoint.ProjectileMotionPointTypes.Initial);
+            VyComputed = Point.Vy.GetBasicVal();
         }
 
         private ProjectileMotionWithRezistanceComputation(ProjectileMotionWithRezistanceComputation prevComputation)
@@ -33,7 +33,7 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
 
             Point = new ProjectileMotionPoint( prevComputation );
 
-            if (Point.Y.GetBasicVal() == 0)
+            if (Point.Y.Val == 0)
             {
                 IsNextReal = false;
             }
@@ -51,13 +51,12 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
 
         private double VyComputed { get; set; }
 
-        public ProjectileMotionWithRezistance Motion { get; private set; }
+        internal ProjectileMotionWithRezistance Motion { get; private set; }
 
         public ProjectileMotionWithRezistanceComputation Continue()
         {
             return new ProjectileMotionWithRezistanceComputation(this);
         }
-
 
         public static double Dt = Math.Pow(10, -1 * 3);
 

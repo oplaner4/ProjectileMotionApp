@@ -23,13 +23,20 @@ namespace ProjectileMotionWeb.Controllers
             }
 
             return View(new DisplayMotionModel(motion, ShowLargerMotionChart) {
-                Layout = new LayoutModel("Projectile motion") { ActiveMenuItem = LayoutModel.ActiveNavItem.MotionDropdown, FluidContainer = true },
+                Layout = new LayoutModel("Projectile motion") {
+                    FluidContainer = true,
+                    Menu = new LayoutMenuModel ()
+                    {
+                        ActiveMenuItem = LayoutMenuModel.ActiveNavItem.MotionDropdown,
+                        SetWithRezistance = false
+                    }
+                },
             });
         }
 
 
         [HttpGet]
-        public ActionResult MotionWithRezistance(bool ShowMotionWithoutRezistanceCourseToo = false, bool ShowLargerMotionChart = false)
+        public ActionResult MotionWithRezistance(bool ShowLargerMotionChart = false)
         {
             ProjectileMotionWithRezistance motionWithRezistance = GetSession().GetSavedProjectileMotionWithRezistance();
 
@@ -38,9 +45,16 @@ namespace ProjectileMotionWeb.Controllers
                 return DefaultRedirect();
             }
 
-            return View(new DisplayMotionWithRezistanceModel(motionWithRezistance, ShowMotionWithoutRezistanceCourseToo, ShowLargerMotionChart)
+            return View(new DisplayMotionWithRezistanceModel(motionWithRezistance, ShowLargerMotionChart)
             {
-                Layout = new LayoutModel("Projectile motion with rezistance") { ActiveMenuItem = LayoutModel.ActiveNavItem.MotionDropdown, FluidContainer = true }
+                Layout = new LayoutModel("Projectile motion with rezistance") {
+                    FluidContainer = true,
+                    Menu = new LayoutMenuModel()
+                    {
+                        ActiveMenuItem = LayoutMenuModel.ActiveNavItem.MotionDropdown,
+                        SetWithRezistance = true
+                    }
+                }
             });
         }
     }

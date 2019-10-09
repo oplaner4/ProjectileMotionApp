@@ -31,7 +31,7 @@ class Program
             {
                 RoundDigits = 4,
                 PathToFiles = "C:\\Users\\oplan\\Documents\\c#\\ProjectileMotions",
-                PointsForFunctionCourse = 160
+                PointsForTrajectory = 160
             }).SaveInfoToTxt();
 
 
@@ -50,7 +50,7 @@ class Program
            {
                RoundDigits = 4,
                PathToFiles = "C:\\Users\\oplan\\Documents\\c#\\ProjectileMotions",
-               PointsForFunctionCourse = 153
+               PointsForTrajectory = 153
            });
 
         motionWithRezistance.SaveInfoToTxt();

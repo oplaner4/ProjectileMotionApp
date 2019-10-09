@@ -13,7 +13,7 @@ namespace ProjectileMotionWeb.Controllers
 
         public ActionResult Neglection()
         {
-            return View(new ChooseModel() { Layout = new LayoutModel("Choose") { ActiveMenuItem = LayoutModel.ActiveNavItem.Choose } });
+            return View(new ChooseModel() { Layout = new LayoutModel("Choose", new LayoutMenuModel (LayoutMenuModel.ActiveNavItem.Choose) ) });
         }
 
         public ActionResult Choosen(bool withRezistance)
