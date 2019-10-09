@@ -155,8 +155,8 @@
     <Content Include="Assets\Images\Display\ChartExportTutorial\ChartExportTutorialSaveAs.png" />
     <Content Include="Assets\Images\Display\ChartExportTutorial\exampleChartExportTutorialClickSaveAs.png" />
     <Content Include="Assets\Images\Display\ChartExportTutorial\exampleChartExportTutorialRightClick.png" />
-    <Content Include="Assets\Images\ExampleCharts\exampleChartBoth.png" />
-    <Content Include="Assets\Images\ExampleCharts\exampleChartTooltip.png" />
+    <Content Include="Assets\Images\ExampleCharts\exampleChartBothTrajectoriesWithoutTooltip.png" />
+    <Content Include="Assets\Images\ExampleCharts\exampleChartBothTrajectories.png" />
     <Content Include="Assets\Images\ExampleCharts\exampleChartWithRezistance.png" />
     <Content Include="Assets\Images\ExampleCharts\exampleChartWithoutRezistance.png" />
     <Content Include="Css\External\bootstrap.css" />
