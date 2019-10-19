@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using ProjectileMotionSource.Func;
 
 namespace ProjectileMotionWeb.Models
 {
     public class _MotionInformationModel : BaseModel
     {
-        public _MotionInformationModel (Dictionary<string, string> information)
+        public _MotionInformationModel (ProjectileMotion motion)
         {
-            Information = information;
+            Motion = motion;
         }
 
-        public Dictionary<string, string> Information { get; set; }
+        public ProjectileMotion Motion { get; private set; }
     }
 }

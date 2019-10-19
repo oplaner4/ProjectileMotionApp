@@ -4,7 +4,7 @@ using ProjectileMotionSource.Point;
 
 namespace ProjectileMotionSource.WithRezistance.PointsComputation
 {
-    public class ProjectileMotionWithRezistanceComputation
+    internal class ProjectileMotionWithRezistanceComputation
     {
         public static ProjectileMotionWithRezistanceComputation Start(ProjectileMotionWithRezistance motion)
         {

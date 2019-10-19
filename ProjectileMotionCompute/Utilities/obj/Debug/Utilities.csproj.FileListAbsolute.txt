@@ -14,3 +14,4 @@ C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilitie
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\obj\Debug\Utilities.csproj.CoreCompileInputs.cache
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\obj\Debug\Utilities.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\obj\Debug\Utilities.pdb
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Utilities\obj\Debug\Utilities.csprojAssemblyReference.cache

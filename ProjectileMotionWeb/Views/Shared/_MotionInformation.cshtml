@@ -5,7 +5,7 @@
 <div class="ml-md-2 mb-3">
     @{
         int i = 0;
-        foreach (KeyValuePair<string, string> info in Model.Information)
+        foreach (KeyValuePair<string, string> info in Model.Motion.Saving.GetDataToFiles())
         {
             <div class="form-group">
                 <label class="d-inline-block" for="info@(i)">@info.Key:</label>

@@ -8,9 +8,13 @@ using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using ProjectileMotionSource.WithRezistance.Func;
 using ProjectileMotionSource.Func;
+using Utilities.Quantities;
 
 namespace ProjectileMotionSource.Saving
 {
+    /// <summary>
+    /// Saving to files and exportation.
+    /// </summary>
     public class ProjectileMotionFilesSaving
     {
         public ProjectileMotionFilesSaving(ProjectileMotion motion)
@@ -18,48 +22,66 @@ namespace ProjectileMotionSource.Saving
             Motion = motion;
         }
 
+
+        private void ConstructNewDataRecordQuantity (string quantityName, Quantity quantity)
+        {
+            DataToFiles.Add(quantityName, quantity.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
+        }
+
+        private string ConstructQuantityDescription (string quantityName, string quantityUnit)
+        {
+            return string.Format("{0} (in {1}s)", quantityName, quantityUnit);
+        }
+
+        private void ConstructNewDataRecordQuantity(string quantityName, QuantityWithUnit quantityWithUnit)
+        {
+            DataToFiles.Add(ConstructQuantityDescription(quantityName, quantityWithUnit.Unit.Name), quantityWithUnit.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
+        }
+
+
+        private Dictionary<string, string> DataToFiles = new Dictionary<string, string>();
+
         public Dictionary<string, string> GetDataToFiles()
         {
-            Dictionary<string, string> data = new Dictionary<string, string>() { };
+            DataToFiles.Clear();
 
             if (!(Motion is ProjectileMotionWithRezistance))
             {
-                data.Add("Assignment type", ProjectileMotionQuantities.AssignmentsTypesTranslations[Motion.Settings.Quantities.UsedAssignmentType]);
+                DataToFiles.Add("The assignment type", ProjectileMotionQuantities.AssignmentsTypesTranslations[Motion.Settings.Quantities.UsedAssignmentType]);
             }
 
-            data.Add("An elevation angle (in " + Motion.Settings.Quantities.Α.Unit.Name + "s)", Motion.Settings.Quantities.Α.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
-            data.Add("An initial velocity (in " + Motion.Settings.Quantities.V.Unit.Name + ")", Motion.Settings.Quantities.V.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
-            data.Add("An initial height (in " + Motion.Settings.Quantities.H.Unit.Name + ")", Motion.Settings.Quantities.H.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
-            data.Add("An initial gravitation acceleration (in " + Motion.Settings.Quantities.G.Unit.Name + ")", Motion.Settings.Quantities.G.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
+            ConstructNewDataRecordQuantity("The elevation angle", Motion.Settings.Quantities.Α);
+            ConstructNewDataRecordQuantity("The initial velocity", Motion.Settings.Quantities.V);
+            ConstructNewDataRecordQuantity("The initial height", Motion.Settings.Quantities.H);
+            ConstructNewDataRecordQuantity("The initial gravitation acceleration", Motion.Settings.Quantities.G);
 
             if (Motion is ProjectileMotionWithRezistance)
             {
                 ProjectileMotionWithRezistanceQuantities rezistanceQuantities = (ProjectileMotionWithRezistanceQuantities)Motion.Settings.Quantities;
 
-                data.Add("The mass (in " + rezistanceQuantities.M.Unit.Name + "s)", rezistanceQuantities.M.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
-                data.Add("The density (in " + rezistanceQuantities.Ρ.Unit.Name + "s)", rezistanceQuantities.Ρ.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
-                data.Add("An area (in " + rezistanceQuantities.A.Unit.Name + "s)", rezistanceQuantities.A.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
-                data.Add("The drag coefficient", rezistanceQuantities.C.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
+                ConstructNewDataRecordQuantity("The mass", rezistanceQuantities.M);
+                ConstructNewDataRecordQuantity("The density", rezistanceQuantities.Ρ);
+                ConstructNewDataRecordQuantity("The frontal area", rezistanceQuantities.A);
+                ConstructNewDataRecordQuantity("The drag coefficient", rezistanceQuantities.C);
             }
 
-            data.Add("Duration (in " + Motion.Settings.Quantities.Units.Time.Name + "s)", Motion.GetDur().Val.ToString(CultureInfo.InvariantCulture));
-            data.Add("Length (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", Motion.GetLength().Val.ToString(CultureInfo.InvariantCulture));
-            data.Add("An arc Length (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", Motion.GetArcLength().Val.ToString(CultureInfo.InvariantCulture));
-            data.Add("An area under arc (in " + Motion.Settings.Quantities.Units.Area.Name + "s)", Motion.GetAreaUnderArc().Val.ToString(CultureInfo.InvariantCulture));
-            data.Add("Max distance from the beginning (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", Motion.GetMaxDistance().Val.ToString(CultureInfo.InvariantCulture));
-            data.Add("Max height (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", Motion.GetMaxHeight().Val.ToString(CultureInfo.InvariantCulture));
+            ConstructNewDataRecordQuantity("The duration", Motion.GetDur());
+            ConstructNewDataRecordQuantity("The length", Motion.GetLength());
+            ConstructNewDataRecordQuantity("The arc length", Motion.GetArcLength());
+            ConstructNewDataRecordQuantity("The area under arc", Motion.GetAreaUnderArc());
+            ConstructNewDataRecordQuantity("Max distance from the beginning", Motion.GetMaxDistance());
+            ConstructNewDataRecordQuantity("Max height", Motion.GetMaxHeight());
 
-            data.Add("Coordinates of the farthest point from the beginning (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", "[" + Motion.GetCoordsFarthest()[0].ToString(CultureInfo.InvariantCulture) + ", " + Motion.GetCoordsFarthest()[1].ToString(CultureInfo.InvariantCulture) + "]");
-            data.Add("Coordinates of the highest point (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", "[" + Motion.GetCoordsHighest()[0].ToString(CultureInfo.InvariantCulture) + ", " + Motion.GetCoordsHighest()[1].ToString(CultureInfo.InvariantCulture) + "]");
-
+            DataToFiles.Add("Coordinates of the farthest point from the beginning (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", "[" + Motion.GetCoordsFarthest()[0].ToString(CultureInfo.InvariantCulture) + ", " + Motion.GetCoordsFarthest()[1].ToString(CultureInfo.InvariantCulture) + "]");
+            DataToFiles.Add("Coordinates of the highest point (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", "[" + Motion.GetCoordsHighest()[0].ToString(CultureInfo.InvariantCulture) + ", " + Motion.GetCoordsHighest()[1].ToString(CultureInfo.InvariantCulture) + "]");
 
             if (Motion is ProjectileMotionWithRezistance)
             {
-                data.Add("The time of the highest point (in " + Motion.Settings.Quantities.Units.Time.Name + "s)", Motion.GetTimeHighest().Val.ToString(CultureInfo.InvariantCulture));
-                data.Add("The time of the farthest point (in " + Motion.Settings.Quantities.Units.Time.Name + "s)", Motion.GetTimeFarthest().Val.ToString(CultureInfo.InvariantCulture));
+                ConstructNewDataRecordQuantity("The time of the highest point", Motion.GetTimeHighest());
+                ConstructNewDataRecordQuantity("The time of the farthest point", Motion.GetTimeFarthest());
             }
 
-            return data;
+            return DataToFiles;
         }
 
         private ProjectileMotion Motion { get; set; }
@@ -67,17 +89,17 @@ namespace ProjectileMotionSource.Saving
 
         public string GetChartCategoryTitle()
         {
-            return "Distance (in " + Motion.Settings.Quantities.Units.Length.Name + "s)";
+            return ConstructQuantityDescription("Distance", Motion.Settings.Quantities.Units.Length.Name);
         }
 
         public string GetChartValueTitle()
         {
-            return "Height (in " + Motion.Settings.Quantities.Units.Length.Name + "s) ";
+            return ConstructQuantityDescription("Height", Motion.Settings.Quantities.Units.Length.Name);
         }
 
-        private string GetFunctionCourseTitle()
+        private string GetTrajectoryTitle()
         {
-            return "Function course (in " + Motion.Settings.Quantities.Units.Length.Name + "s)";
+            return ConstructQuantityDescription("The trajectory", Motion.Settings.Quantities.Units.Length.Name);
         }
 
         private string SuccessfullySavedMessage(string fileName)
@@ -115,7 +137,7 @@ namespace ProjectileMotionSource.Saving
                     }
 
 
-                    writer.WriteLine("Function course (in " + Motion.Settings.Quantities.Units.Length.Name + "s)");
+                    writer.WriteLine(GetTrajectoryTitle());
                     foreach (double[] coords in Motion.GetTrajectory())
                     {
                         writer.WriteLine("( " + coords[0].ToString(CultureInfo.InvariantCulture) + ", " + coords[1].ToString(CultureInfo.InvariantCulture) + " )");
@@ -141,7 +163,7 @@ namespace ProjectileMotionSource.Saving
 
                     writer.WriteLine();
 
-                    writer.WriteLine(GetFunctionCourseTitle());
+                    writer.WriteLine(GetTrajectoryTitle());
                     writer.WriteLine(FormatForCsv(new string[] { GetChartCategoryTitle(), GetChartValueTitle() }));
                     foreach (double[] coords in Motion.GetTrajectory())
                     {

@@ -7,6 +7,9 @@ using ProjectileMotionSource.WithRezistance.PointsComputation;
 
 namespace ProjectileMotionSource.Point
 {
+    /// <summary>
+    /// Projectile motion point of trajectory.
+    /// </summary>
     public class ProjectileMotionPoint
     {
         public enum ProjectileMotionPointTypes
@@ -57,7 +60,7 @@ namespace ProjectileMotionSource.Point
         }
 
 
-        public ProjectileMotionPoint(ProjectileMotionWithRezistanceComputation prevComputation)
+        internal ProjectileMotionPoint(ProjectileMotionWithRezistanceComputation prevComputation)
         {
             Motion = prevComputation.Motion;
             X = new Length(prevComputation.Point.X.GetBasicVal() + prevComputation.Point.Vx.GetBasicVal() * ProjectileMotionWithRezistanceComputation.Dt, UnitLength.Basic);
