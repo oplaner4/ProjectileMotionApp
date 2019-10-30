@@ -48,7 +48,10 @@ namespace ProjectileMotionSource.Func
             V = v;
             H = h;
             G = g;
-            Α = new ElevationAngle(Math.Asin((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) / (2.0 * V.GetBasicVal() * dur.GetBasicVal())), UnitAngle.Basic).Convert(Units.Angle);
+            Α = new ElevationAngle(
+                GetResultWithComputeExpection(Math.Asin((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) / (2.0 * V.GetBasicVal() * dur.GetBasicVal()))), 
+                UnitAngle.Basic).Convert(Units.Angle);
+
             CheckData();
             UsedAssignmentType = AssignmentsTypes.ElevationAngleByDuration;
         }
@@ -68,7 +71,9 @@ namespace ProjectileMotionSource.Func
             Α = α;
             H = h;
             G = g;
-            V = new InitialVelocity((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) / (2.0 * Math.Sin(Α.GetBasicVal()) * dur.GetBasicVal()), UnitVelocity.Basic).Convert(Units.Velocity);
+            V = new InitialVelocity(
+                GetResultWithComputeExpection((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) / (2.0 * Math.Sin(Α.GetBasicVal()) * dur.GetBasicVal())),
+                UnitVelocity.Basic).Convert(Units.Velocity);
 
             CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialVelocityByDuration;
@@ -89,7 +94,9 @@ namespace ProjectileMotionSource.Func
             V = v;
             Α = α;
             G = g;
-            H = new InitialHeight((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2.0 * Math.Sin(Α.GetBasicVal()) * dur.GetBasicVal() * V.GetBasicVal()) / 2.0, UnitLength.Basic).Convert(Units.Length);
+            H = new InitialHeight(
+                GetResultWithComputeExpection((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2.0 * Math.Sin(Α.GetBasicVal()) * dur.GetBasicVal() * V.GetBasicVal()) / 2.0), 
+                UnitLength.Basic).Convert(Units.Length);
 
             CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialHeightByDuration;
@@ -110,7 +117,9 @@ namespace ProjectileMotionSource.Func
             V = v;
             Α = α;
             G = g;
-            H = new InitialHeight((Math.Pow(length.GetBasicVal(), 2.0) * G.GetBasicVal() * 1 / Math.Pow(Math.Cos(Α.GetBasicVal()), 2.0) - 2.0 * length.GetBasicVal() * Math.Pow(V.GetBasicVal(), 2.0) * Math.Tan(Α.GetBasicVal())) / (2.0 * Math.Pow(V.GetBasicVal(), 2.0)), UnitLength.Basic).Convert(Units.Length);
+            H = new InitialHeight(
+                GetResultWithComputeExpection((Math.Pow(length.GetBasicVal(), 2.0) * G.GetBasicVal() * 1 / Math.Pow(Math.Cos(Α.GetBasicVal()), 2.0) - 2.0 * length.GetBasicVal() * Math.Pow(V.GetBasicVal(), 2.0) * Math.Tan(Α.GetBasicVal())) / (2.0 * Math.Pow(V.GetBasicVal(), 2.0))),
+                UnitLength.Basic).Convert(Units.Length);
 
 
             CheckData();
@@ -132,7 +141,9 @@ namespace ProjectileMotionSource.Func
             Α = α;
             H = h;
             G = g;
-            V = new InitialVelocity(length.GetBasicVal() * Math.Sqrt(G.GetBasicVal() * 1 / Math.Cos(Α.GetBasicVal())) / Math.Sqrt(2.0 * length.GetBasicVal() * Math.Sin(Α.GetBasicVal()) + 2.0 * H.GetBasicVal() * Math.Cos(Α.GetBasicVal())), UnitVelocity.Basic).Convert(Units.Velocity);
+            V = new InitialVelocity(
+               GetResultWithComputeExpection(length.GetBasicVal() * Math.Sqrt(G.GetBasicVal() * 1 / Math.Cos(Α.GetBasicVal())) / Math.Sqrt(2.0 * length.GetBasicVal() * Math.Sin(Α.GetBasicVal()) + 2.0 * H.GetBasicVal() * Math.Cos(Α.GetBasicVal()))), 
+                UnitVelocity.Basic).Convert(Units.Velocity);
 
             CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialVelocityByLength;
@@ -148,9 +159,6 @@ namespace ProjectileMotionSource.Func
         /// <param name="units">The units of Quantities. By default metre per second, radian, metre and metre per square second.</param>
         public ProjectileMotionQuantities(Length length, InitialVelocity v, InitialHeight h, GravAcceleration g, ProjectileMotionResultsUnits units = null)
         {
-            // TODO chyba
-            // solve(d= v*cos(a)*(v*sin(a) + sqrt(v^2*sin(a)^2+2*g*y))/g, a) wolframalpha
-
             Units = units ?? new ProjectileMotionResultsUnits();
 
             V = v;
@@ -158,7 +166,7 @@ namespace ProjectileMotionSource.Func
             G = g;
 
             Α = new ElevationAngle(
-                    GetRootWithComputeExpection(EquationSolver.BisectionFindRoot(a => V.GetBasicVal() * Math.Cos(a) * (V.GetBasicVal() * Math.Sin(a) + Math.Sqrt(Math.Pow(V.GetBasicVal() * Math.Sin(a), 2) + 2.0 * G.GetBasicVal() * H.GetBasicVal())) / G.GetBasicVal() - length.GetBasicVal(), 0, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right).Val, 1E-4)),
+                    GetResultWithComputeExpection(EquationSolver.BisectionFindRoot(a => V.GetBasicVal() * Math.Cos(a) * (V.GetBasicVal() * Math.Sin(a) + Math.Sqrt(Math.Pow(V.GetBasicVal() * Math.Sin(a), 2) + 2.0 * G.GetBasicVal() * H.GetBasicVal())) / G.GetBasicVal() - length.GetBasicVal(), 0, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right).Val, 1E-4)),
                     UnitAngle.Basic
                 ).Convert(Units.Angle);
 
@@ -181,7 +189,9 @@ namespace ProjectileMotionSource.Func
             Α = α;
             H = h;
             G = g;
-            V = new InitialVelocity(Math.Sqrt(2.0 * G.GetBasicVal() * (maxHeight.GetBasicVal() - H.GetBasicVal()) / Math.Pow(Math.Sin(Α.GetBasicVal()), 2.0)), UnitVelocity.Basic).Convert(Units.Velocity);
+            V = new InitialVelocity(
+               GetResultWithComputeExpection(Math.Sqrt(2.0 * G.GetBasicVal() * (maxHeight.GetBasicVal() - H.GetBasicVal()) / Math.Pow(Math.Sin(Α.GetBasicVal()), 2.0))),
+                UnitVelocity.Basic).Convert(Units.Velocity);
 
             CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialVelocityByMaxHeight;
@@ -202,7 +212,9 @@ namespace ProjectileMotionSource.Func
             V = v;
             Α = α;
             G = g;
-            H = new InitialHeight(maxHeight.GetBasicVal() - Math.Pow(V.GetBasicVal() * Math.Sin(Α.GetBasicVal()), 2.0) / (2.0 * G.GetBasicVal()), UnitLength.Basic).Convert(Units.Length);
+            H = new InitialHeight(
+               GetResultWithComputeExpection(maxHeight.GetBasicVal() - Math.Pow(V.GetBasicVal() * Math.Sin(Α.GetBasicVal()), 2.0) / (2.0 * G.GetBasicVal())), 
+                UnitLength.Basic).Convert(Units.Length);
 
             CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialHeightByMaxHeight;
@@ -223,8 +235,11 @@ namespace ProjectileMotionSource.Func
             V = v;
             H = h;
             G = g;
+            
 
-            Α = new ElevationAngle(Math.Asin(Math.Sqrt(2.0 * G.GetBasicVal() * maxHeight.GetBasicVal() / Math.Pow(V.GetBasicVal(), 2))), UnitAngle.Basic).Convert(Units.Angle);
+            Α = new ElevationAngle(
+                GetResultWithComputeExpection(Math.Asin(Math.Sqrt(2.0 * G.GetBasicVal() * maxHeight.GetBasicVal() / Math.Pow(V.GetBasicVal(), 2)))),
+                UnitAngle.Basic).Convert(Units.Angle);
 
             CheckData();
             UsedAssignmentType = AssignmentsTypes.ElevationAngleByMaxHeight;
@@ -246,7 +261,9 @@ namespace ProjectileMotionSource.Func
             H = h;
             G = g;
 
-            Α = new ElevationAngle(Math.Acos(Math.Sqrt((2.0 * G.GetBasicVal() * H.GetBasicVal() + Math.Pow(V.GetBasicVal(), 2.0)) / (2.0 * G.GetBasicVal() * H.GetBasicVal() + 2.0 * Math.Pow(V.GetBasicVal(), 2.0)))), UnitAngle.Basic).Convert(Units.Angle);
+            Α = new ElevationAngle(
+                GetResultWithComputeExpection(Math.Acos(Math.Sqrt((2.0 * G.GetBasicVal() * H.GetBasicVal() + Math.Pow(V.GetBasicVal(), 2.0)) / (2.0 * G.GetBasicVal() * H.GetBasicVal() + 2.0 * Math.Pow(V.GetBasicVal(), 2.0))))), 
+                UnitAngle.Basic).Convert(Units.Angle);
 
             CheckData();
             UsedAssignmentType = AssignmentsTypes.ElevationAngleGetMaxRange;
@@ -287,14 +304,24 @@ namespace ProjectileMotionSource.Func
         };
 
 
-        protected double GetRootWithComputeExpection(double? equationSolverOutput)
+        protected double GetResultWithComputeExpection(double? solverRootResult)
         {
-            if (equationSolverOutput.HasValue)
+            if (solverRootResult.HasValue)
             {
-                return equationSolverOutput.Value;
+                return GetResultWithComputeExpection(solverRootResult.Value);
             }
 
-            throw new UnableToComputeQuantityException(UNABLETOCOMPUTEQUANTITYTEXT);
+            return GetResultWithComputeExpection(-1);
+        }
+
+        protected double GetResultWithComputeExpection(double expectedResult)
+        {
+            if (expectedResult < 0)
+            {
+                throw new UnableToComputeQuantityException(UNABLETOCOMPUTEQUANTITYTEXT);
+            }
+
+            return expectedResult;
         }
 
 

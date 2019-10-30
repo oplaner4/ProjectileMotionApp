@@ -84,10 +84,7 @@ namespace Utilities.Quantities
     public class Angle : QuantityWithUnit
     {
         public Angle(double val, UnitAngle unit) : base(val, unit)
-        {
-            if (val < 0)
-                throw new Exception("An elevation angle must be larger or equal to zero");
-        }
+        {}
 
         public Angle Convert(UnitAngle to)
         {
@@ -123,6 +120,11 @@ namespace Utilities.Quantities
             if (this > new ElevationAngle(ElevationAngleTypes.Right))
             {
                 throw new InvalidElevationAngleException(BuidRightAngleExceptionMessage());
+            }
+
+            if (val < 0)
+            {
+                throw new Exception("An elevation angle must be larger or equal to zero");
             }
         }
 
@@ -168,8 +170,8 @@ namespace Utilities.Quantities
     {
         public GravAcceleration(double val, UnitGravAcceleration unit) : base(val, unit)
         {
-            if (val < 0)
-                throw new Exception("A gravitation acceleration must be larger or equal to zero");
+            if (val <= 0)
+                throw new Exception("A gravitation acceleration must be larger than zero");
         }
 
         public GravAcceleration(GravAccelerations val = GravAccelerations.Earth) : base(GetGravAccelerationValue(val), UnitGravAcceleration.Basic)
@@ -229,7 +231,7 @@ namespace Utilities.Quantities
         public Velocity(double val, UnitVelocity unit) : base(val, unit)
         {
             if (val < 0)
-                throw new Exception("An initial velocity must be larger or equal to zero");
+                throw new Exception("A velocity must be larger or equal to zero");
         }
 
         public new Velocity RoundVal(int roundDigits)
@@ -249,7 +251,7 @@ namespace Utilities.Quantities
     public class InitialVelocity : Velocity
     {
         public InitialVelocity(double val, UnitVelocity unit) : base(val, unit)
-        { }
+        {}
 
         public new InitialVelocity RoundVal(int roundDigits)
         {
@@ -271,7 +273,6 @@ namespace Utilities.Quantities
         {
             if (val < 0)
                  throw new Exception("The length or height must be larger or equal to zero");
-            
         }
 
         public new Length RoundVal(int roundDigits)
@@ -368,7 +369,7 @@ namespace Utilities.Quantities
         public Area (double val, UnitArea unit) : base (val, unit)
         {
             if (val < 0)
-                throw new Exception("The area must be larger or equal to zero");
+                throw new Exception("An area must be larger or equal to zero");
         }
 
 
