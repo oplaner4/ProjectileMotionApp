@@ -50,7 +50,7 @@ namespace ProjectileMotionSource.Point
         }
 
 
-        private void ConvertToResultUnits ()
+        private void ConvertToResultUnits()
         {
             X = X.Convert(Motion.Settings.Quantities.Units.Length);
             Y = Y.Convert(Motion.Settings.Quantities.Units.Length);
@@ -106,7 +106,7 @@ namespace ProjectileMotionSource.Point
         }
 
 
-        public ProjectileMotionPoint (ProjectileMotion motion, ProjectileMotionPointTypes type)
+        public ProjectileMotionPoint(ProjectileMotion motion, ProjectileMotionPointTypes type)
         {
             Motion = motion;
             IsFarthest = false;
@@ -116,7 +116,11 @@ namespace ProjectileMotionSource.Point
             {
                 case ProjectileMotionPointTypes.Highest:
                     IsHighest = true;
-                    T = new Time(Motion.Settings.Quantities.V.GetBasicVal() * Math.Sin(Motion.Settings.Quantities.Α.GetBasicVal()) / Motion.Settings.Quantities.G.GetBasicVal(), UnitTime.Basic);
+                    if (GetTimeHighest().GetRoundedVal(Motion.Settings.RoundDigits) == GetTimeFarthest().GetRoundedVal(Motion.Settings.RoundDigits))
+                    {
+                        IsFarthest = true;
+                    }
+                    T = GetTimeHighest();
                     break;
                 case ProjectileMotionPointTypes.Farthest:
                     IsFarthest = true;
@@ -131,10 +135,10 @@ namespace ProjectileMotionSource.Point
                     {
                         IsFarthest = true;
                     }
-                   break;
+                    break;
                 default:
                     T = new Time(0, UnitTime.Basic);
-                   break;
+                    break;
             }
 
 
@@ -146,6 +150,11 @@ namespace ProjectileMotionSource.Point
             return new Time((Motion.Settings.Quantities.V.GetBasicVal() * Math.Sin(Motion.Settings.Quantities.Α.GetBasicVal()) + Math.Sqrt(Math.Pow(Motion.Settings.Quantities.V.GetBasicVal() * Math.Sin(Motion.Settings.Quantities.Α.GetBasicVal()), 2) + 2 * Motion.Settings.Quantities.G.GetBasicVal() * Motion.Settings.Quantities.H.GetBasicVal())) / Motion.Settings.Quantities.G.GetBasicVal(), UnitTime.Basic);
         }
 
+        private Time GetTimeHighest ()
+        {
+            return new Time(Motion.Settings.Quantities.V.GetBasicVal() * Math.Sin(Motion.Settings.Quantities.Α.GetBasicVal()) / Motion.Settings.Quantities.G.GetBasicVal(), UnitTime.Basic);
+        }
+             
         private Time GetTimeFarthest()
         {
             double root = Cubic.RealRoots(

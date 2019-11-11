@@ -269,7 +269,10 @@ namespace ProjectileMotionSource.WithRezistance.Func
                 RoundDigits = Settings.RoundDigits
             });
 
-            DegradedMotion.Settings.PointsForTrajectory = (int)(Settings.PointsForTrajectory * DegradedMotion.GetLength().Val / GetLength().Val);
+            if (GetLength().Val > 0)
+            {
+                DegradedMotion.Settings.PointsForTrajectory = (int)(Settings.PointsForTrajectory * DegradedMotion.GetLength().Val / GetLength().Val);
+            }
 
             return DegradedMotion;
         }

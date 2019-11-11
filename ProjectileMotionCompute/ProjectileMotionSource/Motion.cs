@@ -154,6 +154,11 @@ namespace ProjectileMotionSource.Func
 
         protected Length GetArcLength(UnitLength unitLength)
         {
+            if (Settings.Quantities.Α.IsRight())
+            {
+                return new Length(2.0 * GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Highest).Y.GetConvertedVal(unitLength), unitLength);
+            }
+
             return new Length(Integrate.OnClosedInterval(x => Math.Sqrt(1 + Math.Pow(Math.Tan(Settings.Quantities.Α.GetBasicVal()) - (Settings.Quantities.G.GetBasicVal() / Math.Pow(Settings.Quantities.V.GetBasicVal() * Math.Cos(Settings.Quantities.Α.GetBasicVal()), 2.0)) * x, 2.0)), 0, GetLength(UnitLength.Basic).Val), UnitLength.Basic).Convert(unitLength);
         }
 
@@ -168,6 +173,11 @@ namespace ProjectileMotionSource.Func
 
         protected Area GetAreaUnderArc(UnitArea unitArea)
         {
+            if (Settings.Quantities.Α.IsRight())
+            {
+                return new Area(0, unitArea);
+            }
+
             return new Area(Math.Pow(GetLength(UnitLength.Basic).Val, 2.0) * Math.Tan(Settings.Quantities.Α.GetBasicVal()) / 2.0 - Math.Pow(GetLength(UnitLength.Basic).Val, 3.0) * Settings.Quantities.G.GetBasicVal() / (6.0 * Math.Pow(Settings.Quantities.V.GetBasicVal() * Math.Cos(Settings.Quantities.Α.GetBasicVal()), 2.0)) + GetLength(UnitLength.Basic).Val * Settings.Quantities.H.GetBasicVal(), UnitArea.Basic).Convert(unitArea); 
         }
 

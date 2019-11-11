@@ -151,7 +151,7 @@ namespace ProjectileMotionWeb.Controllers
 
                 InitialVelocity v = new InitialVelocity(postModel.Quantities.InitialVelocity, new ReflectionHelper(typeof(UnitVelocity)).GetValueOfStaticProperty(postModel.Quantities.InitialVelocityUnit) as UnitVelocity);
                 InitialHeight h = new InitialHeight(postModel.Quantities.InitialHeight, new ReflectionHelper(typeof(UnitLength)).GetValueOfStaticProperty(postModel.Quantities.InitialHeightUnit) as UnitLength);
-                GravAcceleration g = new GravAcceleration(postModel.Quantities.GravAcceleration, postModel.Quantities.GravAccelerationUnit == null ? UnitGravAcceleration.Basic : new ReflectionHelper(typeof(UnitGravAcceleration)).GetValueOfStaticProperty(postModel.Quantities.GravAccelerationUnit) as UnitGravAcceleration);
+                GravAcceleration g = new GravAcceleration(postModel.Quantities.GravAcceleration, new ReflectionHelper(typeof(UnitGravAcceleration)).GetValueOfStaticProperty(postModel.Quantities.GravAccelerationUnit) as UnitGravAcceleration);
                 ElevationAngle α = new ElevationAngle(postModel.Quantities.ElevationAngle, new UnitsReflectionHelper(typeof(UnitAngle)).GetValueOfStaticProperty(postModel.Quantities.ElevationAngleUnit) as UnitAngle);
 
                 ProjectileMotionResultsUnits units = new ProjectileMotionResultsUnits()
@@ -171,7 +171,7 @@ namespace ProjectileMotionWeb.Controllers
                        new ProjectileMotionWithRezistanceQuantities(
                            v, α, h, g,
                            new Mass(postModel.Quantities.Mass.Value, new ReflectionHelper(typeof(UnitMass)).GetValueOfStaticProperty(postModel.Quantities.MassUnit) as UnitMass),
-                           new Density(postModel.Quantities.Density.Value, postModel.Quantities.DensityUnit == null ? UnitDensity.Basic : new ReflectionHelper(typeof(UnitDensity)).GetValueOfStaticProperty(postModel.Quantities.DensityUnit) as UnitDensity),
+                           new Density(postModel.Quantities.Density.Value, new ReflectionHelper(typeof(UnitDensity)).GetValueOfStaticProperty(postModel.Quantities.DensityUnit) as UnitDensity),
                            new FrontalArea(postModel.Quantities.FrontalArea.Value, new ReflectionHelper(typeof(UnitArea)).GetValueOfStaticProperty(postModel.Quantities.FrontalAreaUnit) as UnitArea),
                            new DragCoefficient(postModel.Quantities.DragCoefficient.Value),
                            units

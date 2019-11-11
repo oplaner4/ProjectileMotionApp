@@ -11,14 +11,21 @@
         <a data-toggler-for="@Model.NameForQuantity" title="Toggle data input type" data-text-toggle="own value" class="ml-1 btn btn-sm btn-info form-quantity-group-datainputtype-toggler" href="#"><span>predefined values</span> <i class="fa fa-random"></i></a>
     }
     <div class="@(Model.HasPredefined ? "mt-2" : string.Empty)">
+
         @if (Model.HasPredefined)
         {
-            <select name="@Model.NameForQuantity" class="form-control form-quantity-group-datainputtype d-none" style="width:auto">
-                @foreach (KeyValuePair<string, double> pair in Model.PredefinedDic)
-                {
-                    <option value="@pair.Value">@pair.Key</option>
-                }
-            </select>
+           <div class="form-quantity-group-datainputtype d-none">
+               <select name="@Model.NameForQuantity" class="form-control" style="width:auto">
+                   @foreach (KeyValuePair<string, double> pair in Model.PredefinedDic)
+                   {
+                       <option value="@pair.Value">@pair.Key</option>
+                   }
+               </select>
+               @if (Model.HasUnit)
+               {
+                 <input type="hidden" name="@Model.NameForUnit" value="Basic" />
+               }
+           </div>
         }
         <div class="@(Model.HasPredefined ? "form-quantity-group-datainputtype form-quantity-group-datainputtype-current" : string.Empty)">
             <div class="d-lg-flex">

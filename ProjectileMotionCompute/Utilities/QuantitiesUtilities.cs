@@ -112,17 +112,27 @@ namespace Utilities.Quantities
             { ElevationAngleTypes.Right, Math.PI / 2 }
         };
 
-        public ElevationAngle(ElevationAngleTypes type) : base (ElevationAngleTypesDic[type], UnitAngle.Basic)
-        {}
+        public ElevationAngle(ElevationAngleTypes type) : base(ElevationAngleTypesDic[type], UnitAngle.Basic)
+        { }
+
+        public bool IsRight()
+        {
+            return GetBasicVal() - new ElevationAngle(ElevationAngleTypes.Right).GetBasicVal() <= Math.Pow(10, 12);
+        }
+
+        public static double GetElevationAngleValue(ElevationAngleTypes type)
+        {
+            return ElevationAngleTypesDic[type];
+        }
 
         public ElevationAngle(double val, UnitAngle unit) : base(val, unit)
         {
-            if (this > new ElevationAngle(ElevationAngleTypes.Right))
+            if (this > new ElevationAngle(ElevationAngleTypes.Right).RoundVal(12))
             {
                 throw new InvalidElevationAngleException(BuidRightAngleExceptionMessage());
             }
 
-            if (val < 0)
+            if (val <= -Math.Pow(10,-12))
             {
                 throw new Exception("An elevation angle must be larger or equal to zero");
             }
@@ -159,7 +169,7 @@ namespace Utilities.Quantities
 
             foreach (UnitAngle un in new List<UnitAngle>() { UnitAngle.Radian, UnitAngle.Degree, UnitAngle.Gradian })
             {
-                ret.Add(new ElevationAngle(ElevationAngleTypes.Right).Convert(un).RoundVal(4));
+                ret.Add(new ElevationAngle(ElevationAngleTypes.Right).Convert(un));
             }
 
             return ret;
@@ -170,7 +180,7 @@ namespace Utilities.Quantities
     {
         public GravAcceleration(double val, UnitGravAcceleration unit) : base(val, unit)
         {
-            if (val <= 0)
+            if (val <= -Math.Pow(10, -12))
                 throw new Exception("A gravitation acceleration must be larger than zero");
         }
 
@@ -230,7 +240,7 @@ namespace Utilities.Quantities
         /// <param name="val">The value of velocity. Larger or equal to zero.</param>
         public Velocity(double val, UnitVelocity unit) : base(val, unit)
         {
-            if (val < 0)
+            if (val <= -Math.Pow(10, -12))
                 throw new Exception("A velocity must be larger or equal to zero");
         }
 
@@ -271,7 +281,7 @@ namespace Utilities.Quantities
     {
         public Length(double val, UnitLength unit) : base(val, unit)
         {
-            if (val < 0)
+            if (val <= -Math.Pow(10, -12))
                  throw new Exception("The length or height must be larger or equal to zero");
         }
 
@@ -329,7 +339,7 @@ namespace Utilities.Quantities
     {
         public Time(double val, UnitTime unit) : base(val, unit)
         {
-            if (val < 0)
+            if (val <= -Math.Pow(10, -12))
                 throw new Exception("The time or duration must be larger or equal to zero");
         }
 
@@ -368,7 +378,7 @@ namespace Utilities.Quantities
     {
         public Area (double val, UnitArea unit) : base (val, unit)
         {
-            if (val < 0)
+            if (val <= -Math.Pow(10, -12))
                 throw new Exception("An area must be larger or equal to zero");
         }
 
@@ -409,7 +419,7 @@ namespace Utilities.Quantities
     {
         public Mass(double val, UnitMass unit) : base(val, unit)
         {
-            if (val < 0)
+            if (val <= -Math.Pow(10, -12))
                 throw new Exception("The mass must be larger or equal to zero");
         }
 
@@ -431,7 +441,7 @@ namespace Utilities.Quantities
     {
         public Density(double val, UnitDensity unit) : base(val, unit)
         {
-            if (val < 0)
+            if (val <= -Math.Pow(10, -12))
                 throw new Exception("The density must be larger or equal to zero");
         }
 
@@ -475,7 +485,7 @@ namespace Utilities.Quantities
     public class DragCoefficient : Quantity
     {
         public DragCoefficient (double val) : base (val) {
-            if (val < 0)
+            if (val <= -Math.Pow(10, -12))
                 throw new Exception("A drag coefficient must be larger or equal to zero");
         }
 

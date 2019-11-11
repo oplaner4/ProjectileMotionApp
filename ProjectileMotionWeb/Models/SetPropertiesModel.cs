@@ -11,6 +11,7 @@ namespace ProjectileMotionWeb.Models
         internal const string REQUIREDWITHREZISTANCETEXT = REQUIREDTEXT + " for motions with rezistance";
         internal const string REQUIREDFORASSIGNMENT = REQUIREDTEXT + " for selected assignment";
         internal const string LARGERTHANZEROTEXT = "* Larger than zero";
+        internal const string LARGEROREQUALTOZEROTEXT = "* Larger or equal to zero";
 
         [Display(Name = "Velocity")]
         public string ResultUnitVelocity { get; set; }

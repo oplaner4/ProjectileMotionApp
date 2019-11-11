@@ -145,6 +145,15 @@
                     </div>
                     <div class="col-md-6 collapse formQuantityGroupElevationAngleCollapse formQuantityGroupCollapse">
                         <div class="ml-md-2">
+
+                            @{
+                                Dictionary<string, double> predefinedElevationAnglesDic = new Dictionary<string, double>();
+                                foreach (ElevationAngle.ElevationAngleTypes t in Enum.GetValues(typeof(ElevationAngle.ElevationAngleTypes)))
+                                {
+                                    predefinedElevationAnglesDic.Add(t.ToString(), ElevationAngle.GetElevationAngleValue(t));
+                                }
+                            }
+
                             @Html.Partial("_FormQuantityGroup",
                                 new _FormQuantityGroupModel(
                                     Html.EditorFor(m => m.Quantities.ElevationAngle, additionalDataForQuantityInputs),
@@ -153,7 +162,8 @@
                                     Html.NameFor(m => m.Quantities.ElevationAngle),
                                     Html.NameFor(m => m.Quantities.ElevationAngleUnit),
                                     Model.Quantities.ElevationAngleUnit,
-                                    typeof(UnitAngle)
+                                    typeof(UnitAngle),
+                                    predefinedElevationAnglesDic
                                )
                             )
                         </div>

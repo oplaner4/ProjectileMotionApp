@@ -74,11 +74,10 @@
 
                                 var pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                                 var specialPointTitle = '';
-                                if (pointData.isFarthest) {
-                                    specialPointTitle = "farthest point";
-                                }
-                                else if (pointData.isHighest) {
-                                    specialPointTitle = "highest point";
+                                if (pointData.isFarthest || pointData.isHighest) {
+                                    if (pointData.isFarthest && pointData.isHighest) specialPointTitle = "the farthest and highest point";
+                                    else if (pointData.isFarthest) specialPointTitle = "the farthest point";
+                                    else specialPointTitle = "the highest point";
                                 }
 
                                 var label = data.datasets[tooltipItem.datasetIndex].label || '';
