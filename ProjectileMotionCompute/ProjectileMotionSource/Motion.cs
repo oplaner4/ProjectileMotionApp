@@ -140,6 +140,11 @@ namespace ProjectileMotionSource.Func
 
         protected Length GetLength(UnitLength unitLength)
         {
+            if (Settings.Quantities.Α.IsRight())
+            {
+                return new Length(0, unitLength);
+            }
+
             return new Length(Settings.Quantities.V.GetBasicVal() * Math.Cos(Settings.Quantities.Α.GetBasicVal()) * (Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()) + Math.Sqrt(Math.Pow(Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()), 2.0) + 2 * Settings.Quantities.G.GetBasicVal() * Settings.Quantities.H.GetBasicVal())) / Settings.Quantities.G.GetBasicVal(), UnitLength.Basic).Convert(unitLength);
         }
 

@@ -195,6 +195,11 @@ namespace ProjectileMotionSource.Point
 
         private Velocity GetVelocityX()
         {
+            if (Motion.Settings.Quantities.Α.IsRight())
+            {
+                return new Velocity(0, UnitVelocity.Basic);
+            }
+
             return new Velocity(Math.Cos(Motion.Settings.Quantities.Α.GetBasicVal()) * Motion.Settings.Quantities.V.GetBasicVal(), UnitVelocity.Basic);
         }
 

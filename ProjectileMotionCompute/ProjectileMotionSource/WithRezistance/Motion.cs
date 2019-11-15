@@ -143,10 +143,14 @@ namespace ProjectileMotionSource.WithRezistance.Func
             {
                 ProjectileMotionPoint prevPoint = ProjectileMotionWithRezistanceComputation.Start(this).Point;
                 double a = 0;
-                foreach (ProjectileMotionPoint point in GetListAllPointsOfTrajectory())
+
+                if (!Settings.Quantities.Α.IsRight())
                 {
-                    a += (point.Y.GetBasicVal() + prevPoint.Y.GetBasicVal()) * (point.X.GetBasicVal() - prevPoint.X.GetBasicVal()) / 2.0;
-                    prevPoint = point;
+                    foreach (ProjectileMotionPoint point in GetListAllPointsOfTrajectory())
+                    {
+                        a += (point.Y.GetBasicVal() + prevPoint.Y.GetBasicVal()) * (point.X.GetBasicVal() - prevPoint.X.GetBasicVal()) / 2.0;
+                        prevPoint = point;
+                    }
                 }
 
                 _AreaUnderArc = new Area(a, UnitArea.Basic).Convert(unitArea);
@@ -179,7 +183,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
                 _ArcLength = new Length(l, UnitLength.Basic).Convert(unitLength);
             }
 
-            return _ArcLength;
+            return _ArcLength.Convert(unitLength);
         }
 
         public override ProjectileMotionPoint GetPoint(Time t)
