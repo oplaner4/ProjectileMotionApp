@@ -117,7 +117,7 @@ namespace Utilities.Quantities
 
         public bool IsRight()
         {
-            return GetBasicVal() - new ElevationAngle(ElevationAngleTypes.Right).GetBasicVal() <= Math.Pow(10, 12);
+            return new ElevationAngle(ElevationAngleTypes.Right).GetBasicVal() - GetBasicVal() <= Math.Pow(10, -12);
         }
 
         public static double GetElevationAngleValue(ElevationAngleTypes type)
