@@ -6,7 +6,7 @@ namespace ProjectileMotionWeb.Controllers
 {
     public class HomeController : BaseController
     {
-        public ActionResult Index()
+        public ActionResult Index ()
         {
             return RedirectToAction(nameof(Start));
         }

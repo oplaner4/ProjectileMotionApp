@@ -116,15 +116,21 @@ namespace ProjectileMotionSource.Point
             {
                 case ProjectileMotionPointTypes.Highest:
                     IsHighest = true;
-                    if (GetTimeHighest().GetRoundedVal(Motion.Settings.RoundDigits) == GetTimeFarthest().GetRoundedVal(Motion.Settings.RoundDigits))
+                    if (HighestIsFarthest())
                     {
                         IsFarthest = true;
                     }
+
                     T = GetTimeHighest();
                     break;
                 case ProjectileMotionPointTypes.Farthest:
                     IsFarthest = true;
-                    T = GetTimeFarthest();
+                    if (HighestIsFarthest())
+                    {
+                        IsHighest = true;
+                        T = GetTimeHighest();
+                    }
+                    else T = GetTimeFarthest();
                     break;
                 case ProjectileMotionPointTypes.Initial:
                     T = new Time(0, UnitTime.Basic);
@@ -143,6 +149,11 @@ namespace ProjectileMotionSource.Point
 
 
             ComputeProperties();
+        }
+
+        private bool HighestIsFarthest ()
+        {
+            return Math.Abs(GetTimeHighest().GetBasicVal() - GetTimeFarthest().GetBasicVal()) <= Math.Pow(10, -Motion.Settings.RoundDigits) || Motion.Settings.Quantities.Α.IsRight();
         }
 
         private Time GetTimeFinal()
