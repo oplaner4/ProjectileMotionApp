@@ -34,7 +34,7 @@ namespace ProjectileMotionSource.Point
             Vy = GetVelocityY();
 
 
-            if (T >= GetTimeFinal())
+            if (T >= GetTimeFinal() && T.Val != 0)
             {
                 X = Motion.GetLength();
                 Y = new Length(0, UnitLength.Basic);
@@ -66,7 +66,7 @@ namespace ProjectileMotionSource.Point
             X = new Length(prevComputation.Point.X.GetBasicVal() + prevComputation.Point.Vx.GetBasicVal() * ProjectileMotionWithRezistanceComputation.Dt, UnitLength.Basic);
             Y = new Length(prevComputation.GetNewY() < 0 ? 0 : prevComputation.GetNewY(), UnitLength.Basic);
             T = new Time(prevComputation.Point.T.GetBasicVal() + ProjectileMotionWithRezistanceComputation.Dt, UnitTime.Basic);
-            Vx = new Velocity(prevComputation.Point.Vx.GetBasicVal() + prevComputation.GetAx() * ProjectileMotionWithRezistanceComputation.Dt, UnitVelocity.Basic);
+            Vx = new Velocity(Math.Abs(prevComputation.GetNewVx()), UnitVelocity.Basic);
             Vy = new Velocity(Math.Abs(prevComputation.GetNewVy()), UnitVelocity.Basic);
 
             WasHighest = prevComputation.Point.WasHighest;
@@ -116,7 +116,7 @@ namespace ProjectileMotionSource.Point
             {
                 case ProjectileMotionPointTypes.Highest:
                     IsHighest = true;
-                    if (HighestIsFarthest())
+                    if (HighestIsFarthest() && Motion.Settings.Quantities.Α.Val > 0)
                     {
                         IsFarthest = true;
                     }
@@ -133,11 +133,22 @@ namespace ProjectileMotionSource.Point
                     else T = GetTimeFarthest();
                     break;
                 case ProjectileMotionPointTypes.Initial:
+                    if (Motion.Settings.Quantities.Α.Val == 0)
+                    {
+                        IsHighest = true;
+                        WasHighest = true;
+                        if (Motion.Settings.Quantities.H.Val == 0)
+                        {
+                            IsFarthest = true;
+                            WasFarthest = true;
+                        }
+                    }
+
                     T = new Time(0, UnitTime.Basic);
                     break;
                 case ProjectileMotionPointTypes.Final:
                     T = GetTimeFinal();
-                    if (GetTimeFarthest() >= T)
+                    if (GetTimeFarthest() >= T || Motion.Settings.Quantities.Α.Val == 0)
                     {
                         IsFarthest = true;
                     }

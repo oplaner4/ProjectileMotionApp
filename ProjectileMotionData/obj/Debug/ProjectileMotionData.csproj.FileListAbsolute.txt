@@ -1,4 +1,3 @@
-C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\obj\Debug\ProjectileMotionData.csproj.CoreCompileInputs.cache
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\ProjectileMotionData.dll.config
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\ProjectileMotionData.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\ProjectileMotionData.pdb
@@ -55,7 +54,9 @@ C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\Microso
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\ProjectileMotion.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\Utilities.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\PdfSharp.dll
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\NonLinearEquationSolver.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\MathNet.Numerics.dll
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\netstandard.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\ProjectileMotion.pdb
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\ProjectileMotion.dll.config
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
@@ -65,8 +66,7 @@ C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\PdfShar
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\MathNet.Numerics.xml
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\de\PdfSharp.resources.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\obj\Debug\ProjectileMotionData.csprojAssemblyReference.cache
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\obj\Debug\ProjectileMotionData.csproj.CoreCompileInputs.cache
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\obj\Debug\ProjectileMotionData.csproj.CopyComplete
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\obj\Debug\ProjectileMotionData.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\obj\Debug\ProjectileMotionData.pdb
-C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\NonLinearEquationSolver.dll
-C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\netstandard.dll

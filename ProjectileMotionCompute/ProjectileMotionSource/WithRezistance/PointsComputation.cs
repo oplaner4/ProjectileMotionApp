@@ -22,6 +22,12 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
 
             Point = new ProjectileMotionPoint(Motion, ProjectileMotionPoint.ProjectileMotionPointTypes.Initial);
             VyComputed = Point.Vy.GetBasicVal();
+            VxComputed = Point.Vx.GetBasicVal();
+
+            if (Point.Y.Val == 0)
+            {
+                IsNextReal = false;
+            }
         }
 
         private ProjectileMotionWithRezistanceComputation(ProjectileMotionWithRezistanceComputation prevComputation)
@@ -30,6 +36,7 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
             IsNextReal = true;
 
             VyComputed = prevComputation.GetNewVy();
+            VxComputed = prevComputation.GetNewVx();
 
             Point = new ProjectileMotionPoint( prevComputation );
 
@@ -44,12 +51,20 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
             return VyComputed + GetAy() * Dt;
         }
 
+
+        internal double GetNewVx()
+        {
+            return VxComputed + GetAx() * Dt;
+        }
+
         internal double GetNewY()
         {
             return Point.Y.GetBasicVal() + VyComputed * Dt;
         }
 
         private double VyComputed { get; set; }
+
+        private double VxComputed { get; set; }
 
         internal ProjectileMotionWithRezistance Motion { get; private set; }
 

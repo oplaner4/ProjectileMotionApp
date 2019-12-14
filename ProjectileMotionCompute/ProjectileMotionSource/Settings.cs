@@ -49,6 +49,12 @@ namespace ProjectileMotionSource.Func
                 {
                     throw new Exception("The number of decimal places to round to cannot be smaller than zero");
                 }
+
+                if (value > 15)
+                {
+                    value = 15;
+                }
+
                 _RoundDigits = value;
             }
         }

@@ -281,10 +281,11 @@ namespace ProjectileMotionSource.Func
                 Time now = new Time(finalPoint.T.GetBasicVal() / (Settings.PointsForTrajectory - 1) * i, UnitTime.Basic).RoundVal(Settings.RoundDigits);
                 Time next = new Time(finalPoint.T.GetBasicVal() / (Settings.PointsForTrajectory - 1) * (i + 1), UnitTime.Basic).RoundVal(Settings.RoundDigits);
 
-                if (now != highestPoint.T && now != farthestPoint.T)
+                if (now.GetBasicVal() != highestPoint.T.GetBasicVal() && now.GetBasicVal() != farthestPoint.T.GetBasicVal())
                 {
                     ret.Add(GetPoint(now));
                 }
+
                 if (next >= highestPoint.T && now <= highestPoint.T)
                 {
                     ret.Add(highestPoint);
