@@ -24,7 +24,7 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
             VyComputed = Point.Vy.GetBasicVal();
             VxComputed = Point.Vx.GetBasicVal();
 
-            if (Point.Y.Val == 0)
+            if (Point.Y.Val == 0 && Motion.Settings.Quantities.Α.Val == 0)
             {
                 IsNextReal = false;
             }

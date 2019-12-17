@@ -162,9 +162,9 @@ namespace ProjectileMotionSource.Point
             ComputeProperties();
         }
 
-        private bool HighestIsFarthest ()
+        private bool HighestIsFarthest()
         {
-            return Math.Abs(GetTimeHighest().GetBasicVal() - GetTimeFarthest().GetBasicVal()) <= Math.Pow(10, -Motion.Settings.RoundDigits) || Motion.Settings.Quantities.Α.IsRight();
+            return GetTimeFarthest() == GetTimeHighest() || Motion.Settings.Quantities.Α.IsRight();
         }
 
         private Time GetTimeFinal()

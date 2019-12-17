@@ -79,6 +79,16 @@ namespace Utilities.Quantities
         {
             return q1.GetBasicVal() <= q2.GetBasicVal();
         }
+
+        public static bool operator != (QuantityWithUnit q1, QuantityWithUnit q2)
+        {
+            return Math.Abs(q1.GetBasicVal() - q2.GetBasicVal()) > Math.Pow(10, -12);
+        }
+
+        public static bool operator == (QuantityWithUnit q1, QuantityWithUnit q2)
+        {
+            return Math.Abs(q1.GetBasicVal() - q2.GetBasicVal()) <= Math.Pow(10, -12);
+        }
     }
 
     public class Angle : QuantityWithUnit
