@@ -7,8 +7,8 @@
     <div class="btn-group">
         <a class="btn btn-primary d-none d-xl-inline-block" href="@Url.Action(Model.Layout.Menu.SetWithRezistance.Value ? "MotionWithRezistance" : "Motion", new { ShowLargerMotionChart = !Model.ShowLargerMotionChart })"><i class="fa fa-search-@(Model.ShowLargerMotionChart ? "minus" : "plus")" aria-hidden="true"></i> @(Model.ShowLargerMotionChart ? "Smaller chart" : "Larger chart")</a>
         <button type="submit" name="contentType" value="@SavingAndExportController.ChartExportContentTypes.Png" class="btn btn-secondary"><i class="fa fa-file-export"></i> Export chart (png)</button>
-        <button type="submit" name="contentType" value="@SavingAndExportController.ChartExportContentTypes.Pdf" class="btn btn-danger"><i class="fa fa-file-export"></i> Export chart (pdf)</button>
-        <a class="btn btn-success btn-replay" href="#"><i class="fa fa-play" aria-hidden="true"></i> Replay animation</a>
+        <button type="submit" name="contentType" value="@SavingAndExportController.ChartExportContentTypes.Pdf" class="btn btn-info"><i class="fa fa-file-export"></i> Export chart (pdf)</button>
+        <a class="btn btn-danger btn-animation" href="#"><i class="fa fa-stop" aria-hidden="true"></i> <span>Stop animation</span></a>
         <input type="hidden" name="canvasbase64ImageUrl" value="IsFilledByJavascript" />
     </div>
 }

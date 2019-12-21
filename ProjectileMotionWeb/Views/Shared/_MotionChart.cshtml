@@ -120,48 +120,106 @@
                 }
             });
 
-            window.pointsDrawingAnimationProgress = false;
-
-            var playPointsDrawingAnimations = function () {
-                setTimeout(playPointsDrawingAnimation, window.motionChartScatter.options.hover.animationDuration, 0, dataForMotion);
+            var playPointsDrawingAnimations = function (onAnimationStart, onAnimationEnd, onAnimationProgress) {
                 if (window.motionChartScatter.data.datasets.length > 1) {
-                    setTimeout(playPointsDrawingAnimation, window.motionChartScatter.options.hover.animationDuration, 1, dataForSecondMotion);
+                    setTimeout(playPointsDrawingAnimation, window.motionChartScatter.options.hover.animationDuration, 0, dataForMotion, onAnimationStart, function () { }, onAnimationProgress);
+                    setTimeout(playPointsDrawingAnimation, window.motionChartScatter.options.hover.animationDuration, 1, dataForSecondMotion, function () { }, onAnimationEnd, function () { });
+                }
+                else {
+                    setTimeout(playPointsDrawingAnimation, window.motionChartScatter.options.hover.animationDuration, 0, dataForMotion, onAnimationStart, onAnimationEnd, onAnimationProgress);
                 }
             }
-            var playPointsDrawingAnimation = function (dataSetIndex, dataSource) {
+
+            window.storedPointsDrawingAnimationsInfo = new Array(
+                {
+                    dataSourcePointToDrawIndex: 0,
+                    interval: null
+                },
+                {
+                    dataSourcePointToDrawIndex: 0,
+                    interval: null
+                }
+            );
+
+            var playPointsDrawingAnimation = function (dataSetIndex, dataSource, onAnimationStart, onAnimationEnd, onAnimationProgress) {
                 window.motionChartScatter.data.datasets[dataSetIndex].data = new Array();
 
-                var dataSourcePointToDrawIndex = 1;
-                var pointsMotionDrawingAnimationInterval = null;
                 var pointsMotionDrawingAnimationIntervalCallback = function () {
+                    onAnimationProgress(dataSource[window.storedPointsDrawingAnimationsInfo[dataSetIndex].dataSourcePointToDrawIndex]);
+                    window.motionChartScatter.data.datasets[dataSetIndex].data = dataSource.slice(0, window.storedPointsDrawingAnimationsInfo[dataSetIndex].dataSourcePointToDrawIndex + 1);
 
-                    window.pointsDrawingAnimationProgress = true;
-                    window.motionChartScatter.data.datasets[dataSetIndex].data = dataSource.slice(0, dataSourcePointToDrawIndex + 1);
-
-                    clearInterval(pointsMotionDrawingAnimationInterval);
+                    clearInterval(window.storedPointsDrawingAnimationsInfo[dataSetIndex].interval);
                     window.motionChartScatter.update();
 
-                    if (dataSourcePointToDrawIndex === dataSource.length - 1) {
-                        window.pointsDrawingAnimationProgress = false;
+                    if (window.storedPointsDrawingAnimationsInfo[dataSetIndex].dataSourcePointToDrawIndex === dataSource.length - 1) {
+                        
+                        onAnimationEnd();
                     }
                     else {
-                        pointsMotionDrawingAnimationInterval = setInterval(pointsMotionDrawingAnimationIntervalCallback, dataSource[dataSourcePointToDrawIndex + 1].tMiliseconds - dataSource[dataSourcePointToDrawIndex].tMiliseconds);
-                        dataSourcePointToDrawIndex++;
+                        window.storedPointsDrawingAnimationsInfo[dataSetIndex].interval = setInterval(pointsMotionDrawingAnimationIntervalCallback, dataSource[window.storedPointsDrawingAnimationsInfo[dataSetIndex].dataSourcePointToDrawIndex + 1].tMiliseconds - dataSource[window.storedPointsDrawingAnimationsInfo[dataSetIndex].dataSourcePointToDrawIndex].tMiliseconds);
+
+                        window.storedPointsDrawingAnimationsInfo[dataSetIndex].dataSourcePointToDrawIndex++;
                     }
                 };
 
+                onAnimationStart();
                 pointsMotionDrawingAnimationIntervalCallback();
             };
 
+            var animationProgress = false;
+            var animationEnded = false;
 
-            playPointsDrawingAnimations();
-
-            $('.btn.btn-replay').on('click', function (e) {
+            $('.btn.btn-animation').on('click', function (e) {
                 e.preventDefault();
-                if (!window.pointsDrawingAnimationProgress)
-                    playPointsDrawingAnimations();
+                var $this = $(this);
+                var icon = $('i', this);
+                var span = $('span', this);
+
+                var onAnimationStart = function () {
+                   $this.removeClass('btn-success').addClass('btn-danger');
+                   span.text('Stop animation');
+                   icon.removeClass('fa-play fa-redo-alt').addClass('fa-stop');
+                   animationEnded = false;
+                }
+
+                if (animationProgress) {
+                    window.storedPointsDrawingAnimationsInfo.forEach(function (v) {
+                        clearInterval(v.interval);
+                    });
+
+                    $this.removeClass('btn-danger').addClass('btn-success');
+                    span.text('Resume animation');
+                    icon.removeClass('fa-stop fa-redo-alt').addClass('fa-play');
+
+                    animationProgress = false;
+                }
+                else {
+                    if (animationEnded) {
+                        window.storedPointsDrawingAnimationsInfo.forEach(function (v) {
+                            v.dataSourcePointToDrawIndex = 0;
+                        });
+                    }
+
+                    playPointsDrawingAnimations(
+                        onAnimationStart,
+                        function () {
+                            animationProgress = false;
+                            animationEnded = true;
+                            $this.removeClass('btn-danger').addClass('btn-success');
+                            span.text('Replay animation');
+                            icon.removeClass('fa-stop fa-play').addClass('fa-redo-alt');
+                        },
+                        function (lastPointData) {
+                            animationProgress = true;
+                            console.log('x = ' + lastPointData.x + '; y = ' + lastPointData.y + '; t = ' + lastPointData.t);
+                        }
+                    );
+                }
+
                 return false;
-            });
+            }).trigger('click');
+
+
 
             $('form.form-motionChartExport').on('submit', function () {
                 $('input[name="canvasbase64ImageUrl"]', this).val(window.motionChartScatter.toBase64Image());

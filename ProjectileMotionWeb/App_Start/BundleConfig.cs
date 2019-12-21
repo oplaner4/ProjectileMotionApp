@@ -11,7 +11,6 @@ namespace ProjectileMotionWeb
                         "~/Scripts/External/jquery-3.4.1.js",
                         "~/Scripts/External/popper.js",
                         "~/Scripts/External/bootstrap.js",
-                        "~/fontawesome/js/all.js",
                          "~/Scripts/ChartjsDefiningVariables.js",
                         "~/Scripts/External/Chart.js",
                         "~/Scripts/shadeHexColor.js",
@@ -23,8 +22,7 @@ namespace ProjectileMotionWeb
             bundles.Add(new StyleBundle("~/bundles/Styles").Include(
                     "~/Css/External/bootstrap.css",
                     "~/Css/External/Chart.css",
-                    "~/Css/Style.css"
-                )
+                    "~/Css/Style.css")
             );
 
             BundleTable.EnableOptimizations = true;
