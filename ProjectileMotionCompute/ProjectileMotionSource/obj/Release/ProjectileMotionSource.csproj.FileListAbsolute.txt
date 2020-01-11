@@ -106,7 +106,6 @@ C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\Projecti
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\ProjectileMotionSource\bin\Release\Utilities.pdb
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\ProjectileMotionSource\bin\Release\Utilities.dll.config
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\ProjectileMotionSource\bin\Release\MathNet.Numerics.xml
-C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\ProjectileMotionSource\bin\Release\Newtonsoft.Json.pdb
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\ProjectileMotionSource\bin\Release\Newtonsoft.Json.xml
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\ProjectileMotionSource\bin\Release\PdfSharp.xml
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionCompute\ProjectileMotionSource\bin\Release\PdfSharp.Charting.xml

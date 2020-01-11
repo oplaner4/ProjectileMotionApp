@@ -36,11 +36,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Numerics, Version=4.8.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MathNet.Numerics.4.8.1\lib\net461\MathNet.Numerics.dll</HintPath>
+    <Reference Include="MathNet.Numerics, Version=4.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MathNet.Numerics.4.9.0\lib\net461\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NonLinearEquationSolver, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NonLinearEquationSolver.1.0.0\lib\netstandard2.0\NonLinearEquationSolver.dll</HintPath>
@@ -56,9 +56,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\ProjectileMotionApp\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Packaging, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\ProjectileMotionApp\packages\System.IO.Packaging.4.5.0\lib\net46\System.IO.Packaging.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
