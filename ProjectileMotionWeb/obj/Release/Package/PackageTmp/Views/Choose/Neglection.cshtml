@@ -1,0 +1,21 @@
+﻿@using ProjectileMotionWeb.Models;
+@using ProjectileMotionData;
+
+@model ChooseModel
+
+<h5 class="mb-3">Neglect the resistance of the environment?</h5>
+
+<div class="row">
+    <div class="col-lg-8 text-center">
+        <img class="img-fluid mb-2" src="~/Assets/Images/ExampleCharts/exampleChartBothTrajectoriesWithoutTooltip.png" />
+
+        @{
+            SessionStore session = new SessionStore(Context);
+        }
+
+        <div class="btn-group btn-group-lg">
+            <a @(session.IsSavedProjectileMotion() ? "data-confirm" : string.Empty) data-confirm-text="You are going to loose your existing motion." class="btn btn-primary" href="@Url.Action("Choosen", "Choose", new { withRezistance = true })">With rezistance</a>
+            <a @(session.IsSavedProjectileMotionWithRezistance() ? "data-confirm" : string.Empty) data-confirm-text="You are going to loose your existing motion." class="btn btn-secondary" href="@Url.Action("Choosen", "Choose", new { withRezistance = false })">Without rezistance</a>
+        </div>
+    </div>
+</div>

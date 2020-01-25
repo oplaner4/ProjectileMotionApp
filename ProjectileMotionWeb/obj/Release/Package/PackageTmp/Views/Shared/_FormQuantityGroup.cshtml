@@ -1,0 +1,46 @@
+﻿@using ProjectileMotionWeb.Models;
+@using ProjectileMotionWeb.Helpers;
+@using Utilities.Units;
+@model _FormQuantityGroupModel
+
+
+<div class="form-group form-quantity-group">
+    @Model.LabelForQuantity
+    @if (Model.HasPredefined)
+    {
+        <a data-toggler-for="@Model.NameForQuantity" title="Toggle data input type" data-text-toggle="own value" class="ml-1 btn btn-sm btn-info form-quantity-group-datainputtype-toggler" href="#"><span>predefined values</span> <i class="fa fa-random"></i></a>
+    }
+    <div class="@(Model.HasPredefined ? "mt-2" : string.Empty)">
+
+        @if (Model.HasPredefined)
+        {
+           <div class="form-quantity-group-datainputtype d-none">
+               <select name="@Model.NameForQuantity" class="form-control" style="width:auto">
+                   @foreach (KeyValuePair<string, double> pair in Model.PredefinedDic)
+                   {
+                       <option value="@pair.Value">@pair.Key</option>
+                   }
+               </select>
+               @if (Model.HasUnit)
+               {
+                 <input type="hidden" name="@Model.NameForUnit" value="Basic" />
+               }
+           </div>
+        }
+        <div class="@(Model.HasPredefined ? "form-quantity-group-datainputtype form-quantity-group-datainputtype-current" : string.Empty)">
+            <div class="d-lg-flex">
+                @Model.EditorForQuantity
+                @if (Model.HasUnit)
+                {
+                    <select data-unittype="@Model.UnitClassType.Name.Replace(nameof(Unit), string.Empty)" name="@Model.NameForUnit" class="form-control" style="width:auto">
+                        @foreach (string unitName in new UnitsReflectionHelper(Model.UnitClassType).GetListUnitsNames())
+                        {
+                            <option value="@unitName" @(unitName == Model.SelectedUnit ? "selected" : string.Empty)>@unitName</option>
+                        }
+                    </select>
+                }
+            </div>
+        </div>
+    </div>
+    <small class="form-text text-danger">@Model.ValidationMessageForQuantity</small>
+</div>
