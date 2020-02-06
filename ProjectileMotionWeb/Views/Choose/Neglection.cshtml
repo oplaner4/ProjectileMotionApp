@@ -14,7 +14,7 @@
         }
 
         <div class="btn-group btn-group-lg">
-            <a @(session.IsSavedProjectileMotion() ? "data-confirm" : string.Empty) data-confirm-text="You are going to loose your existing motion." class="btn btn-primary" href="@Url.Action("Choosen", "Choose", new { withRezistance = true })">With rezistance</a>
+            <a @(session.IsSavedProjectileMotion() ? "data-confirm" : string.Empty) data-confirm-text="You are going to lose your existing motion." class="btn btn-primary" href="@Url.Action("Choosen", "Choose", new { withRezistance = true })">With rezistance</a>
             <a @(session.IsSavedProjectileMotionWithRezistance() ? "data-confirm" : string.Empty) data-confirm-text="You are going to loose your existing motion." class="btn btn-secondary" href="@Url.Action("Choosen", "Choose", new { withRezistance = false })">Without rezistance</a>
         </div>
     </div>
