@@ -4,6 +4,8 @@ using ProjectileMotionSource.Func;
 using System;
 using MathNet.Numerics.RootFinding;
 using ProjectileMotionSource.WithRezistance.PointsComputation;
+using ProjectileMotionSource.WithRezistance.Func;
+using ProjectileMotionSource.Exceptions;
 
 namespace ProjectileMotionSource.Point
 {
@@ -108,6 +110,11 @@ namespace ProjectileMotionSource.Point
 
         public ProjectileMotionPoint(ProjectileMotion motion, ProjectileMotionPointTypes type)
         {
+            if (motion is ProjectileMotionWithRezistance)
+            {
+                throw new OnlySuperClassMethodException("This constructor cannot be used for motions with rezistance");
+            }
+
             Motion = motion;
             IsFarthest = false;
             IsHighest = false;
@@ -130,7 +137,9 @@ namespace ProjectileMotionSource.Point
                         IsHighest = true;
                         T = GetTimeHighest();
                     }
-                    else T = GetTimeFarthest();
+                    else {
+                        T = GetTimeFarthest();
+                    }
                     break;
                 case ProjectileMotionPointTypes.Initial:
                     if (Motion.Settings.Quantities.Α.Val == 0)
@@ -237,7 +246,7 @@ namespace ProjectileMotionSource.Point
 
         public Length GetDistance(UnitLength unitLength)
         {
-            return GetDistanceFromPoint(new ProjectileMotionPoint(Motion, ProjectileMotionPointTypes.Initial), unitLength);
+            return GetDistanceFromPoint(new ProjectileMotionPoint(Motion, new Time(0, UnitTime.Basic)), unitLength);
         }
     }
 }

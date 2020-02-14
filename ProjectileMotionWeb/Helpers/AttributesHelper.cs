@@ -76,6 +76,11 @@ namespace ProjectileMotionWeb.Helpers
             object instance = context.ObjectInstance;
             if (instance.GetType().GetProperty(PropertyName).GetValue(instance, null).Equals(ExpectedValue))
             {
+                if (value == null)
+                {
+                    return ValidationResult.Success;
+                }
+
                 if ((double)value < Minimum || (double)value > Maximum)
                 {
                     return new ValidationResult(ErrorMessage);

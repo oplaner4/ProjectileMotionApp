@@ -1,6 +1,8 @@
 ﻿using System;
 using ProjectileMotionSource.WithRezistance.Func;
 using ProjectileMotionSource.Point;
+using Utilities.Quantities;
+using Utilities.Units;
 
 namespace ProjectileMotionSource.WithRezistance.PointsComputation
 {
@@ -20,7 +22,7 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
             Motion = motion;
             IsNextReal = true;
 
-            Point = new ProjectileMotionPoint(Motion, ProjectileMotionPoint.ProjectileMotionPointTypes.Initial);
+            Point = new ProjectileMotionPoint(Motion, new Time(0, UnitTime.Basic));
             VyComputed = Point.Vy.GetBasicVal();
             VxComputed = Point.Vx.GetBasicVal();
 

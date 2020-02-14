@@ -89,6 +89,18 @@ namespace Utilities.Quantities
         {
             return Math.Abs(q1.GetBasicVal() - q2.GetBasicVal()) <= Math.Pow(10, -12);
         }
+
+        public override bool Equals(object obj)
+        {
+            var unit = obj as QuantityWithUnit;
+            return unit != null &&
+                   EqualityComparer<Unit>.Default.Equals(Unit, unit.Unit);
+        }
+
+        public override int GetHashCode()
+        {
+            return -1325969601 + EqualityComparer<Unit>.Default.GetHashCode(Unit);
+        }
     }
 
     public class Angle : QuantityWithUnit
