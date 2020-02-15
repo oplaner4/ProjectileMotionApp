@@ -5,6 +5,8 @@ using ProjectileMotionSource.WithRezistance.PointsComputation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Utilities.Quantities;
 using Utilities.Units;
 
@@ -19,6 +21,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
         {
             Settings = settings;
             _ListAllPointsOfTrajectory = new List<ProjectileMotionPoint>();
+            _FarthestPoint = new ProjectileMotionPoint(this, new Time(0, UnitTime.Basic));
             _AreaUnderArc = new Area(0, UnitArea.Basic);
             _ArcLength = new Length(0, UnitLength.Basic);
         }
@@ -48,7 +51,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
 
         public override Length GetMaxDistance()
         {
-            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest).GetDistance(Settings.Quantities.Units.Length).RoundVal(Settings.RoundDigits);
+            return GetFarthestPoint().GetDistance(Settings.Quantities.Units.Length).RoundVal(Settings.RoundDigits);
         }
 
 
@@ -85,13 +88,13 @@ namespace ProjectileMotionSource.WithRezistance.Func
 
         public override Time GetTimeFarthest()
         {
-            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest).Round().T;
+            return GetFarthestPoint().Round().T;
         }
 
 
         public override double[] GetCoordsFarthest()
         {
-            return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest).Round().GetCoords(Settings.Quantities.Units.Length);
+            return GetFarthestPoint().Round().GetCoords(Settings.Quantities.Units.Length);
         }
 
 
@@ -143,16 +146,13 @@ namespace ProjectileMotionSource.WithRezistance.Func
         {
             if (_AreaUnderArc.Val == 0)
             {
-                ProjectileMotionPoint prevPoint = ProjectileMotionWithRezistanceComputation.Start(this).Point;
                 double a = 0;
 
                 if (!Settings.Quantities.Α.IsRight())
                 {
-                    foreach (ProjectileMotionPoint point in GetListAllPointsOfTrajectory())
-                    {
-                        a += (point.Y.GetBasicVal() + prevPoint.Y.GetBasicVal()) * (point.X.GetBasicVal() - prevPoint.X.GetBasicVal()) / 2.0;
-                        prevPoint = point;
-                    }
+                    a = GetSumParallelPointsOfTrajectory(i => {
+                        return (GetListAllPointsOfTrajectory().ElementAt(i).Y.GetBasicVal() + GetListAllPointsOfTrajectory().ElementAt(i - 1).Y.GetBasicVal()) * (GetListAllPointsOfTrajectory().ElementAt(i).X.GetBasicVal() - GetListAllPointsOfTrajectory().ElementAt(i - 1).X.GetBasicVal()) / 2.0;
+                    });
                 }
 
                 _AreaUnderArc = new Area(a, UnitArea.Basic).Convert(unitArea);
@@ -174,18 +174,57 @@ namespace ProjectileMotionSource.WithRezistance.Func
         {
             if (_ArcLength.Val == 0)
             {
-                ProjectileMotionPoint prevPoint = ProjectileMotionWithRezistanceComputation.Start(this).Point;
-                double l = 0;
-                foreach (ProjectileMotionPoint point in GetListAllPointsOfTrajectory())
-                {
-                    l += point.GetDistanceFromPoint(prevPoint, UnitLength.Basic).Val;
-                    prevPoint = point;
-                }
-
-                _ArcLength = new Length(l, UnitLength.Basic).Convert(unitLength);
+                _ArcLength = new Length(
+                    GetSumParallelPointsOfTrajectory(i => {
+                        return GetListAllPointsOfTrajectory().ElementAt(i).GetDistanceFromPoint(GetListAllPointsOfTrajectory().ElementAt(i - 1), UnitLength.Basic).Val;
+                    }
+                 ), UnitLength.Basic).Convert(unitLength);
             }
 
             return _ArcLength.Convert(unitLength);
+        }
+
+
+        private double GetSumParallelPointsOfTrajectory (Func<int, double> increaseFunc)
+        {
+            double sum = 0.0;
+
+            Parallel.For(1, GetListAllPointsOfTrajectory().Count, 
+                () => 0,
+                (int i, ParallelLoopState loop, double subSum) =>
+                {
+                    subSum += increaseFunc(i);
+                    return subSum;
+                },
+                (double subSum) =>
+                {
+                    lock (GetListAllPointsOfTrajectory())
+                    {
+                        sum += subSum;
+                    }
+                }
+            );
+
+            return sum;
+        }
+
+
+        private ProjectileMotionPoint _FarthestPoint { get; set; }
+
+        private ProjectileMotionPoint GetFarthestPoint()
+        {
+            if (_FarthestPoint.T.Val == 0)
+            {
+                Parallel.ForEach(GetListAllPointsOfTrajectory(), point =>
+                {
+                    if (point.GetDistance(UnitLength.Basic) > _FarthestPoint.GetDistance(UnitLength.Basic))
+                    {
+                        _FarthestPoint = point;
+                    }
+                });
+            }
+
+            return _FarthestPoint;
         }
 
         public override ProjectileMotionPoint GetPoint(Time t)
@@ -207,7 +246,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
                 case ProjectileMotionPoint.ProjectileMotionPointTypes.Highest:
                     return GetListAllPointsOfTrajectory().Where(p => p.IsHighest).First();
                 case ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest:
-                    return GetListAllPointsOfTrajectory().Where(p => p.IsFarthest).First();
+                    return GetFarthestPoint();
                 case ProjectileMotionPoint.ProjectileMotionPointTypes.Initial:
                     return GetListAllPointsOfTrajectory().First();
                 case ProjectileMotionPoint.ProjectileMotionPointTypes.Final:
@@ -242,7 +281,15 @@ namespace ProjectileMotionSource.WithRezistance.Func
         public override List<ProjectileMotionPoint> GetListPointsOfTrajectory()
         {
             return GetListAllPointsOfTrajectory()
-                .Where((p, i) => i % Math.Round((double)GetListAllPointsOfTrajectory().Count / Settings.PointsForTrajectory) == 0 || i == GetListAllPointsOfTrajectory().Count - 1 || p.IsFarthest || p.IsHighest)
+                .Where((p, i) => {
+                    if (GetFarthestPoint().T == p.T)
+                    {
+                        p.IsFarthest = true;
+                        return true;
+                    }
+
+                    return i % Math.Round((double)GetListAllPointsOfTrajectory().Count / Settings.PointsForTrajectory) == 0 || i == GetListAllPointsOfTrajectory().Count - 1 || p.IsHighest;
+                 })
                 .ToList();
         }
 

@@ -26,9 +26,7 @@ namespace ProjectileMotionSource.Point
 
         private bool WasHighest { get; set; }
 
-        public bool IsFarthest { get; private set; }
-
-        private bool WasFarthest { get; set; }
+        public bool IsFarthest { get; set; }
 
         private void ComputeProperties()
         {
@@ -72,25 +70,11 @@ namespace ProjectileMotionSource.Point
             Vy = new Velocity(Math.Abs(prevComputation.GetNewVy()), UnitVelocity.Basic);
 
             WasHighest = prevComputation.Point.WasHighest;
-            WasFarthest = prevComputation.Point.WasFarthest;
 
             if (Y < prevComputation.Point.Y && !prevComputation.Point.WasHighest)
             {
                 prevComputation.Point.IsHighest = true;
                 WasHighest = true;
-            }
-
-            if (!prevComputation.Point.WasFarthest)
-            {
-                if (GetDistance(UnitLength.Basic) < prevComputation.Point.GetDistance(UnitLength.Basic))
-                {
-                    prevComputation.Point.IsFarthest = true;
-                    WasFarthest = true;
-                }
-                else if (Y.Val == 0 && X.Val > 0)
-                {
-                    IsFarthest = true;
-                }
             }
 
             ConvertToResultUnits();
@@ -149,7 +133,6 @@ namespace ProjectileMotionSource.Point
                         if (Motion.Settings.Quantities.H.Val == 0)
                         {
                             IsFarthest = true;
-                            WasFarthest = true;
                         }
                     }
 
