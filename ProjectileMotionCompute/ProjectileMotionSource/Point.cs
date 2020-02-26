@@ -88,6 +88,12 @@ namespace ProjectileMotionSource.Point
 
             T = t;
 
+            if (T.Val == 0 && Motion.Settings.Quantities.Α.Val == 0)
+            {
+                IsHighest = true;
+                WasHighest = true;
+            }
+
             ComputeProperties();
         }
 

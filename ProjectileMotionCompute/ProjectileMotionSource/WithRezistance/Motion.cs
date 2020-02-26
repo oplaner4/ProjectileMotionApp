@@ -21,7 +21,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
         {
             Settings = settings;
             _ListAllPointsOfTrajectory = new List<ProjectileMotionPoint>();
-            _FarthestPoint = new ProjectileMotionPoint(this, new Time(0, UnitTime.Basic));
+            _FarthestPointIndex = 0;
             _AreaUnderArc = new Area(0, UnitArea.Basic);
             _ArcLength = new Length(0, UnitLength.Basic);
         }
@@ -209,22 +209,23 @@ namespace ProjectileMotionSource.WithRezistance.Func
         }
 
 
-        private ProjectileMotionPoint _FarthestPoint { get; set; }
+        private int _FarthestPointIndex { get; set; }
 
         private ProjectileMotionPoint GetFarthestPoint()
         {
-            if (_FarthestPoint.T.Val == 0)
+            if (_FarthestPointIndex == 0)
             {
-                Parallel.ForEach(GetListAllPointsOfTrajectory(), point =>
+                for (int i = 0; i < GetListAllPointsOfTrajectory().Count(); i++)
                 {
-                    if (point.GetDistance(UnitLength.Basic) > _FarthestPoint.GetDistance(UnitLength.Basic))
+                    if (GetListAllPointsOfTrajectory()[i].GetDistance(UnitLength.Basic) > GetListAllPointsOfTrajectory()[_FarthestPointIndex].GetDistance(UnitLength.Basic))
                     {
-                        _FarthestPoint = point;
+                        _FarthestPointIndex = i;
                     }
-                });
+                }
             }
 
-            return _FarthestPoint;
+            GetListAllPointsOfTrajectory()[_FarthestPointIndex].IsFarthest = true;
+            return GetListAllPointsOfTrajectory()[_FarthestPointIndex];
         }
 
         public override ProjectileMotionPoint GetPoint(Time t)
@@ -280,15 +281,11 @@ namespace ProjectileMotionSource.WithRezistance.Func
 
         public override List<ProjectileMotionPoint> GetListPointsOfTrajectory()
         {
+            GetListAllPointsOfTrajectory()[_FarthestPointIndex].IsFarthest = true;
+
             return GetListAllPointsOfTrajectory()
                 .Where((p, i) => {
-                    if (GetFarthestPoint().T == p.T)
-                    {
-                        p.IsFarthest = true;
-                        return true;
-                    }
-
-                    return i % Math.Round((double)GetListAllPointsOfTrajectory().Count / Settings.PointsForTrajectory) == 0 || i == GetListAllPointsOfTrajectory().Count - 1 || p.IsHighest;
+                    return i % Math.Round((double)GetListAllPointsOfTrajectory().Count / Settings.PointsForTrajectory) == 0 || i == GetListAllPointsOfTrajectory().Count - 1 || p.IsHighest || p.IsFarthest;
                  })
                 .ToList();
         }
