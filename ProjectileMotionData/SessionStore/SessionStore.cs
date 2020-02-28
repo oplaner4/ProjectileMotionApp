@@ -1,5 +1,5 @@
 ﻿using ProjectileMotionSource.Func;
-using ProjectileMotionSource.WithRezistance.Func;
+using ProjectileMotionSource.WithResistance.Func;
 using System.Web;
 using System.Collections.Generic;
 
@@ -31,20 +31,20 @@ namespace ProjectileMotionData
         }
 
 
-        public SessionStore SaveProjectileMotionWithRezistance(ProjectileMotionWithRezistance motion)
+        public SessionStore SaveProjectileMotionWithResistance(ProjectileMotionWithResistance motion)
         {
-            GetSessionBase()[SessionStoreConstants.PROJECTILEMOTIONWITHREZISTANCE] = motion;
+            GetSessionBase()[SessionStoreConstants.PROJECTILEMOTIONWITHRESISTANCE] = motion;
             return this;
         }
 
-        public ProjectileMotionWithRezistance GetSavedProjectileMotionWithRezistance()
+        public ProjectileMotionWithResistance GetSavedProjectileMotionWithResistance()
         {
-            return GetSessionBase()[SessionStoreConstants.PROJECTILEMOTIONWITHREZISTANCE] as ProjectileMotionWithRezistance;
+            return GetSessionBase()[SessionStoreConstants.PROJECTILEMOTIONWITHRESISTANCE] as ProjectileMotionWithResistance;
         }
 
-        public ProjectileMotion GetSavedProjectileMotionWithOrWithoutRezistance()
+        public ProjectileMotion GetSavedProjectileMotionWithOrWithoutResistance()
         {
-            return IsSavedAnyMotion() ? (IsSavedProjectileMotion() ? GetSavedProjectileMotion() : GetSavedProjectileMotionWithRezistance()) : null;
+            return IsSavedAnyMotion() ? (IsSavedProjectileMotion() ? GetSavedProjectileMotion() : GetSavedProjectileMotionWithResistance()) : null;
         }
 
         public SessionStore SaveActionVisited(string controllerName, string actionName)
@@ -102,15 +102,15 @@ namespace ProjectileMotionData
         }
 
 
-        public bool IsSavedProjectileMotionWithRezistance()
+        public bool IsSavedProjectileMotionWithResistance()
         {
-            return GetSavedProjectileMotionWithRezistance() != null;
+            return GetSavedProjectileMotionWithResistance() != null;
         }
 
 
         public bool IsSavedAnyMotion ()
         {
-            return IsSavedProjectileMotionWithRezistance() || IsSavedProjectileMotion();
+            return IsSavedProjectileMotionWithResistance() || IsSavedProjectileMotion();
         }
     }
 
@@ -118,7 +118,7 @@ namespace ProjectileMotionData
     class SessionStoreConstants
     {
         public const string PROJECTILEMOTION = "ProjectileMotion";
-        public const string PROJECTILEMOTIONWITHREZISTANCE = "ProjectileMotionWithRezistance";
+        public const string PROJECTILEMOTIONWITHRESISTANCE = "ProjectileMotionWithResistance";
         public const string ACTIONSANDCONTROLLERSVISITED = "ActionsAndControllersVisited";
     }
 }

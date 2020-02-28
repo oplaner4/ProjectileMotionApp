@@ -4,7 +4,7 @@ using System;
 using ProjectileMotionWeb.Helpers;
 using ProjectileMotionData;
 using System.Collections.Generic;
-using ProjectileMotionSource.WithRezistance.Func;
+using ProjectileMotionSource.WithResistance.Func;
 using Utilities.Quantities;
 using Utilities.Units;
 using ProjectileMotionSource.Func;
@@ -16,12 +16,12 @@ namespace ProjectileMotionWeb.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction(nameof(Properties), new { setWithRezistance = false });
+            return RedirectToAction(nameof(Properties), new { setWithResistance = false });
         }
 
 
         [HttpGet]
-        public ActionResult Properties(bool? setWithRezistance =  null)
+        public ActionResult Properties(bool? setWithResistance =  null)
         {
             SetPropertiesModel viewModel = new SetPropertiesModel()
             {
@@ -36,20 +36,20 @@ namespace ProjectileMotionWeb.Controllers
                     DragCoefficient = DragCoefficient.GetDragCoefficientValue(DragCoefficient.DragCoefficients.Sphere),
                     Mass = 0.5,
                     Density = Density.GetDensityValue(Density.Densities.Air),
-                    WithRezistance = setWithRezistance ?? false,
+                    WithResistance = setWithResistance ?? false,
                 },
                 RoundDigits = 6,
                 PointsForTrajectory = 80,
-                ShowMotionWithoutRezistanceTrajectoryToo = false
+                ShowMotionWithoutResistanceTrajectoryToo = false
             };
 
-            viewModel.HexColorOfTrajectory = viewModel.Quantities.WithRezistance ? "#007bff" : "#6c757d";
+            viewModel.HexColorOfTrajectory = viewModel.Quantities.WithResistance ? "#007bff" : "#6c757d";
 
             SessionStore session = GetSession();
 
-            if (session.IsSavedProjectileMotionWithRezistance())
+            if (session.IsSavedProjectileMotionWithResistance())
             {
-                ProjectileMotionWithRezistance savedMotion = session.GetSavedProjectileMotionWithRezistance();
+                ProjectileMotionWithResistance savedMotion = session.GetSavedProjectileMotionWithResistance();
 
                 viewModel.Quantities.InitialVelocity = savedMotion.Settings.Quantities.V.Val;
                 viewModel.Quantities.InitialHeight = savedMotion.Settings.Quantities.H.Val;
@@ -60,7 +60,7 @@ namespace ProjectileMotionWeb.Controllers
                 viewModel.Quantities.Mass = savedMotion.Settings.Quantities.M.Val;
                 viewModel.Quantities.Density = savedMotion.Settings.Quantities.Ρ.Val;
                 viewModel.RoundDigits = savedMotion.Settings.RoundDigits;
-                viewModel.Quantities.WithRezistance = true;
+                viewModel.Quantities.WithResistance = true;
 
                 viewModel.PointsForTrajectory = savedMotion.Settings.PointsForTrajectory;
 
@@ -83,7 +83,7 @@ namespace ProjectileMotionWeb.Controllers
                 viewModel.CsvDataFileName = savedMotion.Settings.CsvDataFileName;
                 viewModel.PdfInfoFileName = savedMotion.Settings.PdfInfoFileName;
                 viewModel.HexColorOfTrajectory = savedMotion.Settings.HexColorOfTrajectory;
-                viewModel.ShowMotionWithoutRezistanceTrajectoryToo = savedMotion.Settings.ShowMotionWithoutRezistanceTrajectoryToo;
+                viewModel.ShowMotionWithoutResistanceTrajectoryToo = savedMotion.Settings.ShowMotionWithoutResistanceTrajectoryToo;
 
                 viewModel.Layout.Title = "Edit properties";
             }
@@ -95,7 +95,7 @@ namespace ProjectileMotionWeb.Controllers
                 viewModel.Quantities.InitialHeight = savedMotion.Settings.Quantities.H.Val;
                 viewModel.Quantities.ElevationAngle = savedMotion.Settings.Quantities.Α.Val;
                 viewModel.Quantities.GravAcceleration = savedMotion.Settings.Quantities.G.Val;
-                viewModel.Quantities.WithRezistance = false;
+                viewModel.Quantities.WithResistance = false;
 
 
                 viewModel.RoundDigits = savedMotion.Settings.RoundDigits;
@@ -125,18 +125,18 @@ namespace ProjectileMotionWeb.Controllers
                 viewModel.CsvDataFileName = savedMotion.Settings.CsvDataFileName;
                 viewModel.PdfInfoFileName = savedMotion.Settings.PdfInfoFileName;
                 viewModel.HexColorOfTrajectory = savedMotion.Settings.HexColorOfTrajectory;
-                viewModel.ShowMotionWithoutRezistanceTrajectoryToo = false;
+                viewModel.ShowMotionWithoutResistanceTrajectoryToo = false;
 
                 viewModel.Quantities.SelectedAssignmentType = savedMotion.Settings.Quantities.UsedAssignmentType;
 
                 viewModel.Layout.Title = "Edit properties";
             }
-            else if (setWithRezistance == null)
+            else if (setWithResistance == null)
             {
                 return RedirectToAction(nameof(ChooseController.Neglection), "Choose");
             }
 
-            viewModel.Layout.Menu.SetWithRezistance = viewModel.Quantities.WithRezistance;
+            viewModel.Layout.Menu.SetWithResistance = viewModel.Quantities.WithResistance;
             viewModel.Layout.Menu.ActiveMenuItem = LayoutMenuModel.ActiveNavItem.Set;
 
             return View(viewModel);
@@ -164,11 +164,11 @@ namespace ProjectileMotionWeb.Controllers
                     GravAcceleration = new ReflectionHelper(typeof(UnitGravAcceleration)).GetValueOfStaticProperty(postModel.ResultUnitGravAcceleration) as UnitGravAcceleration
                 };
 
-                if (postModel.Quantities.WithRezistance)
+                if (postModel.Quantities.WithResistance)
                 {
-                    session.SaveProjectileMotionWithRezistance(new ProjectileMotionWithRezistance(
-                    new ProjectileMotionWithRezistanceSettings(
-                       new ProjectileMotionWithRezistanceQuantities(
+                    session.SaveProjectileMotionWithResistance(new ProjectileMotionWithResistance(
+                    new ProjectileMotionWithResistanceSettings(
+                       new ProjectileMotionWithResistanceQuantities(
                            v, α, h, g,
                            new Mass(postModel.Quantities.Mass.Value, new ReflectionHelper(typeof(UnitMass)).GetValueOfStaticProperty(postModel.Quantities.MassUnit) as UnitMass),
                            new Density(postModel.Quantities.Density.Value, new ReflectionHelper(typeof(UnitDensity)).GetValueOfStaticProperty(postModel.Quantities.DensityUnit) as UnitDensity),
@@ -184,15 +184,15 @@ namespace ProjectileMotionWeb.Controllers
                         CsvDataFileName = postModel.CsvDataFileName,
                         PdfInfoFileName = postModel.PdfInfoFileName,
                         HexColorOfTrajectory = postModel.HexColorOfTrajectory,
-                        ShowMotionWithoutRezistanceTrajectoryToo = postModel.ShowMotionWithoutRezistanceTrajectoryToo
+                        ShowMotionWithoutResistanceTrajectoryToo = postModel.ShowMotionWithoutResistanceTrajectoryToo
 
                 })).SaveProjectileMotion(null);
 
-                    return RedirectToAction(nameof(DisplayController.MotionWithRezistance), "Display");
+                    return RedirectToAction(nameof(DisplayController.MotionWithResistance), "Display");
                 }
 
 
-                ProjectileMotionQuantities quantitiesWithoutRezistance = null;
+                ProjectileMotionQuantities quantitiesWithoutResistance = null;
 
                 try
                 {
@@ -207,13 +207,13 @@ namespace ProjectileMotionWeb.Controllers
                         switch (postModel.Quantities.SelectedAssignmentType)
                         {
                             case ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByDuration:
-                                quantitiesWithoutRezistance = new ProjectileMotionQuantities(d, v, h, g, units);
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(d, v, h, g, units);
                                 break;
                             case ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByDuration:
-                                quantitiesWithoutRezistance = new ProjectileMotionQuantities(d, α, v, g, units);
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(d, α, v, g, units);
                                 break;
                             case ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByDuration:
-                                quantitiesWithoutRezistance = new ProjectileMotionQuantities(d, α, h, g, units);
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(d, α, h, g, units);
                                 break;
                         }
                     }
@@ -228,13 +228,13 @@ namespace ProjectileMotionWeb.Controllers
                         switch (postModel.Quantities.SelectedAssignmentType)
                         {
                             case ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByMaxHeight:
-                                quantitiesWithoutRezistance = new ProjectileMotionQuantities(maxH, v, h, g, units);
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(maxH, v, h, g, units);
                                 break;
                             case ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByMaxHeight:
-                                quantitiesWithoutRezistance = new ProjectileMotionQuantities(maxH, α, v, g, units);
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(maxH, α, v, g, units);
                                 break;
                             case ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByMaxHeight:
-                                quantitiesWithoutRezistance = new ProjectileMotionQuantities(maxH, α, h, g, units);
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(maxH, α, h, g, units);
                                 break;
                         }
                     }
@@ -249,25 +249,25 @@ namespace ProjectileMotionWeb.Controllers
                         switch (postModel.Quantities.SelectedAssignmentType)
                         {
                             case ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLength:
-                                quantitiesWithoutRezistance = new ProjectileMotionQuantities(l, v, h, g, units);
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(l, v, h, g, units);
                                 break;
                             case ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByLength:
-                                quantitiesWithoutRezistance = new ProjectileMotionQuantities(l, α, v, g, units);
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(l, α, v, g, units);
                                 break;
                             case ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLength:
-                                quantitiesWithoutRezistance = new ProjectileMotionQuantities(l, α, h, g, units);
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(l, α, h, g, units);
                                 break;
                         }
                     }
                     else if (postModel.Quantities.SelectedAssignmentType == ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleGetMaxRange)
                     {
-                        quantitiesWithoutRezistance = new ProjectileMotionQuantities(v, h, g, units);
+                        quantitiesWithoutResistance = new ProjectileMotionQuantities(v, h, g, units);
                     }
                     else
-                        quantitiesWithoutRezistance = new ProjectileMotionQuantities(v, α, h, g, units);
+                        quantitiesWithoutResistance = new ProjectileMotionQuantities(v, α, h, g, units);
 
                     session.SaveProjectileMotion(new ProjectileMotion(
-                            new ProjectileMotionSettings(quantitiesWithoutRezistance)
+                            new ProjectileMotionSettings(quantitiesWithoutResistance)
                             {
                                 RoundDigits = postModel.RoundDigits,
                                 PointsForTrajectory = postModel.PointsForTrajectory,
@@ -275,7 +275,7 @@ namespace ProjectileMotionWeb.Controllers
                                 CsvDataFileName = postModel.CsvDataFileName,
                                 PdfInfoFileName = postModel.PdfInfoFileName,
                                 HexColorOfTrajectory = postModel.HexColorOfTrajectory
-                            })).SaveProjectileMotionWithRezistance(null);
+                            })).SaveProjectileMotionWithResistance(null);
 
                     return RedirectToAction(nameof(DisplayController.Motion), "Display");
                 }
@@ -286,7 +286,7 @@ namespace ProjectileMotionWeb.Controllers
             }
 
             postModel.Layout = new LayoutModel("Repair properties");
-            postModel.Layout.Menu.SetWithRezistance = postModel.Quantities.WithRezistance;
+            postModel.Layout.Menu.SetWithResistance = postModel.Quantities.WithResistance;
             postModel.Layout.Menu.ActiveMenuItem = LayoutMenuModel.ActiveNavItem.Set;
             return View(postModel);
         }

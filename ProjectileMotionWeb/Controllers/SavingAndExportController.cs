@@ -45,7 +45,7 @@ namespace ProjectileMotionWeb.Controllers
                 return null;
             }
 
-            ProjectileMotion SavedMotion = GetSession().GetSavedProjectileMotionWithOrWithoutRezistance();
+            ProjectileMotion SavedMotion = GetSession().GetSavedProjectileMotionWithOrWithoutResistance();
             return new ExportHelper(SavedMotion.Settings.TxtInfoFileName, "text/plain", SavedMotion.Saving.InfoToTxtGetMemoryStream()).GetResultAsContentType();
         }
 
@@ -57,7 +57,7 @@ namespace ProjectileMotionWeb.Controllers
                 return null;
             }
 
-            ProjectileMotion SavedMotion = GetSession().GetSavedProjectileMotionWithOrWithoutRezistance();
+            ProjectileMotion SavedMotion = GetSession().GetSavedProjectileMotionWithOrWithoutResistance();
             return new ExportHelper(SavedMotion.Settings.CsvDataFileName, "application/CSV", SavedMotion.Saving.DataToCsvGetMemoryStream()).GetResultAsContentType();
         }
 
@@ -69,7 +69,7 @@ namespace ProjectileMotionWeb.Controllers
                 return null;
             }
 
-            ProjectileMotion SavedMotion = GetSession().GetSavedProjectileMotionWithOrWithoutRezistance();
+            ProjectileMotion SavedMotion = GetSession().GetSavedProjectileMotionWithOrWithoutResistance();
             return new ExportHelper(SavedMotion.Settings.PdfInfoFileName, "application/pdf", SavedMotion.Saving.InfoToPdfGetMemoryStream()).GetResultAsContentType();
         }
 
@@ -93,11 +93,11 @@ namespace ProjectileMotionWeb.Controllers
             switch (contentType)
             {
                 case ChartExportContentTypes.Png:
-                    return new ExportHelperBase64Image(canvasbase64ImageUrl, GetSession().GetSavedProjectileMotionWithOrWithoutRezistance().Settings.GetChartFileNameForExport("png"), "image/png").GetResultAsContentType();
+                    return new ExportHelperBase64Image(canvasbase64ImageUrl, GetSession().GetSavedProjectileMotionWithOrWithoutResistance().Settings.GetChartFileNameForExport("png"), "image/png").GetResultAsContentType();
                 case ChartExportContentTypes.Pdf:
-                    return new ExportHelperBase64Image(canvasbase64ImageUrl, GetSession().GetSavedProjectileMotionWithOrWithoutRezistance().Settings.GetChartFileNameForExport("pdf")).GetResultAsPdf();
+                    return new ExportHelperBase64Image(canvasbase64ImageUrl, GetSession().GetSavedProjectileMotionWithOrWithoutResistance().Settings.GetChartFileNameForExport("pdf")).GetResultAsPdf();
                 case ChartExportContentTypes.Jpg:
-                    return new ExportHelperBase64Image(canvasbase64ImageUrl, GetSession().GetSavedProjectileMotionWithOrWithoutRezistance().Settings.GetChartFileNameForExport("jpg")).GetResultAsJpg();
+                    return new ExportHelperBase64Image(canvasbase64ImageUrl, GetSession().GetSavedProjectileMotionWithOrWithoutResistance().Settings.GetChartFileNameForExport("jpg")).GetResultAsJpg();
 
                 default:
                     return null;

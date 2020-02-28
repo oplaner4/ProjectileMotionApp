@@ -78,10 +78,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OnlySuperClassMethodException.cs" />
-    <Compile Include="WithRezistance\Settings.cs" />
-    <Compile Include="WithRezistance\Quantities.cs" />
-    <Compile Include="WithRezistance\Motion.cs" />
-    <Compile Include="WithRezistance\PointsComputation.cs" />
+    <Compile Include="WithResistance\Settings.cs" />
+    <Compile Include="WithResistance\Quantities.cs" />
+    <Compile Include="WithResistance\Motion.cs" />
+    <Compile Include="WithResistance\PointsComputation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

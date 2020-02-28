@@ -40,12 +40,12 @@
     @Html.AntiForgeryToken()
     <div class="row">
         <div class="col-md-5 col-lg-6">
-            <h5 class="mb-3">Neglect rezistance</h5>
+            <h5 class="mb-3">Neglect resistance</h5>
             <div class=" ml-md-2">
                 <div class="form-group d-flex justify-content-center justify-content-md-start">
                     <div class="alternative-checkbox alternative-checkbox-switch-toggler">
-                        @Html.CheckBoxFor(m => m.Quantities.WithRezistance, Model.Quantities.WithRezistance ? new _EditorForHtmlAttributesModel_Checked() : null)
-                        @Html.LabelFor(m => m.Quantities.WithRezistance)
+                        @Html.CheckBoxFor(m => m.Quantities.WithResistance, Model.Quantities.WithResistance ? new _EditorForHtmlAttributesModel_Checked() : null)
+                        @Html.LabelFor(m => m.Quantities.WithResistance)
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 WithoutRezistancecollapse collapse show">
+        <div class="col-12 WithoutResistancecollapse collapse show">
             <h5 class="mb-3">Possible assignments</h5>
             <div class="ml-md-2 mb-2">
                 <select name="@Html.NameFor(m=> m.Quantities.SelectedAssignmentType)" class="form-control" style="width:auto">
@@ -210,7 +210,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 WithRezistancecollapse collapse">
+        <div class="col-md-6 WithResistancecollapse collapse">
             <div class="ml-md-2">
                 @{
                     Dictionary<string, double> predefinedDensitiesDic = new Dictionary<string, double>();
@@ -234,7 +234,7 @@
                 )
             </div>
         </div>
-        <div class="col-md-6 WithRezistancecollapse collapse">
+        <div class="col-md-6 WithResistancecollapse collapse">
             <div class="ml-md-2">
                 @Html.Partial("_FormQuantityGroup",
                     new _FormQuantityGroupModel(
@@ -249,7 +249,7 @@
                 )
             </div>
         </div>
-        <div class="col-md-6 WithRezistancecollapse collapse">
+        <div class="col-md-6 WithResistancecollapse collapse">
             <div class="ml-md-2">
                 @Html.Partial("_FormQuantityGroup",
                     new _FormQuantityGroupModel(
@@ -264,7 +264,7 @@
                 )
             </div>
         </div>
-        <div class="col-md-6 WithRezistancecollapse collapse">
+        <div class="col-md-6 WithResistancecollapse collapse">
             <div class="ml-md-2">
                 @{
                     Dictionary<string, double> PredefinedDragCoefficientsDic = new Dictionary<string, double>();
@@ -336,7 +336,7 @@
                )
             )
 
-            <div class="WithRezistancecollapse collapse" aria-expanded="false">
+            <div class="WithResistancecollapse collapse" aria-expanded="false">
                 @Html.Partial("_FormResultUnitGroup",
                     new _FormResultUnitGroupModel(
                         Html.LabelFor(m => m.ResultUnitArea),
@@ -392,11 +392,11 @@
 
         </div>
         <div class="col-12">
-            <div class="WithRezistancecollapse collapse" aria-expanded="false">
+            <div class="WithResistancecollapse collapse" aria-expanded="false">
                 <div class="form-group d-flex justify-content-center justify-content-md-start">
                     <div class="alternative-checkbox alternative-checkbox-switch-toggler">
-                        @Html.CheckBoxFor(m => m.ShowMotionWithoutRezistanceTrajectoryToo)
-                        @Html.LabelFor(m => m.ShowMotionWithoutRezistanceTrajectoryToo)
+                        @Html.CheckBoxFor(m => m.ShowMotionWithoutResistanceTrajectoryToo)
+                        @Html.LabelFor(m => m.ShowMotionWithoutResistanceTrajectoryToo)
                     </div>
                 </div>
             </div>
@@ -533,24 +533,24 @@
             }).trigger('change');
 
 
-            var withRezistanceCollapse = collapse.filter('.WithRezistancecollapse');
-            var withoutRezistanceCollapse = collapse.filter('.WithoutRezistancecollapse');
-            var withRezistanceCheckboxChecked = function () {
-                withRezistanceCollapse.collapse('show');
-                withoutRezistanceCollapse.collapse('hide');
+            var withResistanceCollapse = collapse.filter('.WithResistancecollapse');
+            var withoutResistanceCollapse = collapse.filter('.WithoutResistancecollapse');
+            var withResistanceCheckboxChecked = function () {
+                withResistanceCollapse.collapse('show');
+                withoutResistanceCollapse.collapse('hide');
                 optionFormQuantityGroupCollapseTrigger.parent().val('@ProjectileMotionQuantities.AssignmentsTypes.Basic.ToString()').trigger('change');
             }
 
-            if ($('input[type="checkbox"][name="@Html.NameFor(m=> m.Quantities.WithRezistance)"]').change(function () {
+            if ($('input[type="checkbox"][name="@Html.NameFor(m=> m.Quantities.WithResistance)"]').change(function () {
                 if (this.checked) {
-                    withRezistanceCheckboxChecked();
+                    withResistanceCheckboxChecked();
                 }
                 else {
-                    withRezistanceCollapse.collapse('hide');
-                    withoutRezistanceCollapse.collapse('show');
+                    withResistanceCollapse.collapse('hide');
+                    withoutResistanceCollapse.collapse('show');
                 }
             }).is(':checked')) {
-                withRezistanceCheckboxChecked();
+                withResistanceCheckboxChecked();
             };
         });
     </script>

@@ -10,8 +10,8 @@ namespace ProjectileMotionWeb.Models
         { /* POST! */ }
 
 
-        [Display(Name = "With rezistance")]
-        public bool WithRezistance { get; set; }
+        [Display(Name = "With resistance")]
+        public bool WithResistance { get; set; }
 
         [Required(ErrorMessage = SetPropertiesModel.REQUIREDTEXT)]
         [Range(0, double.MaxValue, ErrorMessage = "* Larger or equal to zero")]
@@ -42,29 +42,29 @@ namespace ProjectileMotionWeb.Models
 
         public string ElevationAngleUnit { get; set; }
 
-        [RequiredIf(nameof(WithRezistance), true, ErrorMessage = SetPropertiesModel.REQUIREDWITHREZISTANCETEXT)]
-        [RangeIf(nameof(WithRezistance), true, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
+        [RequiredIf(nameof(WithResistance), true, ErrorMessage = SetPropertiesModel.REQUIREDWITHRESISTANCETEXT)]
+        [RangeIf(nameof(WithResistance), true, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
         [Display(Name = "Mass")]
         public double? Mass { get; set; }
 
         public string MassUnit { get; set; }
 
-        [RequiredIf(nameof(WithRezistance), true, ErrorMessage = SetPropertiesModel.REQUIREDWITHREZISTANCETEXT)]
-        [RangeIf(nameof(WithRezistance), true, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
+        [RequiredIf(nameof(WithResistance), true, ErrorMessage = SetPropertiesModel.REQUIREDWITHRESISTANCETEXT)]
+        [RangeIf(nameof(WithResistance), true, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
         [Display(Name = "Density")]
         public double? Density { get; set; }
 
         public string DensityUnit { get; set; }
 
-        [RequiredIf(nameof(WithRezistance), true, ErrorMessage = SetPropertiesModel.REQUIREDWITHREZISTANCETEXT)]
-        [RangeIf(nameof(WithRezistance), true, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
+        [RequiredIf(nameof(WithResistance), true, ErrorMessage = SetPropertiesModel.REQUIREDWITHRESISTANCETEXT)]
+        [RangeIf(nameof(WithResistance), true, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
         [Display(Name = "Frontal area")]
         public double? FrontalArea { get; set; }
 
         public string FrontalAreaUnit { get; set; }
 
-        [RequiredIf(nameof(WithRezistance), true, ErrorMessage = SetPropertiesModel.REQUIREDWITHREZISTANCETEXT)]
-        [RangeIf(nameof(WithRezistance), true, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
+        [RequiredIf(nameof(WithResistance), true, ErrorMessage = SetPropertiesModel.REQUIREDWITHRESISTANCETEXT)]
+        [RangeIf(nameof(WithResistance), true, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
         [Display(Name = "Drag coefficient")]
         public double? DragCoefficient { get; set; }
 

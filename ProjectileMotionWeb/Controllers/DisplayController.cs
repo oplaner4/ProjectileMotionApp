@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using ProjectileMotionSource.Func;
-using ProjectileMotionSource.WithRezistance.Func;
+using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionWeb.Models;
 
 namespace ProjectileMotionWeb.Controllers
@@ -9,7 +9,7 @@ namespace ProjectileMotionWeb.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction(nameof(SetController.Properties), "Set", new { withRezistance = false });
+            return RedirectToAction(nameof(SetController.Properties), "Set", new { withResistance = false });
         }
 
         [HttpGet]
@@ -28,7 +28,7 @@ namespace ProjectileMotionWeb.Controllers
                     Menu = new LayoutMenuModel ()
                     {
                         ActiveMenuItem = LayoutMenuModel.ActiveNavItem.MotionDropdown,
-                        SetWithRezistance = false
+                        SetWithResistance = false
                     }
                 },
             });
@@ -36,23 +36,23 @@ namespace ProjectileMotionWeb.Controllers
 
 
         [HttpGet]
-        public ActionResult MotionWithRezistance(bool ShowLargerMotionChart = false)
+        public ActionResult MotionWithResistance(bool ShowLargerMotionChart = false)
         {
-            ProjectileMotionWithRezistance motionWithRezistance = GetSession().GetSavedProjectileMotionWithRezistance();
+            ProjectileMotionWithResistance motionWithResistance = GetSession().GetSavedProjectileMotionWithResistance();
 
-            if (motionWithRezistance == null)
+            if (motionWithResistance == null)
             {
                 return DefaultRedirect();
             }
 
-            return View(new DisplayMotionWithRezistanceModel(motionWithRezistance, ShowLargerMotionChart)
+            return View(new DisplayMotionWithResistanceModel(motionWithResistance, ShowLargerMotionChart)
             {
-                Layout = new LayoutModel("Projectile motion with rezistance") {
+                Layout = new LayoutModel("Projectile motion with resistance") {
                     FluidContainer = true,
                     Menu = new LayoutMenuModel()
                     {
                         ActiveMenuItem = LayoutMenuModel.ActiveNavItem.MotionDropdown,
-                        SetWithRezistance = true
+                        SetWithResistance = true
                     }
                 }
             });

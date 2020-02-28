@@ -1,23 +1,23 @@
 ﻿using System;
-using ProjectileMotionSource.WithRezistance.Func;
+using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionSource.Point;
 using Utilities.Quantities;
 using Utilities.Units;
 
-namespace ProjectileMotionSource.WithRezistance.PointsComputation
+namespace ProjectileMotionSource.WithResistance.PointsComputation
 {
-    internal class ProjectileMotionWithRezistanceComputation
+    internal class ProjectileMotionWithResistanceComputation
     {
-        public static ProjectileMotionWithRezistanceComputation Start(ProjectileMotionWithRezistance motion)
+        public static ProjectileMotionWithResistanceComputation Start(ProjectileMotionWithResistance motion)
         {
-            return new ProjectileMotionWithRezistanceComputation(motion);
+            return new ProjectileMotionWithResistanceComputation(motion);
         }
 
         public ProjectileMotionPoint Point { get; private set; }
 
         public bool IsNextReal { get; private set; }
 
-        private ProjectileMotionWithRezistanceComputation(ProjectileMotionWithRezistance motion)
+        private ProjectileMotionWithResistanceComputation(ProjectileMotionWithResistance motion)
         {
             Motion = motion;
             IsNextReal = true;
@@ -32,7 +32,7 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
             }
         }
 
-        private ProjectileMotionWithRezistanceComputation(ProjectileMotionWithRezistanceComputation prevComputation)
+        private ProjectileMotionWithResistanceComputation(ProjectileMotionWithResistanceComputation prevComputation)
         {
             Motion = prevComputation.Motion;
             IsNextReal = true;
@@ -68,11 +68,11 @@ namespace ProjectileMotionSource.WithRezistance.PointsComputation
 
         private double VxComputed { get; set; }
 
-        internal ProjectileMotionWithRezistance Motion { get; private set; }
+        internal ProjectileMotionWithResistance Motion { get; private set; }
 
-        public ProjectileMotionWithRezistanceComputation Continue()
+        public ProjectileMotionWithResistanceComputation Continue()
         {
-            return new ProjectileMotionWithRezistanceComputation(this);
+            return new ProjectileMotionWithResistanceComputation(this);
         }
 
         public static double Dt = Math.Pow(10, -1 * 3);

@@ -33,7 +33,7 @@
                     <a class="nav-link" href="@Url.Action("Index", "Choose")"><i class="fa fa-balance-scale"></i> Choose</a>
                 </li>
                 <li class="nav-item @(Model.Layout.Menu.ActiveMenuItem == LayoutMenuModel.ActiveNavItem.Set ? "active" : string.Empty)">
-                    <a class="nav-link" href="@Url.Action("Properties", "Set", new { setwithRezistance = Model.Layout.Menu.SetWithRezistance })"><i class="fa fa-sliders-h"></i> Set</a>
+                    <a class="nav-link" href="@Url.Action("Properties", "Set", new { setwithResistance = Model.Layout.Menu.SetWithResistance })"><i class="fa fa-sliders-h"></i> Set</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
@@ -41,11 +41,11 @@
                 {
                     <li class="nav-item dropdown @(Model.Layout.Menu.ActiveMenuItem == LayoutMenuModel.ActiveNavItem.MotionDropdown ? "active" : string.Empty)">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarMotionDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-tools"></i> @(session.IsSavedProjectileMotion() ? "Motion" : "Motion with rezistance")
+                            <i class="fa fa-tools"></i> @(session.IsSavedProjectileMotion() ? "Motion" : "Motion with resistance")
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarMotionDropdown">
-                            <a class="dropdown-item" href="@Url.Action(session.IsSavedProjectileMotion() ? "Motion" : "MotionWithRezistance", "Display")"><i class="fa fa-eye"></i> Display</a>
-                            <a class="dropdown-item" href="@Url.Action("Properties", "Set", new { setwithRezistance = Model.Layout.Menu.SetWithRezistance })"><i class="fa fa-edit"></i> Edit</a>
+                            <a class="dropdown-item" href="@Url.Action(session.IsSavedProjectileMotion() ? "Motion" : "MotionWithResistance", "Display")"><i class="fa fa-eye"></i> Display</a>
+                            <a class="dropdown-item" href="@Url.Action("Properties", "Set", new { setwithResistance = Model.Layout.Menu.SetWithResistance })"><i class="fa fa-edit"></i> Edit</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="@Url.Action("Index", "SavingAndExport")"><i class="fa fa-save"></i> Saving & Export</a>
                         </div>

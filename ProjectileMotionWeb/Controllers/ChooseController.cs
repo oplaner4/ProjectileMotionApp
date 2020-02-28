@@ -16,19 +16,19 @@ namespace ProjectileMotionWeb.Controllers
             return View(new ChooseModel() { Layout = new LayoutModel("Choose", new LayoutMenuModel (LayoutMenuModel.ActiveNavItem.Choose) ) });
         }
 
-        public ActionResult Choosen(bool withRezistance)
+        public ActionResult Choosen(bool withResistance)
         {
             SessionStore session = GetSession();
 
-            if (session.IsSavedProjectileMotion() && withRezistance)
+            if (session.IsSavedProjectileMotion() && withResistance)
             {
                 session.SaveProjectileMotion(null);
             }
-            else if (session.IsSavedProjectileMotionWithRezistance() && !withRezistance)
+            else if (session.IsSavedProjectileMotionWithResistance() && !withResistance)
             {
-                session.SaveProjectileMotionWithRezistance(null);
+                session.SaveProjectileMotionWithResistance(null);
             }
-            return RedirectToAction("Properties", "Set", new { setWithRezistance = withRezistance });
+            return RedirectToAction("Properties", "Set", new { setWithResistance = withResistance });
         }
     }
 }

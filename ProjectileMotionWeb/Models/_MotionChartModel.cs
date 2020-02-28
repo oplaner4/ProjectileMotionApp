@@ -1,6 +1,6 @@
 ﻿using ProjectileMotionSource.Func;
 using ProjectileMotionSource.Point;
-using ProjectileMotionSource.WithRezistance.Func;
+using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionWeb.Classes;
 using ProjectileMotionWeb.Helpers;
 using System;
@@ -29,19 +29,19 @@ namespace ProjectileMotionWeb.Models
         {
             Motion = motion;
             DegradedMotion = Motion;
-            ShowMotionWithoutRezistanceTrajectoryToo = false;
+            ShowMotionWithoutResistanceTrajectoryToo = false;
         }
 
 
-        public _MotionChartModel(ProjectileMotionWithRezistance motion)
+        public _MotionChartModel(ProjectileMotionWithResistance motion)
         {
             Motion = motion;
             DegradedMotion = motion.Degrade();
-            ShowMotionWithoutRezistanceTrajectoryToo = motion.Settings.ShowMotionWithoutRezistanceTrajectoryToo;
+            ShowMotionWithoutResistanceTrajectoryToo = motion.Settings.ShowMotionWithoutResistanceTrajectoryToo;
         }
 
         public ProjectileMotion DegradedMotion { get; private set; }
 
-        public bool ShowMotionWithoutRezistanceTrajectoryToo { get; private set; }
+        public bool ShowMotionWithoutResistanceTrajectoryToo { get; private set; }
     }
 }

@@ -11,7 +11,7 @@
             ActiveMenuItem = activeItem;
         }
 
-        public bool? SetWithRezistance { get; set; }
+        public bool? SetWithResistance { get; set; }
 
         public enum ActiveNavItem
         {

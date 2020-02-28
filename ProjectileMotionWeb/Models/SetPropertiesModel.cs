@@ -8,7 +8,7 @@ namespace ProjectileMotionWeb.Models
         { /* POST! */ }
 
         internal const string REQUIREDTEXT = "* Required";
-        internal const string REQUIREDWITHREZISTANCETEXT = REQUIREDTEXT + " for motions with rezistance";
+        internal const string REQUIREDWITHRESISTANCETEXT = REQUIREDTEXT + " for motions with resistance";
         internal const string REQUIREDFORASSIGNMENT = REQUIREDTEXT + " for selected assignment";
         internal const string LARGERTHANZEROTEXT = "* Larger than zero";
         internal const string LARGEROREQUALTOZEROTEXT = "* Larger or equal to zero";
@@ -50,8 +50,8 @@ namespace ProjectileMotionWeb.Models
         [Display(Name = ".pdf file name")]
         public string PdfInfoFileName { get; set; }
 
-        [Display(Name = "Display also trajectory of the motion neglecting rezistance")]
-        public bool ShowMotionWithoutRezistanceTrajectoryToo { get; set; }
+        [Display(Name = "Display also trajectory of the motion neglecting resistance")]
+        public bool ShowMotionWithoutResistanceTrajectoryToo { get; set; }
 
         [Display(Name = "Recalculate")]
         public bool RecalculateOnUnitChange { get; set; }

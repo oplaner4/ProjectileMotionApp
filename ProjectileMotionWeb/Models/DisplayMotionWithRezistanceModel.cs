@@ -1,14 +1,14 @@
-﻿using ProjectileMotionSource.WithRezistance.Func;
+﻿using ProjectileMotionSource.WithResistance.Func;
 
 namespace ProjectileMotionWeb.Models
 {
-    public class DisplayMotionWithRezistanceModel : DisplayMotionBaseModel
+    public class DisplayMotionWithResistanceModel : DisplayMotionBaseModel
     {
-        public DisplayMotionWithRezistanceModel(ProjectileMotionWithRezistance motion, bool showLargerMotionChart) : base (showLargerMotionChart)
+        public DisplayMotionWithResistanceModel(ProjectileMotionWithResistance motion, bool showLargerMotionChart) : base (showLargerMotionChart)
         {
             Motion = motion;
         }
 
-        public ProjectileMotionWithRezistance Motion { get; set; }
+        public ProjectileMotionWithResistance Motion { get; set; }
     }
 }

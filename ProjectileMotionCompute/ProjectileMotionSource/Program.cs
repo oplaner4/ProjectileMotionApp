@@ -2,7 +2,7 @@
 using Utilities.Units;
 using Utilities.Quantities;
 using System;
-using ProjectileMotionSource.WithRezistance.Func;
+using ProjectileMotionSource.WithResistance.Func;
 
 class Program
 {
@@ -36,9 +36,9 @@ class Program
 
 
 
-        ProjectileMotionWithRezistance motionWithRezistance = new ProjectileMotionWithRezistance(
-           new ProjectileMotionWithRezistanceSettings(
-               new ProjectileMotionWithRezistanceQuantities(
+        ProjectileMotionWithResistance motionWithResistance = new ProjectileMotionWithResistance(
+           new ProjectileMotionWithResistanceSettings(
+               new ProjectileMotionWithResistanceQuantities(
                    v, α, h, g,
                    new Mass(46, UnitMass.Gram),
                    new Density(Density.Densities.Air),
@@ -53,7 +53,7 @@ class Program
                PointsForTrajectory = 153
            });
 
-        motionWithRezistance.SaveInfoToTxt();
+        motionWithResistance.SaveInfoToTxt();
     }
 }
 

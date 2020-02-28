@@ -1,7 +1,7 @@
 ﻿using ProjectileMotionSource.Exceptions;
 using ProjectileMotionSource.Func;
 using ProjectileMotionSource.Point;
-using ProjectileMotionSource.WithRezistance.PointsComputation;
+using ProjectileMotionSource.WithResistance.PointsComputation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 using Utilities.Quantities;
 using Utilities.Units;
 
-namespace ProjectileMotionSource.WithRezistance.Func
+namespace ProjectileMotionSource.WithResistance.Func
 {
     /// <summary>
-    /// Projectile motion with rezistance features.
+    /// Projectile motion with resistance features.
     /// </summary>
-    public class ProjectileMotionWithRezistance : ProjectileMotion
+    public class ProjectileMotionWithResistance : ProjectileMotion
     {
-        public ProjectileMotionWithRezistance(ProjectileMotionWithRezistanceSettings settings) : base(settings)
+        public ProjectileMotionWithResistance(ProjectileMotionWithResistanceSettings settings) : base(settings)
         {
             Settings = settings;
             _ListAllPointsOfTrajectory = new List<ProjectileMotionPoint>();
@@ -100,7 +100,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
 
         public override Velocity GetVelocityX()
         {
-            throw new OnlySuperClassMethodException("This method cannot be used for motions with rezistance");
+            throw new OnlySuperClassMethodException("This method cannot be used for motions with resistance");
         }
 
 
@@ -234,7 +234,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
             {
                 return GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Final);
             }
-            return GetListAllPointsOfTrajectory().Where(x => t.GetBasicVal() - x.T.GetRoundedVal(Settings.RoundDigits) <= ProjectileMotionWithRezistanceComputation.Dt).First();
+            return GetListAllPointsOfTrajectory().Where(x => t.GetBasicVal() - x.T.GetRoundedVal(Settings.RoundDigits) <= ProjectileMotionWithResistanceComputation.Dt).First();
 
         }
 
@@ -264,12 +264,12 @@ namespace ProjectileMotionSource.WithRezistance.Func
         {
             if (!_ListAllPointsOfTrajectory.Any())
             {
-                ProjectileMotionWithRezistanceComputation computation = ProjectileMotionWithRezistanceComputation.Start(this);
+                ProjectileMotionWithResistanceComputation computation = ProjectileMotionWithResistanceComputation.Start(this);
                 _ListAllPointsOfTrajectory.Add(computation.Point);
 
                 while (computation.IsNextReal)
                 {
-                    ProjectileMotionWithRezistanceComputation nextComputation = computation.Continue();
+                    ProjectileMotionWithResistanceComputation nextComputation = computation.Continue();
                     _ListAllPointsOfTrajectory.Add(nextComputation.Point);
                     computation = nextComputation;
                 }
@@ -296,7 +296,7 @@ namespace ProjectileMotionSource.WithRezistance.Func
         }
 
 
-        public new ProjectileMotionWithRezistanceSettings Settings { get; private set; }
+        public new ProjectileMotionWithResistanceSettings Settings { get; private set; }
 
 
         public override ProjectileMotion SaveInfoToTxt()

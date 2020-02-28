@@ -3,8 +3,8 @@ using Utilities.Quantities;
 using ProjectileMotionSource.Func;
 using System;
 using MathNet.Numerics.RootFinding;
-using ProjectileMotionSource.WithRezistance.PointsComputation;
-using ProjectileMotionSource.WithRezistance.Func;
+using ProjectileMotionSource.WithResistance.PointsComputation;
+using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionSource.Exceptions;
 
 namespace ProjectileMotionSource.Point
@@ -60,12 +60,12 @@ namespace ProjectileMotionSource.Point
         }
 
 
-        internal ProjectileMotionPoint(ProjectileMotionWithRezistanceComputation prevComputation)
+        internal ProjectileMotionPoint(ProjectileMotionWithResistanceComputation prevComputation)
         {
             Motion = prevComputation.Motion;
-            X = new Length(prevComputation.Point.X.GetBasicVal() + prevComputation.Point.Vx.GetBasicVal() * ProjectileMotionWithRezistanceComputation.Dt, UnitLength.Basic);
+            X = new Length(prevComputation.Point.X.GetBasicVal() + prevComputation.Point.Vx.GetBasicVal() * ProjectileMotionWithResistanceComputation.Dt, UnitLength.Basic);
             Y = new Length(prevComputation.GetNewY() < 0 ? 0 : prevComputation.GetNewY(), UnitLength.Basic);
-            T = new Time(prevComputation.Point.T.GetBasicVal() + ProjectileMotionWithRezistanceComputation.Dt, UnitTime.Basic);
+            T = new Time(prevComputation.Point.T.GetBasicVal() + ProjectileMotionWithResistanceComputation.Dt, UnitTime.Basic);
             Vx = new Velocity(Math.Abs(prevComputation.GetNewVx()), UnitVelocity.Basic);
             Vy = new Velocity(Math.Abs(prevComputation.GetNewVy()), UnitVelocity.Basic);
 
@@ -100,9 +100,9 @@ namespace ProjectileMotionSource.Point
 
         public ProjectileMotionPoint(ProjectileMotion motion, ProjectileMotionPointTypes type)
         {
-            if (motion is ProjectileMotionWithRezistance)
+            if (motion is ProjectileMotionWithResistance)
             {
-                throw new OnlySuperClassMethodException("This constructor cannot be used for motions with rezistance");
+                throw new OnlySuperClassMethodException("This constructor cannot be used for motions with resistance");
             }
 
             Motion = motion;

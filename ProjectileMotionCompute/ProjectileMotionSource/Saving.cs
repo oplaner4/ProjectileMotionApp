@@ -6,7 +6,7 @@ using System.Text;
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using ProjectileMotionSource.WithRezistance.Func;
+using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionSource.Func;
 using Utilities.Quantities;
 
@@ -45,7 +45,7 @@ namespace ProjectileMotionSource.Saving
         {
             DataToFiles.Clear();
 
-            if (!(Motion is ProjectileMotionWithRezistance))
+            if (!(Motion is ProjectileMotionWithResistance))
             {
                 DataToFiles.Add("The assignment type", ProjectileMotionQuantities.AssignmentsTypesTranslations[Motion.Settings.Quantities.UsedAssignmentType]);
             }
@@ -55,14 +55,14 @@ namespace ProjectileMotionSource.Saving
             ConstructNewDataRecordQuantity("The initial height", Motion.Settings.Quantities.H);
             ConstructNewDataRecordQuantity("The initial gravitation acceleration", Motion.Settings.Quantities.G);
 
-            if (Motion is ProjectileMotionWithRezistance)
+            if (Motion is ProjectileMotionWithResistance)
             {
-                ProjectileMotionWithRezistanceQuantities rezistanceQuantities = (ProjectileMotionWithRezistanceQuantities)Motion.Settings.Quantities;
+                ProjectileMotionWithResistanceQuantities resistanceQuantities = (ProjectileMotionWithResistanceQuantities)Motion.Settings.Quantities;
 
-                ConstructNewDataRecordQuantity("The mass", rezistanceQuantities.M);
-                ConstructNewDataRecordQuantity("The density", rezistanceQuantities.Ρ);
-                ConstructNewDataRecordQuantity("The frontal area", rezistanceQuantities.A);
-                ConstructNewDataRecordQuantity("The drag coefficient", rezistanceQuantities.C);
+                ConstructNewDataRecordQuantity("The mass", resistanceQuantities.M);
+                ConstructNewDataRecordQuantity("The density", resistanceQuantities.Ρ);
+                ConstructNewDataRecordQuantity("The frontal area", resistanceQuantities.A);
+                ConstructNewDataRecordQuantity("The drag coefficient", resistanceQuantities.C);
             }
 
             ConstructNewDataRecordQuantity("The duration", Motion.GetDur());
@@ -75,7 +75,7 @@ namespace ProjectileMotionSource.Saving
             DataToFiles.Add("Coordinates of the farthest point from the beginning (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", "[" + Motion.GetCoordsFarthest()[0].ToString(CultureInfo.InvariantCulture) + ", " + Motion.GetCoordsFarthest()[1].ToString(CultureInfo.InvariantCulture) + "]");
             DataToFiles.Add("Coordinates of the highest point (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", "[" + Motion.GetCoordsHighest()[0].ToString(CultureInfo.InvariantCulture) + ", " + Motion.GetCoordsHighest()[1].ToString(CultureInfo.InvariantCulture) + "]");
 
-            if (Motion is ProjectileMotionWithRezistance)
+            if (Motion is ProjectileMotionWithResistance)
             {
                 ConstructNewDataRecordQuantity("The time of the highest point", Motion.GetTimeHighest());
                 ConstructNewDataRecordQuantity("The time of the farthest point", Motion.GetTimeFarthest());

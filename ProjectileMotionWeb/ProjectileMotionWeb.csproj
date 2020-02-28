@@ -157,8 +157,8 @@
     <Content Include="Assets\Images\Display\ChartExportTutorial\exampleChartExportTutorialRightClick.png" />
     <Content Include="Assets\Images\ExampleCharts\exampleChartBothTrajectoriesWithoutTooltip.png" />
     <Content Include="Assets\Images\ExampleCharts\exampleChartBothTrajectories.png" />
-    <Content Include="Assets\Images\ExampleCharts\exampleChartWithRezistance.png" />
-    <Content Include="Assets\Images\ExampleCharts\exampleChartWithoutRezistance.png" />
+    <Content Include="Assets\Images\ExampleCharts\exampleChartWithResistance.png" />
+    <Content Include="Assets\Images\ExampleCharts\exampleChartWithoutResistance.png" />
     <Content Include="Assets\Images\Home\Start\easyRecalculate.gif" />
     <Content Include="Css\External\bootstrap.css" />
     <Content Include="Css\External\bootstrapRoot.css" />
@@ -1844,7 +1844,7 @@
     <Content Include="Views\Set\Properties.cshtml" />
     <Content Include="Views\Choose\Neglection.cshtml" />
     <Content Include="Views\Display\Motion.cshtml" />
-    <Content Include="Views\Display\MotionWithRezistance.cshtml" />
+    <Content Include="Views\Display\MotionWithResistance.cshtml" />
     <Content Include="Views\Shared\_MotionInformation.cshtml" />
     <Content Include="Views\Shared\_FormQuantityGroup.cshtml" />
     <Content Include="Views\Shared\_MotionChart.cshtml" />

@@ -4,7 +4,7 @@
 <h5 class="mb-2">Chart</h5>
 
 <div class="ml-md-2">
-    <canvas id="motionChart" class="mb-3" style="height:@(Math.Round(1000 * (Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val / (Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val))px; width:1000px;"></canvas>
+    <canvas id="motionChart" class="mb-3" style="height:@(Math.Round(1000 * (Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val / (Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val))px; width:1000px;"></canvas>
 </div>
 
 <script>
@@ -20,7 +20,7 @@
             var easings = ["linear", "easeInQuad", "easeOutQuad", "easeInOutQuad", "easeInCubic", "easeOutCubic", "easeOutQuart", "easeInQuint", "easeOutQuint", "easeOutExpo"];
             Chart.defaults.global.animation.easing = easings[Math.ceil(Math.random() * easings.length) - 1];
 
-            var defaultStepSize = @((Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val / 11);
+            var defaultStepSize = @((Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val / 11);
 
             function getPointsBackgroundsWithBgColorForMaximalPoint(data, defPointBgColor) {
                 var pointBackgroundColor = new Array();
@@ -45,15 +45,15 @@
                 data: {
                     datasets: [
                         {
-                            label: '@(Model.ShowMotionWithoutRezistanceTrajectoryToo ? "With rezistance" : "")',
+                            label: '@(Model.ShowMotionWithoutResistanceTrajectoryToo ? "With resistance" : "")',
                             pointBackgroundColor: getPointsBackgroundsWithBgColorForMaximalPoint(dataForMotion, "@(Model.Motion.Settings.HexColorOfTrajectory)"),
                             backgroundColor: "@(Model.Motion.Settings.HexColorOfTrajectory)",
                             borderColor: "@(Model.Motion.Settings.HexColorOfTrajectory)",
-                        }@if (Model.ShowMotionWithoutRezistanceTrajectoryToo)
+                        }@if (Model.ShowMotionWithoutResistanceTrajectoryToo)
                         {
                         <text>
                         , {
-                            label: 'Without rezistance',
+                            label: 'Without resistance',
                             pointBackgroundColor: getPointsBackgroundsWithBgColorForMaximalPoint(dataForSecondMotion, "#6c757d"),
                             backgroundColor: "#6c757d",
                             borderColor: "#848c94",
@@ -98,7 +98,7 @@
                             },
                             ticks: {
                                 min: 0,
-                                max: @((Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val),
+                                max: @((Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val),
                                 beginAtZero: true,
                                 callback: ticksRenderCallback
                             },
@@ -111,7 +111,7 @@
                             },
                             ticks: {
                                 min: 0,
-                                max: @((Model.ShowMotionWithoutRezistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val),
+                                max: @((Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val),
                                 beginAtZero: true,
                                 callback: ticksRenderCallback
                             },
