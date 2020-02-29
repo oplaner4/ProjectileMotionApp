@@ -136,7 +136,7 @@
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Models\ChooseModel.cs" />
     <Compile Include="Models\DisplayMotionBaseModel.cs" />
-    <Compile Include="Models\DisplayMotionWithRezistanceModel.cs" />
+    <Compile Include="Models\DisplayMotionWithResistanceModel.cs" />
     <Compile Include="Models\DisplayMotionModel.cs" />
     <Compile Include="Models\LayoutMenuModel.cs" />
     <Compile Include="Models\SetPropertiesQuantitiesModel.cs" />
