@@ -1,4 +1,4 @@
-﻿using Utilities.Units;
+﻿ using Utilities.Units;
 using Utilities.Quantities;
 using ProjectileMotionSource.Func;
 using System;

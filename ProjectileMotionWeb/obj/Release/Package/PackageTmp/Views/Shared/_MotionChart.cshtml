@@ -1,0 +1,231 @@
+﻿@using ProjectileMotionWeb.Models;
+@model _MotionChartModel
+
+<h5 class="mb-2">Chart</h5>
+
+<div class="ml-md-2">
+    <canvas id="motionChart" class="mb-3" style="height:@(Math.Round(1000 * (Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val / (Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val))px; width:1000px;"></canvas>
+</div>
+
+<script>
+        $(function () {
+            var canvas = $('canvas#motionChart');
+
+            Chart.defaults.global.animation.duration = 0;
+            Chart.defaults.global.elements.point.radius = 4;
+            Chart.defaults.global.elements.point.hoverRadius = 5;
+            Chart.defaults.global.elements.line.borderWidth = 3;
+            Chart.defaults.scatter.showLines = true;
+            Chart.defaults.global.elements.line.fill = false;
+            var easings = ["linear", "easeInQuad", "easeOutQuad", "easeInOutQuad", "easeInCubic", "easeOutCubic", "easeOutQuart", "easeInQuint", "easeOutQuint", "easeOutExpo"];
+            Chart.defaults.global.animation.easing = easings[Math.ceil(Math.random() * easings.length) - 1];
+
+            var defaultStepSize = @((Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val / 11);
+
+            function getPointsBackgroundsWithBgColorForMaximalPoint(data, defPointBgColor) {
+                var pointBackgroundColor = new Array();
+                data.forEach(function (v) {
+                    pointBackgroundColor.push(v.isFarthest || v.isHighest ? shadeHexColor(defPointBgColor, -25) : defPointBgColor);
+                });
+                return pointBackgroundColor;
+            };
+
+            var dataForMotion = @Html.Raw(Model.GetSpeciallySerializedTrajectory(Model.Motion.GetListPointsOfTrajectory()));
+            var dataForSecondMotion =  @Html.Raw(Model.GetSpeciallySerializedTrajectory(Model.DegradedMotion.GetListPointsOfTrajectory()));
+            var ticksRenderCallback = function (value) {
+                if (value !== this.max)
+                    return value.getRoundedVal(2);
+            };
+            Number.prototype.getRoundedVal = function (digits) {
+                return Math.round(this * Math.pow(10, digits)) / Math.pow(10, digits);
+            };
+
+            window.motionChartScatter = new Chart(canvas[0].getContext('2d'), {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: '@(Model.ShowMotionWithoutResistanceTrajectoryToo ? "With resistance" : "")',
+                            pointBackgroundColor: getPointsBackgroundsWithBgColorForMaximalPoint(dataForMotion, "@(Model.Motion.Settings.HexColorOfTrajectory)"),
+                            backgroundColor: "@(Model.Motion.Settings.HexColorOfTrajectory)",
+                            borderColor: "@(Model.Motion.Settings.HexColorOfTrajectory)",
+                        }@if (Model.ShowMotionWithoutResistanceTrajectoryToo)
+                        {
+                        <text>
+                        , {
+                            label: 'Without resistance',
+                            pointBackgroundColor: getPointsBackgroundsWithBgColorForMaximalPoint(dataForSecondMotion, "#6c757d"),
+                            backgroundColor: "#6c757d",
+                            borderColor: "#848c94",
+                        }
+                        </text>
+                        }
+
+                    ]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function (tooltipItem, data) {
+                                if (window.pointsDrawingAnimationProgress === true)
+                                    return '';
+
+                                var pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                                var specialPointTitle = '';
+                                if (pointData.isFarthest || pointData.isHighest) {
+                                    if (pointData.isFarthest && pointData.isHighest) specialPointTitle = "the farthest and highest point";
+                                    else if (pointData.isFarthest) specialPointTitle = "the farthest point";
+                                    else specialPointTitle = "the highest point";
+                                }
+
+                                var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                                return (label ? (label + (specialPointTitle ? " - " : ": ")) : "") + (specialPointTitle ? specialPointTitle + ": " : "") + 'x = ' + tooltipItem.xLabel + '; y = ' + tooltipItem.yLabel + '; t = ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].t;
+                            }
+                        }
+                    },
+                    hover: {
+                        animationDuration: 70
+                    },
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: '@Model.Motion.Saving.GetChartCategoryTitle()'
+                            },
+                            ticks: {
+                                min: 0,
+                                max: @((Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetLength().Val),
+                                beginAtZero: true,
+                                callback: ticksRenderCallback
+                            },
+                            display: true
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: '@Model.DegradedMotion.Saving.GetChartValueTitle()'
+                            },
+                            ticks: {
+                                min: 0,
+                                max: @((Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.DegradedMotion : Model.Motion).GetMaxHeight().Val),
+                                beginAtZero: true,
+                                callback: ticksRenderCallback
+                            },
+                            display: true
+                        }]
+                    },
+                    elements: {
+                        line: {
+                            tension: 0
+                        }
+                    }
+                }
+            });
+
+            var playPointsDrawingAnimations = function (onAnimationStart, onAnimationEnd, onAnimationProgress) {
+                if (window.motionChartScatter.data.datasets.length > 1) {
+                    setTimeout(playPointsDrawingAnimation, window.motionChartScatter.options.hover.animationDuration, 0, dataForMotion, onAnimationStart, function () { }, onAnimationProgress);
+                    setTimeout(playPointsDrawingAnimation, window.motionChartScatter.options.hover.animationDuration, 1, dataForSecondMotion, function () { }, onAnimationEnd, function () { });
+                }
+                else {
+                    setTimeout(playPointsDrawingAnimation, window.motionChartScatter.options.hover.animationDuration, 0, dataForMotion, onAnimationStart, onAnimationEnd, onAnimationProgress);
+                }
+            }
+
+            window.storedPointsDrawingAnimationsInfo = new Array(
+                {
+                    dataSourcePointToDrawIndex: 0,
+                    renderedDataSource: new Array(),
+                    timeout: null
+                },
+                {
+                    dataSourcePointToDrawIndex: 0,
+                    renderedDataSource: new Array(),
+                    timeout: null
+                }
+            );
+
+            var playPointsDrawingAnimation = function (dataSetIndex, dataSource, onAnimationStart, onAnimationEnd, onAnimationProgress) {
+                window.motionChartScatter.data.datasets[dataSetIndex].data = new Array();
+
+                var pointsMotionDrawingAnimationTimeoutCallback = function () {
+                    var infoByDataSetIndex = window.storedPointsDrawingAnimationsInfo[dataSetIndex];
+                    var actualPointToDrawIndex = infoByDataSetIndex.dataSourcePointToDrawIndex;
+                    var actualPoint = dataSource[actualPointToDrawIndex];
+                    onAnimationProgress();
+
+                    window.motionChartScatter.data.datasets[dataSetIndex].data = infoByDataSetIndex.renderedDataSource;
+                    window.storedPointsDrawingAnimationsInfo[dataSetIndex].renderedDataSource.push(actualPoint);
+
+                    window.motionChartScatter.update({
+                        duration: 0
+                    });
+
+                    if (actualPointToDrawIndex === dataSource.length - 1) {
+                        
+                        onAnimationEnd();
+                        window.storedPointsDrawingAnimationsInfo[dataSetIndex].dataSourcePointToDrawIndex = 0;
+                        window.storedPointsDrawingAnimationsInfo[dataSetIndex].renderedDataSource = new Array();
+                    }
+                    else {
+                        window.storedPointsDrawingAnimationsInfo[dataSetIndex].timeout = setTimeout(pointsMotionDrawingAnimationTimeoutCallback, dataSource[actualPointToDrawIndex + 1].tMiliseconds - actualPoint.tMiliseconds);
+                        window.storedPointsDrawingAnimationsInfo[dataSetIndex].dataSourcePointToDrawIndex++;
+                    }
+                };
+
+                onAnimationStart();
+                pointsMotionDrawingAnimationTimeoutCallback();
+            };
+
+            var animationProgress = false;
+
+            $('.btn.btn-animation').on('click', function (e) {
+                e.preventDefault();
+                var $this = $(this);
+                var icon = $('i', this);
+                var span = $('span', this);
+
+                if (animationProgress) {
+                    window.storedPointsDrawingAnimationsInfo.forEach(function (v) {
+                        clearTimeout(v.timeout);
+                    });
+
+                    $this.removeClass('btn-danger').addClass('btn-success');
+                    span.text('Resume animation');
+                    icon.removeClass('fa-stop fa-redo-alt').addClass('fa-play');
+
+                    animationProgress = false;
+                }
+                else {
+                    playPointsDrawingAnimations(
+                        function () {
+                            $this.removeClass('btn-success').addClass('btn-danger');
+                            span.text('Stop animation');
+                            icon.removeClass('fa-play fa-redo-alt').addClass('fa-stop');
+                            animationProgress = true;
+                        },
+                        function () {
+                            animationProgress = false;
+                            $this.removeClass('btn-danger').addClass('btn-success');
+                            span.text('Replay animation');
+                            icon.removeClass('fa-stop fa-play').addClass('fa-redo-alt');
+                        },
+                        function () {}
+                    );
+                }
+
+                return false;
+            }).trigger('click');
+
+
+
+            $('form.form-motionChartExport').on('submit', function () {
+                $('input[name="canvasbase64ImageUrl"]', this).val(window.motionChartScatter.toBase64Image());
+                window.initAndDisplayAlertSuccessMessage('Exporting!', 'Downloading should start soon.');
+            });
+    });
+</script>

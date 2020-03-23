@@ -13,6 +13,11 @@ namespace Utilities.Quantities
     {
         public Quantity(double val)
         {
+            if (double.IsInfinity(val) || double.IsNaN(val))
+            {
+                throw new Exception("The quantity value must be numeric and finite");
+            }
+
             Val = val;
         }
 

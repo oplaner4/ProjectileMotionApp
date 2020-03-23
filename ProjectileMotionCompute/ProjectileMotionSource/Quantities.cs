@@ -29,7 +29,6 @@ namespace ProjectileMotionSource.Func
             H = h;
             G = g;
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.Basic;
         }
 
@@ -52,7 +51,6 @@ namespace ProjectileMotionSource.Func
                 GetResultWithComputeExpection(Math.Asin((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) / (2.0 * V.GetBasicVal() * dur.GetBasicVal()))), 
                 UnitAngle.Basic).Convert(Units.Angle);
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.ElevationAngleByDuration;
         }
 
@@ -71,11 +69,13 @@ namespace ProjectileMotionSource.Func
             Α = α;
             H = h;
             G = g;
+
+            
+
             V = new InitialVelocity(
                 GetResultWithComputeExpection((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) / (2.0 * Math.Sin(Α.GetBasicVal()) * dur.GetBasicVal())),
                 UnitVelocity.Basic).Convert(Units.Velocity);
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialVelocityByDuration;
         }
 
@@ -98,7 +98,6 @@ namespace ProjectileMotionSource.Func
                 GetResultWithComputeExpection((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2.0 * Math.Sin(Α.GetBasicVal()) * dur.GetBasicVal() * V.GetBasicVal()) / 2.0), 
                 UnitLength.Basic).Convert(Units.Length);
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialHeightByDuration;
         }
 
@@ -122,7 +121,6 @@ namespace ProjectileMotionSource.Func
                 UnitLength.Basic).Convert(Units.Length);
 
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialHeightByLength;
         }
 
@@ -145,7 +143,6 @@ namespace ProjectileMotionSource.Func
                GetResultWithComputeExpection(length.GetBasicVal() * Math.Sqrt(G.GetBasicVal() * 1 / Math.Cos(Α.GetBasicVal())) / Math.Sqrt(2.0 * length.GetBasicVal() * Math.Sin(Α.GetBasicVal()) + 2.0 * H.GetBasicVal() * Math.Cos(Α.GetBasicVal()))), 
                 UnitVelocity.Basic).Convert(Units.Velocity);
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialVelocityByLength;
         }
 
@@ -170,7 +167,6 @@ namespace ProjectileMotionSource.Func
                     UnitAngle.Basic
                 ).Convert(Units.Angle);
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.ElevationAngleByLength;
         }
 
@@ -193,7 +189,6 @@ namespace ProjectileMotionSource.Func
                GetResultWithComputeExpection(Math.Sqrt(2.0 * G.GetBasicVal() * (maxHeight.GetBasicVal() - H.GetBasicVal()) / Math.Pow(Math.Sin(Α.GetBasicVal()), 2.0))),
                 UnitVelocity.Basic).Convert(Units.Velocity);
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialVelocityByMaxHeight;
         }
 
@@ -216,7 +211,6 @@ namespace ProjectileMotionSource.Func
                GetResultWithComputeExpection(maxHeight.GetBasicVal() - Math.Pow(V.GetBasicVal() * Math.Sin(Α.GetBasicVal()), 2.0) / (2.0 * G.GetBasicVal())), 
                 UnitLength.Basic).Convert(Units.Length);
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.InitialHeightByMaxHeight;
         }
 
@@ -241,7 +235,6 @@ namespace ProjectileMotionSource.Func
                 GetResultWithComputeExpection(Math.Asin(Math.Sqrt(2.0 * G.GetBasicVal() * maxHeight.GetBasicVal() / Math.Pow(V.GetBasicVal(), 2)))),
                 UnitAngle.Basic).Convert(Units.Angle);
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.ElevationAngleByMaxHeight;
         }
 
@@ -265,7 +258,6 @@ namespace ProjectileMotionSource.Func
                 GetResultWithComputeExpection(Math.Acos(Math.Sqrt((2.0 * G.GetBasicVal() * H.GetBasicVal() + Math.Pow(V.GetBasicVal(), 2.0)) / (2.0 * G.GetBasicVal() * H.GetBasicVal() + 2.0 * Math.Pow(V.GetBasicVal(), 2.0))))), 
                 UnitAngle.Basic).Convert(Units.Angle);
 
-            CheckData();
             UsedAssignmentType = AssignmentsTypes.ElevationAngleGetMaxRange;
         }
 
@@ -316,7 +308,7 @@ namespace ProjectileMotionSource.Func
 
         protected double GetResultWithComputeExpection(double expectedResult)
         {
-            if (expectedResult < 0)
+            if (expectedResult < 0 || double.IsInfinity(expectedResult) || expectedResult == double.NaN)
             {
                 throw new UnableToComputeQuantityException(UNABLETOCOMPUTEQUANTITYTEXT);
             }
@@ -333,24 +325,7 @@ namespace ProjectileMotionSource.Func
 
         public GravAcceleration G { get; private set; }
 
-
-        private void CheckData()
-        {
-
-            if (double.IsNaN(V.Val) ||
-                double.IsNaN(H.Val) ||
-                double.IsNaN(G.Val) ||
-                double.IsNaN(Α.Val)
-            )
-            {
-                throw new UnableToComputeQuantityException(UNABLETOCOMPUTEQUANTITYTEXT);
-            }
-        }
-
-
-        private const string UNABLETOCOMPUTEQUANTITYTEXT = "Unable to compute some quantities. The combination of entered quantities is not valid for any real projectile motion.";
-        
-
+        private const string UNABLETOCOMPUTEQUANTITYTEXT = "Unable to find the definite real projectile motion. The combination of entered quantities is invalid or indefinite.";
 
         /// <summary>
         /// Units of projectile motion Quantities.
