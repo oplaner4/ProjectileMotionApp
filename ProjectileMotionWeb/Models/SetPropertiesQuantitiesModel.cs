@@ -71,6 +71,8 @@ namespace ProjectileMotionWeb.Models
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByDuration, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByDuration, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByDuration, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
+        [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLengthAndDur, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
+        [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLengthAndDur, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
 
         [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByDuration, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
         [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByDuration, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
@@ -98,6 +100,8 @@ namespace ProjectileMotionWeb.Models
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByLength, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLength, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLength, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
+        [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLengthAndDur, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
+        [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLengthAndDur, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
 
         [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByLength, 0, double.MaxValue,ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
         [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLength, 0, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
