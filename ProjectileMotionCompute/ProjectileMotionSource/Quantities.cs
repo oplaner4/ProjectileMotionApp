@@ -105,11 +105,11 @@ namespace ProjectileMotionSource.Func
         /// 5. Constructor for a projectile motion Quantities. Computes an initial height based on the length.
         /// </summary>
         /// <param name="α">An elevation angle.</param>
-        /// <param name="length">The length.</param>
+        /// <param name="l">The length.</param>
         /// <param name="v">An initial velocity.</param>
         /// <param name="g">A gravitation acceleration of the planet.</param>
         /// <param name="units">The units of Quantities. By default metre per second, radian, metre and metre per square second.</param>
-        public ProjectileMotionQuantities(Length length, ElevationAngle α, InitialVelocity v, GravAcceleration g, ProjectileMotionResultsUnits units = null)
+        public ProjectileMotionQuantities(Length l, ElevationAngle α, InitialVelocity v, GravAcceleration g, ProjectileMotionResultsUnits units = null)
         {
             Units = units ?? new ProjectileMotionResultsUnits();
 
@@ -117,7 +117,7 @@ namespace ProjectileMotionSource.Func
             Α = α;
             G = g;
             H = new InitialHeight(
-                GetResultWithComputeExpection((Math.Pow(length.GetBasicVal(), 2.0) * G.GetBasicVal() * 1 / Math.Pow(Math.Cos(Α.GetBasicVal()), 2.0) - 2.0 * length.GetBasicVal() * Math.Pow(V.GetBasicVal(), 2.0) * Math.Tan(Α.GetBasicVal())) / (2.0 * Math.Pow(V.GetBasicVal(), 2.0))),
+                GetResultWithComputeExpection((Math.Pow(l.GetBasicVal(), 2.0) * G.GetBasicVal() * 1 / Math.Pow(Math.Cos(Α.GetBasicVal()), 2.0) - 2.0 * l.GetBasicVal() * Math.Pow(V.GetBasicVal(), 2.0) * Math.Tan(Α.GetBasicVal())) / (2.0 * Math.Pow(V.GetBasicVal(), 2.0))),
                 UnitLength.Basic).Convert(Units.Length);
 
 
@@ -128,11 +128,11 @@ namespace ProjectileMotionSource.Func
         /// 6. Constructor for a projectile motion Quantities. Computes an initial velocity based on the length.
         /// </summary>
         /// <param name="α">An elevation angle.</param>
-        /// <param name="length">The length.</param>
+        /// <param name="l">The length.</param>
         /// <param name="h">An initial height.</param>
         /// <param name="g">A gravitation acceleration of the planet.</param>
         /// <param name="units">The units of Quantities. By default metre per second, radian, metre and metre per square second.</param>
-        public ProjectileMotionQuantities(Length length, ElevationAngle α, InitialHeight h, GravAcceleration g, ProjectileMotionResultsUnits units = null)
+        public ProjectileMotionQuantities(Length l, ElevationAngle α, InitialHeight h, GravAcceleration g, ProjectileMotionResultsUnits units = null)
         {
             Units = units ?? new ProjectileMotionResultsUnits();
 
@@ -140,7 +140,7 @@ namespace ProjectileMotionSource.Func
             H = h;
             G = g;
             V = new InitialVelocity(
-               GetResultWithComputeExpection(length.GetBasicVal() * Math.Sqrt(G.GetBasicVal() * 1 / Math.Cos(Α.GetBasicVal())) / Math.Sqrt(2.0 * length.GetBasicVal() * Math.Sin(Α.GetBasicVal()) + 2.0 * H.GetBasicVal() * Math.Cos(Α.GetBasicVal()))), 
+               GetResultWithComputeExpection(l.GetBasicVal() * Math.Sqrt(G.GetBasicVal() * 1 / Math.Cos(Α.GetBasicVal())) / Math.Sqrt(2.0 * l.GetBasicVal() * Math.Sin(Α.GetBasicVal()) + 2.0 * H.GetBasicVal() * Math.Cos(Α.GetBasicVal()))), 
                 UnitVelocity.Basic).Convert(Units.Velocity);
 
             UsedAssignmentType = AssignmentsTypes.InitialVelocityByLength;
@@ -150,11 +150,11 @@ namespace ProjectileMotionSource.Func
         /// 7. Constructor for a projectile motion Quantities. Computes an elevation angle based on the length.
         /// </summary>
         /// <param name="v">An initial velocity.</param>
-        /// <param name="length">The length.</param>
+        /// <param name="l">The length.</param>
         /// <param name="h">An initial height.</param>
         /// <param name="g">A gravitation acceleration of the planet.</param>
         /// <param name="units">The units of Quantities. By default metre per second, radian, metre and metre per square second.</param>
-        public ProjectileMotionQuantities(Length length, InitialVelocity v, InitialHeight h, GravAcceleration g, ProjectileMotionResultsUnits units = null)
+        public ProjectileMotionQuantities(Length l, InitialVelocity v, InitialHeight h, GravAcceleration g, ProjectileMotionResultsUnits units = null)
         {
             Units = units ?? new ProjectileMotionResultsUnits();
 
@@ -163,7 +163,7 @@ namespace ProjectileMotionSource.Func
             G = g;
 
             Α = new ElevationAngle(
-                    GetResultWithComputeExpection(EquationSolver.BisectionFindRoot(a => V.GetBasicVal() * Math.Cos(a) * (V.GetBasicVal() * Math.Sin(a) + Math.Sqrt(Math.Pow(V.GetBasicVal() * Math.Sin(a), 2) + 2.0 * G.GetBasicVal() * H.GetBasicVal())) / G.GetBasicVal() - length.GetBasicVal(), 0, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right).Val, 1E-4)),
+                    GetResultWithComputeExpection(EquationSolver.BisectionFindRoot(a => V.GetBasicVal() * Math.Cos(a) * (V.GetBasicVal() * Math.Sin(a) + Math.Sqrt(Math.Pow(V.GetBasicVal() * Math.Sin(a), 2) + 2.0 * G.GetBasicVal() * H.GetBasicVal())) / G.GetBasicVal() - l.GetBasicVal(), 0, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right).Val, 1E-4)),
                     UnitAngle.Basic
                 ).Convert(Units.Angle);
 
@@ -261,6 +261,47 @@ namespace ProjectileMotionSource.Func
             UsedAssignmentType = AssignmentsTypes.ElevationAngleGetMaxRange;
         }
 
+        /// <summary>
+        /// 12. Constructor for a projectile motion Quantities. Computes an initial velocity based on the duration and the length.
+        /// </summary>
+        /// <param name="α">An initial velocity.</param>
+        /// <param name="l">The length.</param>
+        /// <param name="dur">The duration.</param>
+        /// <param name="g">A gravitation acceleration of the planet.</param>
+        /// <param name="units">The units of Quantities. By default metre per second, radian, metre and metre per square second.</param>
+        public ProjectileMotionQuantities(ElevationAngle α, Length l, Duration dur, GravAcceleration g, ProjectileMotionResultsUnits units = null)
+        {
+            Units = units ?? new ProjectileMotionResultsUnits();
+
+            Α = α;
+            G = g;
+            V = new InitialVelocity(GetResultWithComputeExpection(l.GetBasicVal() / (Math.Cos(Α.GetBasicVal()) * dur.GetBasicVal())), UnitVelocity.Basic).Convert(Units.Velocity);
+            H = new InitialHeight(GetResultWithComputeExpection(0.5 * G.GetBasicVal() * Math.Pow(dur.GetBasicVal(), 2.0) - Math.Sin(Α.GetBasicVal()) * V.GetBasicVal() * dur.GetBasicVal()), UnitLength.Basic).Convert(Units.Length);
+
+            UsedAssignmentType = AssignmentsTypes.InitialVelocityByLengthAndDur;
+        }
+
+        /// <summary>
+        /// 13. Constructor for a projectile motion Quantities. Computes an elevation angle based on the duration and the length.
+        /// </summary>
+        /// <param name="v">An initial velocity.</param>
+        /// <param name="l">The length.</param>
+        /// <param name="dur">The duration.</param>
+        /// <param name="g">A gravitation acceleration of the planet.</param>
+        /// <param name="units">The units of Quantities. By default metre per second, radian, metre and metre per square second.</param>
+        public ProjectileMotionQuantities(InitialVelocity v, Length l, Duration dur, GravAcceleration g, ProjectileMotionResultsUnits units = null)
+        {
+            Units = units ?? new ProjectileMotionResultsUnits();
+
+
+            G = g;
+            V = v;
+            Α = new ElevationAngle(GetResultWithComputeExpection(Math.Acos(l.GetBasicVal()/(V.GetBasicVal() * dur.GetBasicVal()))), UnitAngle.Basic).Convert(Units.Angle);
+            H = new InitialHeight(GetResultWithComputeExpection(0.5 * G.GetBasicVal() * Math.Pow(dur.GetBasicVal(), 2.0) - Math.Sin(Α.GetBasicVal()) * V.GetBasicVal() * dur.GetBasicVal()), UnitLength.Basic).Convert(Units.Length);
+
+            UsedAssignmentType = AssignmentsTypes.ElevationAngleByLengthAndDur;
+        }
+
 
         public AssignmentsTypes UsedAssignmentType { get; set; }
 
@@ -276,7 +317,9 @@ namespace ProjectileMotionSource.Func
             InitialHeightByLength,
             ElevationAngleByLength,
             InitialVelocityByLength,
-            ElevationAngleGetMaxRange
+            ElevationAngleGetMaxRange,
+            InitialVelocityByLengthAndDur,
+            ElevationAngleByLengthAndDur
         }
 
 
@@ -292,7 +335,9 @@ namespace ProjectileMotionSource.Func
             { AssignmentsTypes.InitialHeightByLength, "An initial height by length" },
             { AssignmentsTypes.ElevationAngleByLength, "An elevation angle by length" },
             { AssignmentsTypes.InitialVelocityByLength, "An initial velocity by length" },
-            { AssignmentsTypes.ElevationAngleGetMaxRange, "An elevation angle to get maximal range" }
+            { AssignmentsTypes.ElevationAngleGetMaxRange, "An elevation angle to get maximal range" },
+            { AssignmentsTypes.InitialVelocityByLengthAndDur, "An initial velocity by length and duration" },
+            { AssignmentsTypes.ElevationAngleByLengthAndDur, "An elevation angle by length and duration" }
         };
 
 
@@ -308,7 +353,7 @@ namespace ProjectileMotionSource.Func
 
         protected double GetResultWithComputeExpection(double expectedResult)
         {
-            if (expectedResult < 0 || double.IsInfinity(expectedResult) || expectedResult == double.NaN)
+            if (expectedResult < 0 || double.IsInfinity(expectedResult) || double.IsNaN(expectedResult))
             {
                 throw new UnableToComputeQuantityException(UNABLETOCOMPUTEQUANTITYTEXT);
             }

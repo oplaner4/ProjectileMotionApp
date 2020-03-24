@@ -263,6 +263,24 @@ namespace ProjectileMotionWeb.Controllers
                     {
                         quantitiesWithoutResistance = new ProjectileMotionQuantities(v, h, g, units);
                     }
+                    if (new List<ProjectileMotionQuantities.AssignmentsTypes>() {
+                        ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLengthAndDur,
+                        ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLengthAndDur
+                    }.Contains(postModel.Quantities.SelectedAssignmentType))
+                    {
+                        Length l = new Length(postModel.Quantities.Length.Value, new ReflectionHelper(typeof(UnitLength)).GetValueOfStaticProperty(postModel.Quantities.MaxHeightUnit) as UnitLength);
+                        Duration d = new Duration(postModel.Quantities.Duration.Value, new ReflectionHelper(typeof(UnitTime)).GetValueOfStaticProperty(postModel.Quantities.DurationUnit) as UnitTime);
+
+                        switch (postModel.Quantities.SelectedAssignmentType)
+                        {
+                            case ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLengthAndDur:
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(α, l, d, g, units);
+                                break;
+                            case ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLengthAndDur:
+                                quantitiesWithoutResistance = new ProjectileMotionQuantities(v, l, d, g, units);
+                                break;
+                        }
+                    }
                     else
                         quantitiesWithoutResistance = new ProjectileMotionQuantities(v, α, h, g, units);
 
