@@ -263,7 +263,7 @@ namespace ProjectileMotionWeb.Controllers
                     {
                         quantitiesWithoutResistance = new ProjectileMotionQuantities(v, h, g, units);
                     }
-                    if (new List<ProjectileMotionQuantities.AssignmentsTypes>() {
+                    else if (new List<ProjectileMotionQuantities.AssignmentsTypes>() {
                         ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLengthAndDur,
                         ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLengthAndDur
                     }.Contains(postModel.Quantities.SelectedAssignmentType))
