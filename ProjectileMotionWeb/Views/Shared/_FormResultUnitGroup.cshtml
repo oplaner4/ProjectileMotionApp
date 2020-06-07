@@ -4,7 +4,7 @@
 
 <div class="form-group">
     @Model.LabelForResultUnit
-    <select name="@Model.NameForResultUnit" class="form-control" style="width:auto">
+    <select id="@Model.NameForResultUnit" name="@Model.NameForResultUnit" class="form-control" style="width:auto">
         @foreach (string unitName in new UnitsReflectionHelper(Model.UnitClassType).GetListUnitsNames())
         {
             <option value="@unitName" @(unitName == Model.ResultUnitName ? "selected" : string.Empty)>@unitName</option>

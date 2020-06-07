@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileUtilities.cs" />
+    <Compile Include="InvalidQuantityValueException.cs" />
     <Compile Include="InvalidElevationAngleException.cs" />
     <Compile Include="UnitsUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

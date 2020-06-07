@@ -15,7 +15,7 @@ namespace Utilities.Quantities
         {
             if (double.IsInfinity(val) || double.IsNaN(val))
             {
-                throw new Exception("The quantity value must be numeric and finite");
+                throw new InvalidQuantityValueException("The quantity value must be numeric and finite.");
             }
 
             Val = val;
@@ -35,6 +35,25 @@ namespace Utilities.Quantities
         public double GetRoundedVal(int roundDigits)
         {
             return Math.Round(Val, roundDigits);
+        }
+
+        public static double CompareToleratedDifference = Math.Pow(10, -12);
+
+        public enum CheckValueCompareWithZero
+        {
+            LargerOrEqualToZero,
+            LargerThanZero
+        }
+
+        public void CheckValueWithException (CheckValueCompareWithZero compare, string message)
+        {
+            if (
+                (compare == CheckValueCompareWithZero.LargerOrEqualToZero && Val < -CompareToleratedDifference) || 
+                (compare == CheckValueCompareWithZero.LargerThanZero && Val <= -CompareToleratedDifference)
+            )
+            { 
+                throw new InvalidQuantityValueException(message);
+            }
         }
     }
 
@@ -87,12 +106,12 @@ namespace Utilities.Quantities
 
         public static bool operator != (QuantityWithUnit q1, QuantityWithUnit q2)
         {
-            return Math.Abs(q1.GetBasicVal() - q2.GetBasicVal()) > Math.Pow(10, -12);
+            return Math.Abs(q1.GetBasicVal() - q2.GetBasicVal()) > CompareToleratedDifference;
         }
 
         public static bool operator == (QuantityWithUnit q1, QuantityWithUnit q2)
         {
-            return Math.Abs(q1.GetBasicVal() - q2.GetBasicVal()) <= Math.Pow(10, -12);
+            return Math.Abs(q1.GetBasicVal() - q2.GetBasicVal()) <= CompareToleratedDifference;
         }
 
         public override bool Equals(object obj)
@@ -144,7 +163,7 @@ namespace Utilities.Quantities
 
         public bool IsRight()
         {
-            return new ElevationAngle(ElevationAngleTypes.Right).GetBasicVal() - GetBasicVal() <= Math.Pow(10, -12);
+            return new ElevationAngle(ElevationAngleTypes.Right).GetBasicVal() - GetBasicVal() <= CompareToleratedDifference;
         }
 
         public static double GetElevationAngleValue(ElevationAngleTypes type)
@@ -159,10 +178,7 @@ namespace Utilities.Quantities
                 throw new InvalidElevationAngleException(BuidRightAngleExceptionMessage());
             }
 
-            if (val <= -Math.Pow(10,-12))
-            {
-                throw new Exception("An elevation angle must be larger or equal to zero");
-            }
+            CheckValueWithException(CheckValueCompareWithZero.LargerOrEqualToZero, "An elevation angle must be larger or equal to zero");
         }
 
         public new ElevationAngle RoundVal(int roundDigits)
@@ -207,8 +223,7 @@ namespace Utilities.Quantities
     {
         public GravAcceleration(double val, UnitGravAcceleration unit) : base(val, unit)
         {
-            if (val <= -Math.Pow(10, -12))
-                throw new Exception("A gravitation acceleration must be larger than zero");
+            CheckValueWithException(CheckValueCompareWithZero.LargerThanZero, "A gravitation acceleration must be larger than zero");
         }
 
         public GravAcceleration(GravAccelerations val = GravAccelerations.Earth) : base(GetGravAccelerationValue(val), UnitGravAcceleration.Basic)
@@ -267,8 +282,7 @@ namespace Utilities.Quantities
         /// <param name="val">The value of velocity. Larger or equal to zero.</param>
         public Velocity(double val, UnitVelocity unit) : base(val, unit)
         {
-            if (val <= -Math.Pow(10, -12))
-                throw new Exception("A velocity must be larger or equal to zero");
+            CheckValueWithException(CheckValueCompareWithZero.LargerOrEqualToZero, "A velocity must be larger or equal to zero");
         }
 
         public new Velocity RoundVal(int roundDigits)
@@ -308,8 +322,7 @@ namespace Utilities.Quantities
     {
         public Length(double val, UnitLength unit) : base(val, unit)
         {
-            if (val <= -Math.Pow(10, -12))
-                 throw new Exception("The length or height must be larger or equal to zero");
+            CheckValueWithException(CheckValueCompareWithZero.LargerOrEqualToZero, "The length or height must be larger or equal to zero");
         }
 
         public new Length RoundVal(int roundDigits)
@@ -366,8 +379,7 @@ namespace Utilities.Quantities
     {
         public Time(double val, UnitTime unit) : base(val, unit)
         {
-            if (val <= -Math.Pow(10, -12))
-                throw new Exception("The time or duration must be larger or equal to zero");
+            CheckValueWithException(CheckValueCompareWithZero.LargerOrEqualToZero, "The time or duration must be larger or equal to zero");
         }
 
         public new Time RoundVal(int roundDigits)
@@ -405,8 +417,7 @@ namespace Utilities.Quantities
     {
         public Area (double val, UnitArea unit) : base (val, unit)
         {
-            if (val <= -Math.Pow(10, -12))
-                throw new Exception("An area must be larger or equal to zero");
+            CheckValueWithException(CheckValueCompareWithZero.LargerThanZero, "An area must be larger than zero");
         }
 
 
@@ -446,8 +457,7 @@ namespace Utilities.Quantities
     {
         public Mass(double val, UnitMass unit) : base(val, unit)
         {
-            if (val <= -Math.Pow(10, -12))
-                throw new Exception("The mass must be larger or equal to zero");
+            CheckValueWithException(CheckValueCompareWithZero.LargerThanZero, "The mass must be larger than zero");
         }
 
 
@@ -468,8 +478,7 @@ namespace Utilities.Quantities
     {
         public Density(double val, UnitDensity unit) : base(val, unit)
         {
-            if (val <= -Math.Pow(10, -12))
-                throw new Exception("The density must be larger or equal to zero");
+            CheckValueWithException(CheckValueCompareWithZero.LargerThanZero, "The density must be larger than zero");
         }
 
 
@@ -512,8 +521,7 @@ namespace Utilities.Quantities
     public class DragCoefficient : Quantity
     {
         public DragCoefficient (double val) : base (val) {
-            if (val <= -Math.Pow(10, -12))
-                throw new Exception("A drag coefficient must be larger or equal to zero");
+            CheckValueWithException(CheckValueCompareWithZero.LargerThanZero, "A drag coefficient must be larger than zero");
         }
 
         public DragCoefficient(DragCoefficients val) : base(GetDragCoefficientValue(val))

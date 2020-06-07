@@ -353,7 +353,7 @@ namespace ProjectileMotionSource.Func
 
         protected double GetResultWithComputeExpection(double expectedResult)
         {
-            if (expectedResult < 0 || double.IsInfinity(expectedResult) || double.IsNaN(expectedResult))
+            if (expectedResult < -Quantity.CompareToleratedDifference || double.IsInfinity(expectedResult) || double.IsNaN(expectedResult))
             {
                 throw new UnableToComputeQuantityException(UNABLETOCOMPUTEQUANTITYTEXT);
             }
