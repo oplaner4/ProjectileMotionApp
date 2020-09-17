@@ -2,46 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Utilities.Units;
 
 namespace ProjectileMotionWeb.Helpers
 {
     public class ReflectionHelper
     {
-
         public ReflectionHelper(Type classType)
         {
             ClassType = classType;
         }
 
-
-        public object GetValueOfStaticProperty(string propName)
-        {
-            FieldInfo fieldInfo = ClassType.GetTypeInfo().DeclaredFields.Where(x => x.Name == propName).FirstOrDefault();
-            if (fieldInfo != null)
-                return fieldInfo.GetValue(null);
-            return null;
-        }
-
-
-        public List<string> GetListStaticPropertiesNames()
-        {
-            return ClassType.GetTypeInfo().DeclaredFields.Where(x => x.IsStatic).Select(x => x.Name).ToList();
-        }
-
-        public Type ClassType { get; private set; }
+        protected Type ClassType { get; set; }
     }
 
+    public class ReflectionHelper<T> : ReflectionHelper
+    {
+        public ReflectionHelper() : base (typeof(T))
+        {}
+    }
 
     public class UnitsReflectionHelper : ReflectionHelper
     {
         public UnitsReflectionHelper(Type classType) : base (classType)
-        {
-
-        }
+        {}
 
         public List<string> GetListUnitsNames()
         {
-            return ClassType.GetTypeInfo().DeclaredFields.Where(x => x.IsStatic && x.Name != "Basic").Select(x => x.Name).ToList();
+            return ClassType.GetFields(BindingFlags.Public | BindingFlags.Static).Where(f => f.Name != "Basic").Select(f => f.Name).ToList();
+        }
+    }
+
+    public class UnitsReflectionHelper<T> : UnitsReflectionHelper
+    {
+        public UnitsReflectionHelper() : base(typeof(T))
+        { }
+
+        public T GetUnit(string unitName)
+        {
+            return (T)ClassType.GetField(unitName, BindingFlags.Static | BindingFlags.Public).GetValue(null);
         }
     }
 }

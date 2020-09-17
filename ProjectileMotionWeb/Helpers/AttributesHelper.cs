@@ -110,7 +110,7 @@ namespace ProjectileMotionWeb.Helpers
 
             try
             {
-                new ElevationAngle((double)value, new UnitsReflectionHelper(typeof(UnitAngle)).GetValueOfStaticProperty(unit) as UnitAngle);
+                new ElevationAngle((double)value, new UnitsReflectionHelper<UnitAngle>().GetUnit(unit));
             }
             catch (InvalidElevationAngleException ex)
             {

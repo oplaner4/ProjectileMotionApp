@@ -72,8 +72,8 @@ namespace ProjectileMotionSource.Saving
             ConstructNewDataRecordQuantity("The max distance from the beginning", Motion.GetMaxDistance());
             ConstructNewDataRecordQuantity("The max height", Motion.GetMaxHeight());
 
-            DataToFiles.Add("Coordinates of the farthest point from the beginning (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", "[" + Motion.GetCoordsFarthest()[0].ToString(CultureInfo.InvariantCulture) + ", " + Motion.GetCoordsFarthest()[1].ToString(CultureInfo.InvariantCulture) + "]");
-            DataToFiles.Add("Coordinates of the highest point (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", "[" + Motion.GetCoordsHighest()[0].ToString(CultureInfo.InvariantCulture) + ", " + Motion.GetCoordsHighest()[1].ToString(CultureInfo.InvariantCulture) + "]");
+            DataToFiles.Add("Coordinates of the farthest point from the beginning (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", GetCoordsFormatted(Motion.GetCoordsFarthest()));
+            DataToFiles.Add("Coordinates of the highest point (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", GetCoordsFormatted(Motion.GetCoordsHighest()));
 
             if (Motion is ProjectileMotionWithResistance)
             {
@@ -105,6 +105,11 @@ namespace ProjectileMotionSource.Saving
         private string SuccessfullySavedMessage(string fileName)
         {
             return string.Format("The file {0} has been successfully saved to {1}", fileName, Motion.Settings.PathToFiles);
+        }
+
+        private string GetCoordsFormatted(double[] coords)
+        {
+            return string.Format("( {0}, {1} )", coords[0].ToString(CultureInfo.InvariantCulture), coords[1].ToString(CultureInfo.InvariantCulture));
         }
 
 
@@ -140,7 +145,7 @@ namespace ProjectileMotionSource.Saving
                     writer.WriteLine(GetTrajectoryTitle());
                     foreach (double[] coords in Motion.GetTrajectory())
                     {
-                        writer.WriteLine("( " + coords[0].ToString(CultureInfo.InvariantCulture) + ", " + coords[1].ToString(CultureInfo.InvariantCulture) + " )");
+                        writer.WriteLine(GetCoordsFormatted(coords));
                     }
                 }
             );

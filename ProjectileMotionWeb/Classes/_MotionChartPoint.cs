@@ -5,13 +5,14 @@ namespace ProjectileMotionWeb.Classes
 {
     public class _MotionChartPoint
     {
-        public _MotionChartPoint(ProjectileMotionPoint point)
+        public _MotionChartPoint(ProjectileMotionPoint point, bool isFarthest)
         {
+            point.Round();
             X = point.X.Val;
             Y = point.Y.Val;
             T = point.T.Val;
 
-            IsFarthest = point.IsFarthest;
+            IsFarthest = isFarthest;
             IsHighest = point.IsHighest;
             TMiliseconds = point.T.GetConvertedVal(UnitTime.Milisecond);
         }

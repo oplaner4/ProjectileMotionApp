@@ -3,24 +3,19 @@ using ProjectileMotionSource.Point;
 using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionWeb.Classes;
 using ProjectileMotionWeb.Helpers;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectileMotionWeb.Models
 {
     public class _MotionChartModel : BaseModel
     {
-        public string GetSpeciallySerializedTrajectory (List<ProjectileMotionPoint> listPoints)
+        public string GetSpeciallySerializedTrajectory(List<ProjectileMotionPoint> listPoints)
         {
-            _MotionChartPoint[] points = new _MotionChartPoint[listPoints.Count];
-            int i = 0;
-            foreach (ProjectileMotionPoint point in listPoints)
-            {
-                points[i] = new _MotionChartPoint(point.Round());
-                i++;
-            }
-
-            return new JsonSerializerHelper(points).Serialize();
+            ProjectileMotionPoint farthestPoint = Motion.GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest);
+            return new JsonSerializerHelper(
+                listPoints.Select(p => new _MotionChartPoint(p, p.T == farthestPoint.T))
+                ).Serialize();
         }
 
         public ProjectileMotion Motion { get; private set; }
@@ -28,7 +23,7 @@ namespace ProjectileMotionWeb.Models
         public _MotionChartModel(ProjectileMotion motion)
         {
             Motion = motion;
-            DegradedMotion = Motion;
+            DegradedMotion = null;
             ShowMotionWithoutResistanceTrajectoryToo = false;
         }
 

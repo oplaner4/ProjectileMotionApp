@@ -31,11 +31,13 @@
             };
 
             var dataForMotion = @Html.Raw(Model.GetSpeciallySerializedTrajectory(Model.Motion.GetListPointsOfTrajectory()));
-            var dataForSecondMotion =  @Html.Raw(Model.GetSpeciallySerializedTrajectory(Model.DegradedMotion.GetListPointsOfTrajectory()));
+            var dataForSecondMotion = @Html.Raw(Model.ShowMotionWithoutResistanceTrajectoryToo ? Model.GetSpeciallySerializedTrajectory(Model.DegradedMotion.GetListPointsOfTrajectory()) : "[]");
+
             var ticksRenderCallback = function (value) {
                 if (value !== this.max)
                     return value.getRoundedVal(2);
             };
+
             Number.prototype.getRoundedVal = function (digits) {
                 return Math.round(this * Math.pow(10, digits)) / Math.pow(10, digits);
             };
@@ -107,7 +109,7 @@
                         yAxes: [{
                             scaleLabel: {
                                 display: true,
-                                labelString: '@Model.DegradedMotion.Saving.GetChartValueTitle()'
+                                labelString: '@Model.Motion.Saving.GetChartValueTitle()'
                             },
                             ticks: {
                                 min: 0,

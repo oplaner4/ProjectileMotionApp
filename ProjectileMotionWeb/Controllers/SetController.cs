@@ -149,19 +149,19 @@ namespace ProjectileMotionWeb.Controllers
             {
                 SessionStore session = GetSession();
 
-                InitialVelocity v = new InitialVelocity(postModel.Quantities.InitialVelocity, new ReflectionHelper(typeof(UnitVelocity)).GetValueOfStaticProperty(postModel.Quantities.InitialVelocityUnit) as UnitVelocity);
-                InitialHeight h = new InitialHeight(postModel.Quantities.InitialHeight, new ReflectionHelper(typeof(UnitLength)).GetValueOfStaticProperty(postModel.Quantities.InitialHeightUnit) as UnitLength);
-                GravAcceleration g = new GravAcceleration(postModel.Quantities.GravAcceleration, new ReflectionHelper(typeof(UnitGravAcceleration)).GetValueOfStaticProperty(postModel.Quantities.GravAccelerationUnit) as UnitGravAcceleration);
-                ElevationAngle α = new ElevationAngle(postModel.Quantities.ElevationAngle, new UnitsReflectionHelper(typeof(UnitAngle)).GetValueOfStaticProperty(postModel.Quantities.ElevationAngleUnit) as UnitAngle);
+                InitialVelocity v = new InitialVelocity(postModel.Quantities.InitialVelocity, new UnitsReflectionHelper<UnitVelocity>().GetUnit(postModel.Quantities.InitialVelocityUnit));
+                InitialHeight h = new InitialHeight(postModel.Quantities.InitialHeight, new UnitsReflectionHelper<UnitLength>().GetUnit(postModel.Quantities.InitialHeightUnit));
+                GravAcceleration g = new GravAcceleration(postModel.Quantities.GravAcceleration, new UnitsReflectionHelper<UnitGravAcceleration>().GetUnit(postModel.Quantities.GravAccelerationUnit));
+                ElevationAngle α = new ElevationAngle(postModel.Quantities.ElevationAngle, new UnitsReflectionHelper<UnitAngle>().GetUnit(postModel.Quantities.ElevationAngleUnit));
 
                 ProjectileMotionResultsUnits units = new ProjectileMotionResultsUnits()
                 {
-                    Length = new ReflectionHelper(typeof(UnitLength)).GetValueOfStaticProperty(postModel.ResultUnitLength) as UnitLength,
-                    Time = new ReflectionHelper(typeof(UnitTime)).GetValueOfStaticProperty(postModel.ResultUnitTime) as UnitTime,
-                    Velocity = new ReflectionHelper(typeof(UnitVelocity)).GetValueOfStaticProperty(postModel.ResultUnitVelocity) as UnitVelocity,
-                    Angle = new ReflectionHelper(typeof(UnitAngle)).GetValueOfStaticProperty(postModel.ResultUnitAngle) as UnitAngle,
-                    Area = new ReflectionHelper(typeof(UnitArea)).GetValueOfStaticProperty(postModel.ResultUnitArea) as UnitArea,
-                    GravAcceleration = new ReflectionHelper(typeof(UnitGravAcceleration)).GetValueOfStaticProperty(postModel.ResultUnitGravAcceleration) as UnitGravAcceleration
+                    Length = new UnitsReflectionHelper<UnitLength>().GetUnit(postModel.ResultUnitLength),
+                    Time = new UnitsReflectionHelper<UnitTime>().GetUnit(postModel.ResultUnitTime),
+                    Velocity = new UnitsReflectionHelper<UnitVelocity>().GetUnit(postModel.ResultUnitVelocity),
+                    Angle = new UnitsReflectionHelper<UnitAngle>().GetUnit(postModel.ResultUnitAngle),
+                    Area = new UnitsReflectionHelper<UnitArea>().GetUnit(postModel.ResultUnitArea),
+                    GravAcceleration = new UnitsReflectionHelper<UnitGravAcceleration>().GetUnit(postModel.ResultUnitGravAcceleration)
                 };
 
                 if (postModel.Quantities.WithResistance)
@@ -170,9 +170,9 @@ namespace ProjectileMotionWeb.Controllers
                     new ProjectileMotionWithResistanceSettings(
                        new ProjectileMotionWithResistanceQuantities(
                            v, α, h, g,
-                           new Mass(postModel.Quantities.Mass.Value, new ReflectionHelper(typeof(UnitMass)).GetValueOfStaticProperty(postModel.Quantities.MassUnit) as UnitMass),
-                           new Density(postModel.Quantities.Density.Value, new ReflectionHelper(typeof(UnitDensity)).GetValueOfStaticProperty(postModel.Quantities.DensityUnit) as UnitDensity),
-                           new FrontalArea(postModel.Quantities.FrontalArea.Value, new ReflectionHelper(typeof(UnitArea)).GetValueOfStaticProperty(postModel.Quantities.FrontalAreaUnit) as UnitArea),
+                           new Mass(postModel.Quantities.Mass.Value, new UnitsReflectionHelper<UnitMass>().GetUnit(postModel.Quantities.MassUnit)),
+                           new Density(postModel.Quantities.Density.Value, new UnitsReflectionHelper<UnitDensity>().GetUnit(postModel.Quantities.DensityUnit)),
+                           new FrontalArea(postModel.Quantities.FrontalArea.Value, new UnitsReflectionHelper<UnitArea>().GetUnit(postModel.Quantities.FrontalAreaUnit)),
                            new DragCoefficient(postModel.Quantities.DragCoefficient.Value),
                            units
                        )
@@ -202,7 +202,7 @@ namespace ProjectileMotionWeb.Controllers
                         ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByDuration
                     }.Contains(postModel.Quantities.SelectedAssignmentType))
                     {
-                        Duration d = new Duration(postModel.Quantities.Duration.Value, new ReflectionHelper(typeof(UnitTime)).GetValueOfStaticProperty(postModel.Quantities.DurationUnit) as UnitTime);
+                        Duration d = new Duration(postModel.Quantities.Duration.Value, new UnitsReflectionHelper<UnitTime>().GetUnit(postModel.Quantities.DurationUnit));
 
                         switch (postModel.Quantities.SelectedAssignmentType)
                         {
@@ -223,7 +223,7 @@ namespace ProjectileMotionWeb.Controllers
                         ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByMaxHeight
                     }.Contains(postModel.Quantities.SelectedAssignmentType))
                     {
-                        MaximalHeight maxH = new MaximalHeight(postModel.Quantities.MaxHeight.Value, new ReflectionHelper(typeof(UnitLength)).GetValueOfStaticProperty(postModel.Quantities.MaxHeightUnit) as UnitLength);
+                        MaximalHeight maxH = new MaximalHeight(postModel.Quantities.MaxHeight.Value, new UnitsReflectionHelper<UnitLength>().GetUnit(postModel.Quantities.MaxHeightUnit));
 
                         switch (postModel.Quantities.SelectedAssignmentType)
                         {
@@ -244,7 +244,7 @@ namespace ProjectileMotionWeb.Controllers
                         ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLength
                     }.Contains(postModel.Quantities.SelectedAssignmentType))
                     {
-                        Length l = new Length(postModel.Quantities.Length.Value, new ReflectionHelper(typeof(UnitLength)).GetValueOfStaticProperty(postModel.Quantities.MaxHeightUnit) as UnitLength);
+                        Length l = new Length(postModel.Quantities.Length.Value, new UnitsReflectionHelper<UnitLength>().GetUnit(postModel.Quantities.MaxHeightUnit));
 
                         switch (postModel.Quantities.SelectedAssignmentType)
                         {
@@ -268,8 +268,8 @@ namespace ProjectileMotionWeb.Controllers
                         ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLengthAndDur
                     }.Contains(postModel.Quantities.SelectedAssignmentType))
                     {
-                        Length l = new Length(postModel.Quantities.Length.Value, new ReflectionHelper(typeof(UnitLength)).GetValueOfStaticProperty(postModel.Quantities.MaxHeightUnit) as UnitLength);
-                        Duration d = new Duration(postModel.Quantities.Duration.Value, new ReflectionHelper(typeof(UnitTime)).GetValueOfStaticProperty(postModel.Quantities.DurationUnit) as UnitTime);
+                        Length l = new Length(postModel.Quantities.Length.Value, new UnitsReflectionHelper<UnitLength>().GetUnit(postModel.Quantities.MaxHeightUnit));
+                        Duration d = new Duration(postModel.Quantities.Duration.Value, new UnitsReflectionHelper<UnitTime>().GetUnit(postModel.Quantities.DurationUnit));
 
                         switch (postModel.Quantities.SelectedAssignmentType)
                         {

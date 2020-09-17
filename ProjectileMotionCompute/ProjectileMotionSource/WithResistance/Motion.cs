@@ -224,7 +224,6 @@ namespace ProjectileMotionSource.WithResistance.Func
                 }
             }
 
-            GetListAllPointsOfTrajectory()[_FarthestPointIndex].IsFarthest = true;
             return GetListAllPointsOfTrajectory()[_FarthestPointIndex];
         }
 
@@ -281,11 +280,9 @@ namespace ProjectileMotionSource.WithResistance.Func
 
         public override List<ProjectileMotionPoint> GetListPointsOfTrajectory()
         {
-            GetListAllPointsOfTrajectory()[_FarthestPointIndex].IsFarthest = true;
-
             return GetListAllPointsOfTrajectory()
                 .Where((p, i) => {
-                    return i % Math.Round((double)GetListAllPointsOfTrajectory().Count / Settings.PointsForTrajectory) == 0 || i == GetListAllPointsOfTrajectory().Count - 1 || p.IsHighest || p.IsFarthest;
+                    return i % Math.Round((double)GetListAllPointsOfTrajectory().Count / Settings.PointsForTrajectory) == 0 || i == GetListAllPointsOfTrajectory().Count - 1 || p.IsHighest || i == _FarthestPointIndex;
                  })
                 .ToList();
         }

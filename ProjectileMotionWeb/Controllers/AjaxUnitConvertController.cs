@@ -15,8 +15,9 @@ namespace ProjectileMotionWeb.Controllers
 
         public double GetConvertedValVelocity(double value, string from, string to)
         {
-            UnitVelocity unitFrom = new ReflectionHelper(typeof(UnitVelocity)).GetValueOfStaticProperty(from) as UnitVelocity;
-            UnitVelocity unitTo = new ReflectionHelper(typeof(UnitVelocity)).GetValueOfStaticProperty(to) as UnitVelocity;
+            UnitsReflectionHelper<UnitVelocity> helper = new UnitsReflectionHelper<UnitVelocity>();
+            UnitVelocity unitFrom = helper.GetUnit(from);
+            UnitVelocity unitTo = helper.GetUnit(to);
 
             return new Velocity(value, unitFrom).GetConvertedVal(unitTo);
         }
@@ -24,8 +25,9 @@ namespace ProjectileMotionWeb.Controllers
 
         public double GetConvertedValLength(double value, string from, string to)
         {
-            UnitLength unitFrom = new ReflectionHelper(typeof(UnitLength)).GetValueOfStaticProperty(from) as UnitLength;
-            UnitLength unitTo = new ReflectionHelper(typeof(UnitLength)).GetValueOfStaticProperty(to) as UnitLength;
+            UnitsReflectionHelper<UnitLength> helper = new UnitsReflectionHelper<UnitLength>();
+            UnitLength unitFrom = helper.GetUnit(from);
+            UnitLength unitTo = helper.GetUnit(to);
 
             return new Length(value, unitFrom).GetConvertedVal(unitTo);
         }
@@ -33,8 +35,9 @@ namespace ProjectileMotionWeb.Controllers
 
         public double GetConvertedValMass(double value, string from, string to)
         {
-            UnitMass unitFrom = new ReflectionHelper(typeof(UnitMass)).GetValueOfStaticProperty(from) as UnitMass;
-            UnitMass unitTo = new ReflectionHelper(typeof(UnitMass)).GetValueOfStaticProperty(to) as UnitMass;
+            UnitsReflectionHelper<UnitMass> helper = new UnitsReflectionHelper<UnitMass>();
+            UnitMass unitFrom = helper.GetUnit(from);
+            UnitMass unitTo = helper.GetUnit(to);
 
             return new Mass(value, unitFrom).GetConvertedVal(unitTo);
         }
@@ -42,8 +45,9 @@ namespace ProjectileMotionWeb.Controllers
 
         public double GetConvertedValArea(double value, string from, string to)
         {
-            UnitArea unitFrom = new ReflectionHelper(typeof(UnitArea)).GetValueOfStaticProperty(from) as UnitArea;
-            UnitArea unitTo = new ReflectionHelper(typeof(UnitArea)).GetValueOfStaticProperty(to) as UnitArea;
+            UnitsReflectionHelper<UnitArea> helper = new UnitsReflectionHelper<UnitArea>();
+            UnitArea unitFrom = helper.GetUnit(from);
+            UnitArea unitTo = helper.GetUnit(to);
 
             return new Area(value, unitFrom).GetConvertedVal(unitTo);
         }
@@ -51,8 +55,9 @@ namespace ProjectileMotionWeb.Controllers
 
         public double GetConvertedValDensity(double value, string from, string to)
         {
-            UnitDensity unitFrom = new ReflectionHelper(typeof(UnitDensity)).GetValueOfStaticProperty(from) as UnitDensity;
-            UnitDensity unitTo = new ReflectionHelper(typeof(UnitDensity)).GetValueOfStaticProperty(to) as UnitDensity;
+            UnitsReflectionHelper<UnitDensity> helper = new UnitsReflectionHelper<UnitDensity>();
+            UnitDensity unitFrom = helper.GetUnit(from);
+            UnitDensity unitTo = helper.GetUnit(to);
 
             return new Density(value, unitFrom).GetConvertedVal(unitTo);
         }
@@ -60,8 +65,9 @@ namespace ProjectileMotionWeb.Controllers
 
         public double GetConvertedValGravAcceleration(double value, string from, string to)
         {
-            UnitGravAcceleration unitFrom = new ReflectionHelper(typeof(UnitGravAcceleration)).GetValueOfStaticProperty(from) as UnitGravAcceleration;
-            UnitGravAcceleration unitTo = new ReflectionHelper(typeof(UnitGravAcceleration)).GetValueOfStaticProperty(to) as UnitGravAcceleration;
+            UnitsReflectionHelper<UnitGravAcceleration> helper = new UnitsReflectionHelper<UnitGravAcceleration>();
+            UnitGravAcceleration unitFrom = helper.GetUnit(from);
+            UnitGravAcceleration unitTo = helper.GetUnit(to);
 
             return new GravAcceleration(value, unitFrom).GetConvertedVal(unitTo);
         }
@@ -70,8 +76,9 @@ namespace ProjectileMotionWeb.Controllers
 
         public double GetConvertedValAngle(double value, string from, string to)
         {
-            UnitAngle unitFrom = new ReflectionHelper(typeof(UnitAngle)).GetValueOfStaticProperty(from) as UnitAngle;
-            UnitAngle unitTo = new ReflectionHelper(typeof(UnitAngle)).GetValueOfStaticProperty(to) as UnitAngle;
+            UnitsReflectionHelper<UnitAngle> helper = new UnitsReflectionHelper<UnitAngle>();
+            UnitAngle unitFrom = helper.GetUnit(from);
+            UnitAngle unitTo = helper.GetUnit(to);
 
             return new Angle(value, unitFrom).GetConvertedVal(unitTo);
         }
@@ -79,8 +86,9 @@ namespace ProjectileMotionWeb.Controllers
 
         public double GetConvertedValTime(double value, string from, string to)
         {
-            UnitTime unitFrom = new ReflectionHelper(typeof(UnitTime)).GetValueOfStaticProperty(from) as UnitTime;
-            UnitTime unitTo = new ReflectionHelper(typeof(UnitTime)).GetValueOfStaticProperty(to) as UnitTime;
+            UnitsReflectionHelper<UnitTime> helper = new UnitsReflectionHelper<UnitTime>();
+            UnitTime unitFrom = helper.GetUnit(from);
+            UnitTime unitTo = helper.GetUnit(to);
 
             return new Time(value, unitFrom).GetConvertedVal(unitTo);
         }
