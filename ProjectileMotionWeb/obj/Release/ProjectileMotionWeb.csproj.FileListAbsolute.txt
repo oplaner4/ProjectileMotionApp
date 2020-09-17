@@ -1,4 +1,3 @@
-C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\roslyn\System.Text.Encoding.CodePages.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\ProjectileMotionWeb.dll.config
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\ProjectileMotionWeb.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\ProjectileMotionWeb.pdb
@@ -39,6 +38,7 @@ C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\roslyn\S
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\roslyn\System.Security.Cryptography.Encoding.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\roslyn\System.Security.Cryptography.Primitives.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\roslyn\System.Text.Encoding.CodePages.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\roslyn\System.Threading.Tasks.Extensions.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\roslyn\System.ValueTuple.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\roslyn\System.Xml.ReaderWriter.dll
