@@ -168,6 +168,8 @@ C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotion\bin\ProjectileM
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotion\bin\ProjectileMotionData.dll.config
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotion\bin\ProjectileMotion.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotion\bin\ProjectileMotion.dll.config
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\obj\Debug\ProjectileMotionWeb.csprojAssemblyReference.cache
+C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\obj\Debug\ProjectileMotionWeb.csproj.CoreCompileInputs.cache
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\ProjectileMotionWeb.dll.config
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\ProjectileMotionWeb.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\ProjectileMotionWeb.pdb
@@ -239,7 +241,6 @@ C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\Utilitie
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\WebGrease.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\NonLinearEquationSolver.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\MathNet.Numerics.dll
-C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\netstandard.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\ProjectileMotion.pdb
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\ProjectileMotion.dll.config
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\Utilities.pdb
@@ -261,8 +262,6 @@ C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\Antlr3.R
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\MathNet.Numerics.xml
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\de\PdfSharp.resources.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\bin\de\PdfSharp.Charting.resources.dll
-C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\obj\Debug\ProjectileMotionWeb.csprojAssemblyReference.cache
-C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\obj\Debug\ProjectileMotionWeb.csproj.CoreCompileInputs.cache
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\obj\Debug\ProjectileMotionWeb.csproj.CopyComplete
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\obj\Debug\ProjectileMotionWeb.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionWeb\obj\Debug\ProjectileMotionWeb.pdb

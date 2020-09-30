@@ -21,7 +21,7 @@ namespace ProjectileMotionWeb.Controllers
 
 
         [HttpGet]
-        public ActionResult Properties(bool? setWithResistance =  null)
+        public ActionResult Properties(bool? setWithResistance = null)
         {
             SetPropertiesModel viewModel = new SetPropertiesModel()
             {
@@ -82,6 +82,7 @@ namespace ProjectileMotionWeb.Controllers
                 viewModel.TxtInfoFileName = savedMotion.Settings.TxtInfoFileName;
                 viewModel.CsvDataFileName = savedMotion.Settings.CsvDataFileName;
                 viewModel.PdfInfoFileName = savedMotion.Settings.PdfInfoFileName;
+                viewModel.ChartFileName = savedMotion.Settings.ChartFileName;
                 viewModel.HexColorOfTrajectory = savedMotion.Settings.HexColorOfTrajectory;
                 viewModel.ShowMotionWithoutResistanceTrajectoryToo = savedMotion.Settings.ShowMotionWithoutResistanceTrajectoryToo;
 
@@ -124,6 +125,7 @@ namespace ProjectileMotionWeb.Controllers
                 viewModel.TxtInfoFileName = savedMotion.Settings.TxtInfoFileName;
                 viewModel.CsvDataFileName = savedMotion.Settings.CsvDataFileName;
                 viewModel.PdfInfoFileName = savedMotion.Settings.PdfInfoFileName;
+                viewModel.ChartFileName = savedMotion.Settings.ChartFileName;
                 viewModel.HexColorOfTrajectory = savedMotion.Settings.HexColorOfTrajectory;
                 viewModel.ShowMotionWithoutResistanceTrajectoryToo = false;
 
@@ -183,6 +185,7 @@ namespace ProjectileMotionWeb.Controllers
                         TxtInfoFileName = postModel.TxtInfoFileName,
                         CsvDataFileName = postModel.CsvDataFileName,
                         PdfInfoFileName = postModel.PdfInfoFileName,
+                        ChartFileName = postModel.ChartFileName,
                         HexColorOfTrajectory = postModel.HexColorOfTrajectory,
                         ShowMotionWithoutResistanceTrajectoryToo = postModel.ShowMotionWithoutResistanceTrajectoryToo
 
@@ -292,6 +295,7 @@ namespace ProjectileMotionWeb.Controllers
                                 TxtInfoFileName = postModel.TxtInfoFileName,
                                 CsvDataFileName = postModel.CsvDataFileName,
                                 PdfInfoFileName = postModel.PdfInfoFileName,
+                                ChartFileName = postModel.ChartFileName,
                                 HexColorOfTrajectory = postModel.HexColorOfTrajectory
                             })).SaveProjectileMotionWithResistance(null);
 

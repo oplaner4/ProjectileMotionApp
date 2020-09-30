@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using ProjectileMotionWeb.Models;
 using ProjectileMotionSource.Func;
+using Utilities.Files;
 
 namespace ProjectileMotionWeb.Controllers
 {
@@ -93,12 +94,11 @@ namespace ProjectileMotionWeb.Controllers
             switch (contentType)
             {
                 case ChartExportContentTypes.Png:
-                    return new ExportHelperBase64Image(canvasbase64ImageUrl, GetSession().GetSavedProjectileMotionWithOrWithoutResistance().Settings.GetChartFileNameForExport("png"), "image/png").GetResultAsContentType();
+                    return new ExportHelperBase64Image(canvasbase64ImageUrl, FileUtilities.GetFileName(GetSession().GetSavedProjectileMotionWithOrWithoutResistance().Settings.ChartFileName, "png"), "image/png").GetResultAsContentType();
                 case ChartExportContentTypes.Pdf:
-                    return new ExportHelperBase64Image(canvasbase64ImageUrl, GetSession().GetSavedProjectileMotionWithOrWithoutResistance().Settings.GetChartFileNameForExport("pdf")).GetResultAsPdf();
+                    return new ExportHelperBase64Image(canvasbase64ImageUrl, FileUtilities.GetFileName(GetSession().GetSavedProjectileMotionWithOrWithoutResistance().Settings.ChartFileName, "pdf")).GetResultAsPdf();
                 case ChartExportContentTypes.Jpg:
-                    return new ExportHelperBase64Image(canvasbase64ImageUrl, GetSession().GetSavedProjectileMotionWithOrWithoutResistance().Settings.GetChartFileNameForExport("jpg")).GetResultAsJpg();
-
+                    return new ExportHelperBase64Image(canvasbase64ImageUrl, FileUtilities.GetFileName(GetSession().GetSavedProjectileMotionWithOrWithoutResistance().Settings.ChartFileName, "jpg")).GetResultAsJpg();
                 default:
                     return null;
             }

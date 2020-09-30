@@ -35,6 +35,9 @@
                 <li class="nav-item @(Model.Layout.Menu.ActiveMenuItem == LayoutMenuModel.ActiveNavItem.Set ? "active" : string.Empty)">
                     <a class="nav-link" href="@Url.Action("Properties", "Set", new { setwithResistance = Model.Layout.Menu.SetWithResistance })"><i class="fa fa-sliders-h"></i> Set</a>
                 </li>
+                <li class="nav-item @(Model.Layout.Menu.ActiveMenuItem == LayoutMenuModel.ActiveNavItem.Examples ? "active" : string.Empty)">
+                    <a class="nav-link" href="@Url.Action("Index", "Examples")"><i class="fa fa-globe"></i> Examples</a>
+                </li>
             </ul>
             <ul class="navbar-nav">
                 @if (session.IsSavedAnyMotion())

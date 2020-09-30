@@ -20,9 +20,13 @@
         bodyContent.css('padding-bottom', footer.outerHeight());
     }).trigger('resize');
 
-
-    $('[title]').tooltip({ placement: 'bottom' }).on('mouseleave click focus', function () {
-        $(this).tooltip('hide');
+    $(this).tooltip({
+        selector: '[title]',
+        placement: 'bottom',
+        offset: 0,
+        trigger: 'hover'
+    }).on('click mouseleave focus', '[title]', function (e) {
+        $(e.currentTarget).tooltip('hide');
     });
 
     $('[data-confirm]').on('click', function (e) {

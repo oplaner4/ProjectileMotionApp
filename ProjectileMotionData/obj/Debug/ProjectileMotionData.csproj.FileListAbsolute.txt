@@ -56,7 +56,6 @@ C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\Utiliti
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\PdfSharp.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\NonLinearEquationSolver.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\MathNet.Numerics.dll
-C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\netstandard.dll
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\ProjectileMotion.pdb
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\ProjectileMotion.dll.config
 C:\Users\oplan\source\repos\ProjectileMotionApp\ProjectileMotionData\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml

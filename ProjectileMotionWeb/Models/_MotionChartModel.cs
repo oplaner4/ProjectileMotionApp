@@ -3,18 +3,21 @@ using ProjectileMotionSource.Point;
 using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionWeb.Classes;
 using ProjectileMotionWeb.Helpers;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ProjectileMotionWeb.Models
 {
     public class _MotionChartModel : BaseModel
     {
-        public string GetSpeciallySerializedTrajectory(List<ProjectileMotionPoint> listPoints)
+        public string GetSpeciallySerializedTrajectory(bool usingDegradedMotion)
         {
-            ProjectileMotionPoint farthestPoint = Motion.GetPoint(ProjectileMotionPoint.ProjectileMotionPointTypes.Farthest);
+            ProjectileMotionTrajectory trajectory = (usingDegradedMotion ? DegradedMotion : Motion).Trajectory;
+            ProjectileMotionPoint farthestPoint = trajectory.GetFarthestPoint();
+            ProjectileMotionPoint highestPoint = trajectory.GetHighestPoint();
+            ProjectileMotionPoint finalPoint = trajectory.GetFinalPoint();
+
             return new JsonSerializerHelper(
-                listPoints.Select(p => new _MotionChartPoint(p, p.T == farthestPoint.T))
+                trajectory.GetPointsList().Select(p => new _MotionChartPoint(p, p.T == farthestPoint.T, p.T == highestPoint.T, p.T == finalPoint.T, Motion.Settings.RoundDigits))
                 ).Serialize();
         }
 
@@ -31,7 +34,7 @@ namespace ProjectileMotionWeb.Models
         public _MotionChartModel(ProjectileMotionWithResistance motion)
         {
             Motion = motion;
-            DegradedMotion = motion.Degrade();
+            DegradedMotion = motion.NeglectResistance();
             ShowMotionWithoutResistanceTrajectoryToo = motion.Settings.ShowMotionWithoutResistanceTrajectoryToo;
         }
 

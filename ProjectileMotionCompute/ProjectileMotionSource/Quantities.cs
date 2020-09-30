@@ -69,9 +69,6 @@ namespace ProjectileMotionSource.Func
             Α = α;
             H = h;
             G = g;
-
-            
-
             V = new InitialVelocity(
                 GetResultWithComputeExpection((Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) / (2.0 * Math.Sin(Α.GetBasicVal()) * dur.GetBasicVal())),
                 UnitVelocity.Basic).Convert(Units.Velocity);
@@ -161,7 +158,6 @@ namespace ProjectileMotionSource.Func
             V = v;
             H = h;
             G = g;
-
             Α = new ElevationAngle(
                     GetResultWithComputeExpection(EquationSolver.BisectionFindRoot(a => V.GetBasicVal() * Math.Cos(a) * (V.GetBasicVal() * Math.Sin(a) + Math.Sqrt(Math.Pow(V.GetBasicVal() * Math.Sin(a), 2) + 2.0 * G.GetBasicVal() * H.GetBasicVal())) / G.GetBasicVal() - l.GetBasicVal(), 0, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right).Val, 1E-4)),
                     UnitAngle.Basic
@@ -229,8 +225,6 @@ namespace ProjectileMotionSource.Func
             V = v;
             H = h;
             G = g;
-            
-
             Α = new ElevationAngle(
                 GetResultWithComputeExpection(Math.Asin(Math.Sqrt(2.0 * G.GetBasicVal() * maxHeight.GetBasicVal() / Math.Pow(V.GetBasicVal(), 2)))),
                 UnitAngle.Basic).Convert(Units.Angle);
@@ -253,7 +247,6 @@ namespace ProjectileMotionSource.Func
             V = v;
             H = h;
             G = g;
-
             Α = new ElevationAngle(
                 GetResultWithComputeExpection(Math.Acos(Math.Sqrt((2.0 * G.GetBasicVal() * H.GetBasicVal() + Math.Pow(V.GetBasicVal(), 2.0)) / (2.0 * G.GetBasicVal() * H.GetBasicVal() + 2.0 * Math.Pow(V.GetBasicVal(), 2.0))))), 
                 UnitAngle.Basic).Convert(Units.Angle);
@@ -292,7 +285,6 @@ namespace ProjectileMotionSource.Func
         public ProjectileMotionQuantities(InitialVelocity v, Length l, Duration dur, GravAcceleration g, ProjectileMotionResultsUnits units = null)
         {
             Units = units ?? new ProjectileMotionResultsUnits();
-
 
             G = g;
             V = v;
@@ -360,7 +352,6 @@ namespace ProjectileMotionSource.Func
 
             return expectedResult;
         }
-
 
         public InitialVelocity V { get; private set; }
 

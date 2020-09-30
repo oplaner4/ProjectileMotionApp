@@ -32,7 +32,9 @@ class Program
                 RoundDigits = 4,
                 PathToFiles = "C:\\Users\\oplan\\Documents\\c#\\ProjectileMotions",
                 PointsForTrajectory = 160
-            }).SaveInfoToTxt();
+            });
+
+        motion.Saving.InfoToTxt();
 
 
 
@@ -53,7 +55,7 @@ class Program
                PointsForTrajectory = 153
            });
 
-        motionWithResistance.SaveInfoToTxt();
+        motionWithResistance.Saving.InfoToTxt();
     }
 }
 

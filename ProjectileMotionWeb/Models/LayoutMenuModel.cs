@@ -18,7 +18,8 @@
             Home,
             Choose,
             Set,
-            MotionDropdown
+            Examples,
+            MotionDropdown,
         }
 
         public ActiveNavItem ActiveMenuItem { get; set; }

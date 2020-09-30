@@ -150,12 +150,13 @@ namespace Utilities.Quantities
     {
         public enum ElevationAngleTypes
         {
-            Right
+            Right,
+            Horizontal
         }
 
         private static readonly Dictionary<ElevationAngleTypes, double> ElevationAngleTypesDic = new Dictionary<ElevationAngleTypes, double>()
         {
-            { ElevationAngleTypes.Right, Math.PI / 2 }
+            { ElevationAngleTypes.Right, Math.PI / 2 }, { ElevationAngleTypes.Horizontal, 0.0 }
         };
 
         public ElevationAngle(ElevationAngleTypes type) : base(ElevationAngleTypesDic[type], UnitAngle.Basic)
@@ -163,7 +164,7 @@ namespace Utilities.Quantities
 
         public bool IsRight()
         {
-            return new ElevationAngle(ElevationAngleTypes.Right).GetBasicVal() - GetBasicVal() <= CompareToleratedDifference;
+            return this == new ElevationAngle(ElevationAngleTypes.Right);
         }
 
         public static double GetElevationAngleValue(ElevationAngleTypes type)

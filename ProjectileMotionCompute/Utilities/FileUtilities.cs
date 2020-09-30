@@ -3,24 +3,32 @@ using System.IO;
 
 namespace Utilities.Files
 {
-    public class FileUtilities
+    public static class FileUtilities
     {
         /// <summary>
         /// Gets file name with extension when extension is not defined.
         /// </summary>
-        /// <param name="fileName">The name of file with or without extension. It cannot be null or empty.</param>
-        /// <param name="extension">The extension to fill to file name. It cannot be null or empty.</param>
-        public static string GetFileNameWithExtension(string fileName, string extension)
+        /// <param name="fileName">The file name with or without extension. It cannot be null or empty.</param>
+        /// <param name="supposedExtension">The file supposed extension. Empty - extension is removed. It cannot be null.</param>
+        public static string GetFileName (string fileName, string supposedExtension)
         {
-            if (fileName == null || fileName.Length == 0) throw new ArgumentException(nameof(fileName), "The name of file cannot be null or empty");
-            if (extension == null || extension.Length == 0) throw new ArgumentException(nameof(fileName), "The extension cannot be null or empty");
-            extension = extension.StartsWith(".") ? extension : "." + extension;
+            if (fileName == null || fileName.Length == 0)
+            {
+                throw new ArgumentException(nameof(fileName), "The name of file cannot be null or empty");
+            }
+
+            if (supposedExtension == null)
+            {
+                throw new ArgumentException(nameof(fileName), "The extension cannot be null");
+            }
 
             FileInfo fileInfo = new FileInfo(fileName);
-            if (fileInfo.Extension.Length == 0 || fileInfo.Extension != extension)
-                return fileName + extension;
+            supposedExtension = supposedExtension.StartsWith(".") ? supposedExtension : "." + supposedExtension;
 
-            return fileInfo.Name.Replace(fileInfo.Extension, "") + extension;
+
+            return fileInfo.Extension.Length == 0 || fileInfo.Extension != supposedExtension && supposedExtension != "."
+                ? fileName + supposedExtension
+                : fileInfo.Name.Replace(fileInfo.Extension, "") + supposedExtension;
         }
 
         /// <summary>

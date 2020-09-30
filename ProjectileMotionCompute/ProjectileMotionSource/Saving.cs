@@ -9,6 +9,8 @@ using PdfSharp.Pdf;
 using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionSource.Func;
 using Utilities.Quantities;
+using ProjectileMotionSource.Point;
+using System.Linq;
 
 namespace ProjectileMotionSource.Saving
 {
@@ -17,11 +19,10 @@ namespace ProjectileMotionSource.Saving
     /// </summary>
     public class ProjectileMotionFilesSaving
     {
-        public ProjectileMotionFilesSaving(ProjectileMotion motion)
+        internal ProjectileMotionFilesSaving(ProjectileMotion motion)
         {
             Motion = motion;
         }
-
 
         private void ConstructNewDataRecordQuantity (string quantityName, Quantity quantity)
         {
@@ -38,8 +39,12 @@ namespace ProjectileMotionSource.Saving
             DataToFiles.Add(ConstructQuantityDescription(quantityName, quantityWithUnit.Unit.Name), quantityWithUnit.GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
         }
 
+        private string CounstructCoordsFormatted(ProjectileMotionPoint p, string format = "( {0}, {1} )")
+        {
+            return string.Format(format, p.X.Convert(Motion.Settings.Quantities.Units.Length).GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture), p.Y.Convert(Motion.Settings.Quantities.Units.Length).GetRoundedVal(Motion.Settings.RoundDigits).ToString(CultureInfo.InvariantCulture));
+        }
 
-        private Dictionary<string, string> DataToFiles = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> DataToFiles = new Dictionary<string, string>();
 
         public Dictionary<string, string> GetDataToFiles()
         {
@@ -65,20 +70,20 @@ namespace ProjectileMotionSource.Saving
                 ConstructNewDataRecordQuantity("The drag coefficient", resistanceQuantities.C);
             }
 
-            ConstructNewDataRecordQuantity("The duration", Motion.GetDur());
-            ConstructNewDataRecordQuantity("The length", Motion.GetLength());
-            ConstructNewDataRecordQuantity("The arc length", Motion.GetArcLength());
-            ConstructNewDataRecordQuantity("The area under arc", Motion.GetAreaUnderArc());
-            ConstructNewDataRecordQuantity("The max distance from the beginning", Motion.GetMaxDistance());
-            ConstructNewDataRecordQuantity("The max height", Motion.GetMaxHeight());
+            ConstructNewDataRecordQuantity("The duration", Motion.GetDur().Convert(Motion.Settings.Quantities.Units.Time));
+            ConstructNewDataRecordQuantity("The length", Motion.GetLength().Convert(Motion.Settings.Quantities.Units.Length));
+            ConstructNewDataRecordQuantity("The arc length", Motion.Trajectory.GetArcLength().Convert(Motion.Settings.Quantities.Units.Area));
+            ConstructNewDataRecordQuantity("The area under arc", Motion.Trajectory.GetAreaUnderArc().Convert(Motion.Settings.Quantities.Units.Area));
+            ConstructNewDataRecordQuantity("The max distance from the beginning", Motion.GetMaxDistance().Convert(Motion.Settings.Quantities.Units.Length));
+            ConstructNewDataRecordQuantity("The max height", Motion.GetMaxHeight().Convert(Motion.Settings.Quantities.Units.Length));
 
-            DataToFiles.Add("Coordinates of the farthest point from the beginning (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", GetCoordsFormatted(Motion.GetCoordsFarthest()));
-            DataToFiles.Add("Coordinates of the highest point (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", GetCoordsFormatted(Motion.GetCoordsHighest()));
+            DataToFiles.Add("Coordinates of the farthest point from the beginning (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", CounstructCoordsFormatted(Motion.Trajectory.GetFarthestPoint()));
+            DataToFiles.Add("Coordinates of the highest point (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", CounstructCoordsFormatted(Motion.Trajectory.GetHighestPoint()));
 
             if (Motion is ProjectileMotionWithResistance)
             {
-                ConstructNewDataRecordQuantity("The time of the highest point", Motion.GetTimeHighest());
-                ConstructNewDataRecordQuantity("The time of the farthest point", Motion.GetTimeFarthest());
+                ConstructNewDataRecordQuantity("The time of the highest point", Motion.GetTimeHighest().Convert(Motion.Settings.Quantities.Units.Time));
+                ConstructNewDataRecordQuantity("The time of the farthest point", Motion.GetTimeFarthest().Convert(Motion.Settings.Quantities.Units.Time));
             }
 
             return DataToFiles;
@@ -86,15 +91,14 @@ namespace ProjectileMotionSource.Saving
 
         private ProjectileMotion Motion { get; set; }
 
-
         public string GetChartCategoryTitle()
         {
-            return ConstructQuantityDescription("Distance", Motion.Settings.Quantities.Units.Length.Name);
+            return ConstructQuantityDescription("The length", Motion.Settings.Quantities.Units.Length.Name);
         }
 
         public string GetChartValueTitle()
         {
-            return ConstructQuantityDescription("Height", Motion.Settings.Quantities.Units.Length.Name);
+            return ConstructQuantityDescription("The height", Motion.Settings.Quantities.Units.Length.Name);
         }
 
         private string GetTrajectoryTitle()
@@ -106,12 +110,6 @@ namespace ProjectileMotionSource.Saving
         {
             return string.Format("The file {0} has been successfully saved to {1}", fileName, Motion.Settings.PathToFiles);
         }
-
-        private string GetCoordsFormatted(double[] coords)
-        {
-            return string.Format("( {0}, {1} )", coords[0].ToString(CultureInfo.InvariantCulture), coords[1].ToString(CultureInfo.InvariantCulture));
-        }
-
 
         private delegate void ActionWithWriter(StreamWriter writer);
 
@@ -141,11 +139,10 @@ namespace ProjectileMotionSource.Saving
                         writer.WriteLine();
                     }
 
-
                     writer.WriteLine(GetTrajectoryTitle());
-                    foreach (double[] coords in Motion.GetTrajectory())
+                    foreach (ProjectileMotionPoint p in Motion.Trajectory.GetPointsList())
                     {
-                        writer.WriteLine(GetCoordsFormatted(coords));
+                        writer.WriteLine(CounstructCoordsFormatted(p));
                     }
                 }
             );
@@ -170,9 +167,9 @@ namespace ProjectileMotionSource.Saving
 
                     writer.WriteLine(GetTrajectoryTitle());
                     writer.WriteLine(FormatForCsv(new string[] { GetChartCategoryTitle(), GetChartValueTitle() }));
-                    foreach (double[] coords in Motion.GetTrajectory())
+                    foreach (ProjectileMotionPoint p in Motion.Trajectory.GetPointsList())
                     {
-                        writer.WriteLine(FormatForCsv(new string[] { coords[0].ToString(), coords[1].ToString() }));
+                        writer.WriteLine(CounstructCoordsFormatted(p, "{0};{1}"));
                     }
                 }
             );
@@ -196,7 +193,6 @@ namespace ProjectileMotionSource.Saving
                 }
             };
         }
-
 
         public MemoryStream InfoToPdfGetMemoryStream()
         {
@@ -243,20 +239,17 @@ namespace ProjectileMotionSource.Saving
             );
         }
 
-
         public void InfoToTxt()
         {
             File.WriteAllBytes(Motion.Settings.PathToFiles + Motion.Settings.TxtInfoFileName, InfoToTxtGetMemoryStream().ToArray());
             Console.WriteLine(SuccessfullySavedMessage(Motion.Settings.TxtInfoFileName));
         }
 
-
         public void DataToCsv()
         {
             File.WriteAllBytes(Motion.Settings.PathToFiles + Motion.Settings.CsvDataFileName, DataToCsvGetMemoryStream().ToArray());
             Console.WriteLine(SuccessfullySavedMessage(Motion.Settings.CsvDataFileName));
         }
-
 
         public void InfoToPdf()
         {

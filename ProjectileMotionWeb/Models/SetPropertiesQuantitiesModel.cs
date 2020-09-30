@@ -9,12 +9,12 @@ namespace ProjectileMotionWeb.Models
         public SetPropertiesQuantitiesModel()
         { /* POST! */ }
 
-
         [Display(Name = "With resistance")]
         public bool WithResistance { get; set; }
 
         [Required(ErrorMessage = SetPropertiesModel.REQUIREDTEXT)]
-        [Range(0, double.MaxValue, ErrorMessage = "* Larger or equal to zero")]
+        [Range(0, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
+        [RangeIf(nameof(ElevationAngle), 0.0, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
         [Display(Name = "Initial height")]
         public double InitialHeight { get; set; }
 

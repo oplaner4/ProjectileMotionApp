@@ -1,48 +1,50 @@
 ﻿using System;
 using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionSource.Point;
-using Utilities.Quantities;
-using Utilities.Units;
+using ProjectileMotionSource.Func;
+using ProjectileMotionSource.PointsComputation;
 
 namespace ProjectileMotionSource.WithResistance.PointsComputation
 {
     internal class ProjectileMotionWithResistanceComputation
     {
-        public static ProjectileMotionWithResistanceComputation Start(ProjectileMotionWithResistance motion)
+        public static ProjectileMotionWithResistanceComputation Start(ProjectileMotionWithResistanceSettings settings)
         {
-            return new ProjectileMotionWithResistanceComputation(motion);
+            return new ProjectileMotionWithResistanceComputation(settings);
+        }
+
+        public ProjectileMotionWithResistanceComputation Continue()
+        {
+            IsNextReal = true;
+
+            VyComputed = GetNewVy();
+            VxComputed = GetNewVx();
+
+            Point = new ProjectileMotionPoint(this);
+
+            if (Point.Y.Val == 0)
+            {
+                IsNextReal = false;
+            }
+
+            return this;
         }
 
         public ProjectileMotionPoint Point { get; private set; }
 
         public bool IsNextReal { get; private set; }
 
-        private ProjectileMotionWithResistanceComputation(ProjectileMotionWithResistance motion)
+        private ProjectileMotionWithResistanceComputation (ProjectileMotionWithResistanceSettings settings)
         {
-            Motion = motion;
+            Settings = settings;
             IsNextReal = true;
 
-            Point = new ProjectileMotionPoint(Motion, new Time(0, UnitTime.Basic));
+            Point = new ProjectileMotionPoint(new ProjectileMotionSettings(Settings.Quantities), ProjectileMotionPointsComputation.GetTimeInitial());
+
             VyComputed = Point.Vy.GetBasicVal();
             VxComputed = Point.Vx.GetBasicVal();
 
-            if (Point.Y.Val == 0 && Motion.Settings.Quantities.Α.Val == 0)
-            {
-                IsNextReal = false;
-            }
-        }
-
-        private ProjectileMotionWithResistanceComputation(ProjectileMotionWithResistanceComputation prevComputation)
-        {
-            Motion = prevComputation.Motion;
-            IsNextReal = true;
-
-            VyComputed = prevComputation.GetNewVy();
-            VxComputed = prevComputation.GetNewVx();
-
-            Point = new ProjectileMotionPoint( prevComputation );
-
-            if (Point.Y.Val == 0)
+            if (Point.Y.Val == 0 && Settings.Quantities.Α.Val == 0)
             {
                 IsNextReal = false;
             }
@@ -52,7 +54,6 @@ namespace ProjectileMotionSource.WithResistance.PointsComputation
         {
             return VyComputed + GetAy() * Dt;
         }
-
 
         internal double GetNewVx()
         {
@@ -68,28 +69,23 @@ namespace ProjectileMotionSource.WithResistance.PointsComputation
 
         private double VxComputed { get; set; }
 
-        internal ProjectileMotionWithResistance Motion { get; private set; }
-
-        public ProjectileMotionWithResistanceComputation Continue()
-        {
-            return new ProjectileMotionWithResistanceComputation(this);
-        }
+        internal ProjectileMotionWithResistanceSettings Settings { get; private set; }
 
         public static double Dt = Math.Pow(10, -1 * 3);
 
-        internal double GetAx()
+        private double GetAx()
         {
-            return -1.0 * GetD() * Math.Sqrt(Math.Pow(Point.Vx.GetBasicVal(), 2.0) + Math.Pow(Point.Vy.GetBasicVal(), 2.0)) * Point.Vx.GetBasicVal() / Motion.Settings.Quantities.M.GetBasicVal();
+            return -1.0 * GetD() * Math.Sqrt(Math.Pow(Point.Vx.GetBasicVal(), 2.0) + Math.Pow(Point.Vy.GetBasicVal(), 2.0)) * Point.Vx.GetBasicVal() / Settings.Quantities.M.GetBasicVal();
         }
 
-        public double GetD()
+        private double GetD()
         {
-            return Motion.Settings.Quantities.Ρ.GetBasicVal() * Motion.Settings.Quantities.C.Val * Motion.Settings.Quantities.A.GetBasicVal() / 2.0;
+            return Settings.Quantities.Ρ.GetBasicVal() * Settings.Quantities.C.Val * Settings.Quantities.A.GetBasicVal() / 2.0;
         }
 
         private double GetAy()
         {
-            return -1.0 * Motion.Settings.Quantities.G.GetBasicVal() - GetD() * Math.Sqrt(Math.Pow(Point.Vx.GetBasicVal(), 2.0) + Math.Pow(Point.Vy.GetBasicVal(), 2.0)) * Point.Vy.GetBasicVal() / Motion.Settings.Quantities.M.GetBasicVal();
+            return -1.0 * Settings.Quantities.G.GetBasicVal() - GetD() * Math.Sqrt(Math.Pow(Point.Vx.GetBasicVal(), 2.0) + Math.Pow(Point.Vy.GetBasicVal(), 2.0)) * Point.Vy.GetBasicVal() / Settings.Quantities.M.GetBasicVal();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace ProjectileMotionSource.Func
             TxtInfoFileName = GetDefaultFileName("txt");
             CsvDataFileName = GetDefaultFileName("csv");
             PdfInfoFileName = GetDefaultFileName("pdf");
+            ChartFileName = "chart-" + GetDefaultFileName(string.Empty);
             HexColorOfTrajectory = "#6c757d";
         }
 
@@ -61,16 +62,6 @@ namespace ProjectileMotionSource.Func
 
         private int _PointsForTrajectory { get; set; }
 
-        protected bool CheckValidPointsForTrajectoryWithException (int val)
-        {
-            if (val < 0)
-            {
-                throw new Exception("The number of points to use to draw the trajectory cannot be smaller than zero");
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// The number of points to use to draw trajectory.
         /// </summary>
@@ -79,16 +70,19 @@ namespace ProjectileMotionSource.Func
             get { return _PointsForTrajectory; }
             set
             {
-                CheckValidPointsForTrajectoryWithException(value);
+                if (value < 10)
+                {
+                    throw new Exception("The number of points to use to draw the trajectory cannot be smaller than " + 10);
+                }
+
                 _PointsForTrajectory = value;
             }
         }
 
-
         protected string GetDefaultFileName(string extension)
         {
             return string.Format(
-                "ProjectileMotion-{0} {1}-{2} {3}-{4} {5}.{6}",
+                "ProjectileMotion-{0} {1}-{2} {3}-{4} {5}" + (extension.Length == 0 ? "" : ".{6}"),
                 Quantities.Α.GetRoundedVal(RoundDigits).ToString(),
                 Quantities.Α.Unit.Name,
                 Quantities.V.GetRoundedVal(RoundDigits).ToString(),
@@ -99,11 +93,9 @@ namespace ProjectileMotionSource.Func
             );
         }
 
-
         private bool ShouldBeSetDefaultName (string name) {
             return name == null || name?.Length == 0;
         }
-
 
         private string _TxtInfoFileName { get; set; }
 
@@ -118,7 +110,7 @@ namespace ProjectileMotionSource.Func
             }
             set
             {
-                _TxtInfoFileName = ShouldBeSetDefaultName(value) ? GetDefaultFileName("txt") : FileUtilities.GetFileNameWithExtension(value, "txt");
+                _TxtInfoFileName = ShouldBeSetDefaultName(value) ? GetDefaultFileName("txt") : FileUtilities.GetFileName(value, "txt");
             }
         }
 
@@ -136,7 +128,7 @@ namespace ProjectileMotionSource.Func
             }
             set
             {
-                _CsvDataFileName = ShouldBeSetDefaultName(value) ? GetDefaultFileName("csv") : FileUtilities.GetFileNameWithExtension(value, "csv");
+                _CsvDataFileName = ShouldBeSetDefaultName(value) ? GetDefaultFileName("csv") : FileUtilities.GetFileName(value, "csv");
             }
         }
 
@@ -171,7 +163,7 @@ namespace ProjectileMotionSource.Func
         private string _PdfDataFileName { get; set; }
 
         /// <summary>
-        /// The file in which is information saved to be printed.
+        /// The file in which information is saved to be printed.
         /// </summary>
         public string PdfInfoFileName
         {
@@ -181,19 +173,26 @@ namespace ProjectileMotionSource.Func
             }
             set
             {
-                _PdfDataFileName = ShouldBeSetDefaultName(value) ? GetDefaultFileName("pdf") : FileUtilities.GetFileNameWithExtension(value, "pdf");
+                _PdfDataFileName = ShouldBeSetDefaultName(value) ? GetDefaultFileName("pdf") : FileUtilities.GetFileName(value, "pdf");
             }
         }
 
+        private string _ChartFileName { get; set; }
 
         /// <summary>
-        /// Gets the name for chart to be exported with the specified extension.
+        /// The chart file name without extension.
         /// </summary>
-        public virtual string GetChartFileNameForExport (string extension)
+        public string ChartFileName
         {
-            return "chart-" + GetDefaultFileName(extension);
+            get
+            {
+                return _ChartFileName;
+            }
+            set
+            {
+                _ChartFileName = ShouldBeSetDefaultName(value) ? "chart-" + GetDefaultFileName(string.Empty) : value;
+            }
         }
-
 
         private string _PathToFiles { get; set; }
 

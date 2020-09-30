@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ProjectileMotionSource.Func;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectileMotionWeb.Models
 {
@@ -37,7 +38,7 @@ namespace ProjectileMotionWeb.Models
         public int RoundDigits { get; set; }
 
         [Required(ErrorMessage = REQUIREDTEXT)]
-        [Range(1, int.MaxValue, ErrorMessage = LARGERTHANZEROTEXT)]
+        [Range(10, int.MaxValue, ErrorMessage = "* Larger than 9")]
         [Display(Name = "Points to use to draw trajectory")]
         public int PointsForTrajectory { get; set; }
 
@@ -49,6 +50,9 @@ namespace ProjectileMotionWeb.Models
 
         [Display(Name = ".pdf file name")]
         public string PdfInfoFileName { get; set; }
+
+        [Display(Name = "Chart file name (without extension)")]
+        public string ChartFileName { get; set; }
 
         [Display(Name = "Display also trajectory of the motion neglecting resistance")]
         public bool ShowMotionWithoutResistanceTrajectoryToo { get; set; }
