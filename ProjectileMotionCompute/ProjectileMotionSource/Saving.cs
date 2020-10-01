@@ -10,7 +10,6 @@ using ProjectileMotionSource.WithResistance.Func;
 using ProjectileMotionSource.Func;
 using Utilities.Quantities;
 using ProjectileMotionSource.Point;
-using System.Linq;
 
 namespace ProjectileMotionSource.Saving
 {
@@ -31,7 +30,7 @@ namespace ProjectileMotionSource.Saving
 
         private string ConstructQuantityDescription (string quantityName, string quantityUnit)
         {
-            return string.Format("{0} (in {1}s)", quantityName, quantityUnit);
+            return string.Format("{0} ({1})", quantityName, quantityUnit);
         }
 
         private void ConstructNewDataRecordQuantity(string quantityName, QuantityWithUnit quantityWithUnit)
@@ -77,8 +76,8 @@ namespace ProjectileMotionSource.Saving
             ConstructNewDataRecordQuantity("The max distance from the beginning", Motion.GetMaxDistance().Convert(Motion.Settings.Quantities.Units.Length));
             ConstructNewDataRecordQuantity("The max height", Motion.GetMaxHeight().Convert(Motion.Settings.Quantities.Units.Length));
 
-            DataToFiles.Add("Coordinates of the farthest point from the beginning (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", CounstructCoordsFormatted(Motion.Trajectory.GetFarthestPoint()));
-            DataToFiles.Add("Coordinates of the highest point (in " + Motion.Settings.Quantities.Units.Length.Name + "s)", CounstructCoordsFormatted(Motion.Trajectory.GetHighestPoint()));
+            DataToFiles.Add(ConstructQuantityDescription("Coordinates of the farthest point from the beginning", Motion.Settings.Quantities.Units.Length.Name), CounstructCoordsFormatted(Motion.Trajectory.GetFarthestPoint()));
+            DataToFiles.Add(ConstructQuantityDescription("Coordinates of the highest point from the beginning", Motion.Settings.Quantities.Units.Length.Name), CounstructCoordsFormatted(Motion.Trajectory.GetHighestPoint()));
 
             if (Motion is ProjectileMotionWithResistance)
             {
