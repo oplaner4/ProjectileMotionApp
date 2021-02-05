@@ -71,7 +71,7 @@ namespace ProjectileMotionSource.Saving
 
             ConstructNewDataRecordQuantity("The duration", Motion.GetDur().Convert(Motion.Settings.Quantities.Units.Time));
             ConstructNewDataRecordQuantity("The length", Motion.GetLength().Convert(Motion.Settings.Quantities.Units.Length));
-            ConstructNewDataRecordQuantity("The arc length", Motion.Trajectory.GetArcLength().Convert(Motion.Settings.Quantities.Units.Area));
+            ConstructNewDataRecordQuantity("The arc length", Motion.Trajectory.GetArcLength().Convert(Motion.Settings.Quantities.Units.Length));
             ConstructNewDataRecordQuantity("The area under arc", Motion.Trajectory.GetAreaUnderArc().Convert(Motion.Settings.Quantities.Units.Area));
             ConstructNewDataRecordQuantity("The max distance from the beginning", Motion.GetMaxDistance().Convert(Motion.Settings.Quantities.Units.Length));
             ConstructNewDataRecordQuantity("The max height", Motion.GetMaxHeight().Convert(Motion.Settings.Quantities.Units.Length));
