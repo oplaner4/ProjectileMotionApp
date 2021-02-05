@@ -30,7 +30,15 @@ namespace ProjectileMotionSource.Func
 
         public virtual ProjectileMotionPoint GetFarthestPoint()
         {
-            return GetPoint(Settings.Quantities.Α.IsRight() ? new ProjectileMotionPointsComputation(Settings).GetTimeHighest() : new ProjectileMotionPointsComputation(Settings).GetTimeFarthest());
+            ProjectileMotionPoint final = GetFinalPoint();
+            ProjectileMotionPoint initial = GetInitialPoint();
+            ProjectileMotionPoint above = GetPoint(new ProjectileMotionPointsComputation(Settings).GetTimeFarthestAbove());
+
+            if (final.GetDistanceFromPoint(initial) > above.GetDistanceFromPoint(initial)) {
+                return final;
+            }
+
+            return above;
         }
 
         public virtual ProjectileMotionPoint GetHighestPoint()
@@ -38,43 +46,50 @@ namespace ProjectileMotionSource.Func
             return GetPoint(new ProjectileMotionPointsComputation(Settings).GetTimeHighest());
         }
 
-        public virtual ProjectileMotionPoint GetFinalPoint ()
+        public virtual ProjectileMotionPoint GetFinalPoint()
         {
             return GetPoint(new ProjectileMotionPointsComputation(Settings).GetTimeFinal());
         }
 
         protected List<ProjectileMotionPoint> GetDifferentSpecialPoints()
         {
-            List<ProjectileMotionPoint> result = new List<ProjectileMotionPoint>();
+            ProjectileMotionPoint initial = GetInitialPoint();
+            List<ProjectileMotionPoint> result = new List<ProjectileMotionPoint>()
+            {
+                initial
+            };
 
-            if (GetInitialPoint().T == GetHighestPoint().T)
+            ProjectileMotionPoint highest = GetHighestPoint();
+            ProjectileMotionPoint farthest = GetFarthestPoint();
+
+            if (initial.T == highest.T)
             {
-                result.Add(GetInitialPoint());
-                result.Add(GetFarthestPoint());
-            }
-            else if (GetHighestPoint().T == GetFarthestPoint().T)
-            {
-                result.Add(GetInitialPoint());
-                result.Add(GetHighestPoint());
-                result.Add(GetFinalPoint());
-            }
-            else if (GetFarthestPoint().T == GetFinalPoint().T)
-            {
-                result.Add(GetInitialPoint());
-                result.Add(GetHighestPoint());
-                result.Add(GetFarthestPoint());
+                result.Add(farthest);
             }
             else
             {
-                result.Add(GetInitialPoint());
-                result.Add(GetHighestPoint());
-                result.Add(GetFarthestPoint());
-                result.Add(GetFinalPoint());
+                result.Add(highest);
+
+                ProjectileMotionPoint final = GetFinalPoint();
+
+                if (highest.T == farthest.T)
+                {
+                    result.Add(final);
+                }
+                else
+                {
+                    result.Add(farthest);
+
+                    if (farthest.T != final.T)
+                    {
+                        result.Add(final);
+                    }
+                }
             }
             return result;
         }
 
-        public delegate ProjectileMotionPoint OrdinaryPointGenerator (int currentIndex, int ordinaryPointsCount, List<ProjectileMotionPoint> specialPoints);
+        protected delegate ProjectileMotionPoint OrdinaryPointGenerator (int currentIndex, int ordinaryPointsCount, List<ProjectileMotionPoint> specialPoints);
 
         protected virtual List<ProjectileMotionPoint> GetPointsList (OrdinaryPointGenerator generator)
         {
@@ -109,24 +124,41 @@ namespace ProjectileMotionSource.Func
 
         public virtual Length GetArcLength()
         {
-            if (Settings.Quantities.Α.IsRight())
+            double length = GetFinalPoint().X.GetBasicVal();
+
+            if (Settings.Quantities.Α.IsRight() || length == 0)
             {
-                return new Length(2.0 * GetHighestPoint().Y.GetBasicVal(), UnitLength.Basic);
+                return new Length(2.0 * GetHighestPoint().Y.GetBasicVal() - Settings.Quantities.H.GetBasicVal(), UnitLength.Basic);
             }
 
-            return new Length(Integrate.OnClosedInterval(x => Math.Sqrt(1 + Math.Pow(Math.Tan(Settings.Quantities.Α.GetBasicVal()) - (Settings.Quantities.G.GetBasicVal() / Math.Pow(Settings.Quantities.V.GetBasicVal() * Math.Cos(Settings.Quantities.Α.GetBasicVal()), 2.0)) * x, 2.0)), 0, GetFarthestPoint().X.GetBasicVal()), UnitLength.Basic);
+            return new Length(
+                Integrate.OnClosedInterval(
+                    x => Math.Sqrt(
+                        1 + Math.Pow(
+                            Math.Tan(Settings.Quantities.Α.GetBasicVal()) -
+                            Settings.Quantities.G.GetBasicVal() /
+                            Math.Pow(GetInitialPoint().Vx.GetBasicVal(), 2.0) * x, 2.0)
+                    ), 0, length
+                ), UnitLength.Basic
+            );
         }
 
         public virtual Area GetAreaUnderArc ()
         {
-            if (Settings.Quantities.Α.IsRight())
+            double length = GetFinalPoint().X.GetBasicVal();
+
+            if (Settings.Quantities.Α.IsRight() || length == 0)
             {
                 return new Area(0, Settings.Quantities.Units.Area);
             }
 
-            double length = GetFinalPoint().X.GetBasicVal();
-
-            return new Area(Math.Pow(length, 2.0) * Math.Tan(Settings.Quantities.Α.GetBasicVal()) / 2.0 - Math.Pow(length, 3.0) * Settings.Quantities.G.GetBasicVal() / (6.0 * Math.Pow(Settings.Quantities.V.GetBasicVal() * Math.Cos(Settings.Quantities.Α.GetBasicVal()), 2.0)) + length * Settings.Quantities.H.GetBasicVal(), UnitArea.Basic);
+            return new Area(
+                Math.Pow(length, 2.0) * Math.Tan(Settings.Quantities.Α.GetBasicVal()) / 2.0 -
+                Math.Pow(length, 3.0) * Settings.Quantities.G.GetBasicVal() /
+                (6.0 * Math.Pow(GetInitialPoint().Vx.GetBasicVal(), 2.0)) +
+                length * Settings.Quantities.H.GetBasicVal(),
+                UnitArea.Basic
+            );
         }
     }
 }

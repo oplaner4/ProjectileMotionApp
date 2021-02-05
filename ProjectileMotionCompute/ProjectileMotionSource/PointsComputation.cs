@@ -1,5 +1,4 @@
-﻿using MathNet.Numerics.RootFinding;
-using ProjectileMotionSource.Exceptions;
+﻿using ProjectileMotionSource.Exceptions;
 using ProjectileMotionSource.Func;
 using ProjectileMotionSource.WithResistance.Func;
 using System;
@@ -10,6 +9,8 @@ namespace ProjectileMotionSource.PointsComputation
 {
     internal class ProjectileMotionPointsComputation
     {
+        private static readonly double FarthestBreakAngle = Math.Asin(Math.Sqrt(8.0/9.0));
+
         public ProjectileMotionPointsComputation (ProjectileMotionSettings settings)
         {
             if (settings is ProjectileMotionWithResistanceSettings)
@@ -29,27 +30,47 @@ namespace ProjectileMotionSource.PointsComputation
 
         public Time GetTimeFinal()
         {
-            return new Time((Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()) + Math.Sqrt(Math.Pow(Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()), 2.0) + 2 * Settings.Quantities.G.GetBasicVal() * Settings.Quantities.H.GetBasicVal())) / Settings.Quantities.G.GetBasicVal(), UnitTime.Basic);
+            double vY = GetVelocityY(GetTimeInitial()).GetBasicVal();
+
+            return new Time((
+                    vY + Math.Sqrt(
+                        Math.Pow(vY, 2.0) +
+                        2 * Settings.Quantities.G.GetBasicVal() * Settings.Quantities.H.GetBasicVal()
+                    )
+                ) / Settings.Quantities.G.GetBasicVal(),
+                UnitTime.Basic
+            );
         }
 
         public Time GetTimeHighest()
         {
-            return new Time(Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()) / Settings.Quantities.G.GetBasicVal(), UnitTime.Basic);
+            return new Time(
+                GetVelocityY(GetTimeInitial()).GetBasicVal() / Settings.Quantities.G.GetBasicVal(),
+                UnitTime.Basic
+            );
         }
 
-        public Time GetTimeFarthest()
+        public Time GetTimeFarthestAbove()
         {
-            double root = Cubic.RealRoots(
-                2.0 * Settings.Quantities.H.GetBasicVal() * Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()) / Math.Pow(Settings.Quantities.G.GetBasicVal(), 2.0),
-                (2.0 * Math.Pow(Settings.Quantities.V.GetBasicVal(), 2.0) - (Settings.Quantities.G.GetBasicVal() * Settings.Quantities.H.GetBasicVal())) / Math.Pow(Settings.Quantities.G.GetBasicVal(), 2.0),
-                -3.0 * Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()) / Settings.Quantities.G.GetBasicVal()
-            ).Item3;
-            return double.IsNaN(root) ? GetTimeFinal() : new Time(root, UnitTime.Basic);
+            double α = Settings.Quantities.Α.GetBasicVal();
+
+            if (α >= FarthestBreakAngle)
+            {
+                double sinA = Math.Sin(α);
+                return new Time(-1 * Settings.Quantities.V.GetBasicVal() * (
+                    Math.Sqrt(9 * Math.Pow(sinA, 2.0) - 8) - 3 * sinA
+                ) / (2.0 * Settings.Quantities.G.GetBasicVal()), UnitTime.Basic);
+            }
+
+            return new Time(0, UnitTime.Basic);
         }
 
-        public Length GetY (Time t)
+        public Length GetY(Time t)
         {
-            double computedLength = t >= GetTimeFinal() ? 0 : t.GetBasicVal() * Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()) - 0.5 * Settings.Quantities.G.GetBasicVal() * Math.Pow(t.GetBasicVal(), 2) + Settings.Quantities.H.GetBasicVal();
+            double computedLength = t >= GetTimeFinal() ?
+                0 :
+                t.GetBasicVal() * GetVelocityY(GetTimeInitial()).GetBasicVal() -
+                0.5 * Settings.Quantities.G.GetBasicVal() * Math.Pow(t.GetBasicVal(), 2) + Settings.Quantities.H.GetBasicVal();
             return new Length(computedLength < 0 ? 0 : computedLength, UnitLength.Basic);
         }
 
@@ -60,13 +81,19 @@ namespace ProjectileMotionSource.PointsComputation
 
         public Velocity GetVelocityY(Time t)
         {
-            double computedBasicVelocity = Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()) - Settings.Quantities.G.GetBasicVal() * t.GetBasicVal();
+            double computedBasicVelocity = Settings.Quantities.V.GetBasicVal() * Math.Sin(Settings.Quantities.Α.GetBasicVal()) -
+                Settings.Quantities.G.GetBasicVal() * t.GetBasicVal();
             return new Velocity(Math.Abs(computedBasicVelocity), UnitVelocity.Basic);
         }
 
         public Velocity GetVelocityX()
         {
-            return new Velocity(Settings.Quantities.Α.IsRight() ? 0 : Math.Cos(Settings.Quantities.Α.GetBasicVal()) * Settings.Quantities.V.GetBasicVal(), UnitVelocity.Basic);
+            return new Velocity(
+                Settings.Quantities.Α.IsRight() ?
+                    0 :
+                    Math.Cos(Settings.Quantities.Α.GetBasicVal()) * Settings.Quantities.V.GetBasicVal(),
+                UnitVelocity.Basic
+            );
         }
     }
 }

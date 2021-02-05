@@ -41,7 +41,7 @@ namespace ProjectileMotionSource.Func
         private int _RoundDigits { get; set; }
 
         /// <summary>
-        /// The number of decimal places to round to.
+        /// The number of decimal places to round to used in IO services.
         /// </summary>
         public int RoundDigits {
             get { return _RoundDigits; }

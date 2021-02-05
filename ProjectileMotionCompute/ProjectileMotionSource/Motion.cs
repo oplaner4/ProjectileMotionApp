@@ -1,7 +1,6 @@
 ﻿using System;
 using Utilities.Quantities;
 using ProjectileMotionSource.Saving;
-using ProjectileMotionSource.Point;
 
 namespace ProjectileMotionSource.Func
 {

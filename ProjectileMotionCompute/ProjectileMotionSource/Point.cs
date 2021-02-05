@@ -4,7 +4,6 @@ using ProjectileMotionSource.Func;
 using System;
 using ProjectileMotionSource.WithResistance.PointsComputation;
 using ProjectileMotionSource.PointsComputation;
-using ProjectileMotionSource.WithResistance.Func;
 
 namespace ProjectileMotionSource.Point
 {
