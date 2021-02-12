@@ -49,10 +49,13 @@ namespace ProjectileMotionSource.Func
             G = g;
             Α = new ElevationAngle(
                 GetResultWithComputeExpection(
-                    Math.Asin(
-                        (Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) /
-                        (2.0 * V.GetBasicVal() * dur.GetBasicVal())
-                    )
+                    V.GetBasicVal() > 0 && H.GetBasicVal() == 0 && dur.GetBasicVal() == 0
+                        ? 0
+                        :
+                        Math.Asin(
+                            (Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) /
+                            (2.0 * V.GetBasicVal() * dur.GetBasicVal())
+                        )
                 ),
                 UnitAngle.Basic).Convert(Units.Angle);
 
@@ -74,10 +77,14 @@ namespace ProjectileMotionSource.Func
             Α = α;
             H = h;
             G = g;
+
             V = new InitialVelocity(
                 GetResultWithComputeExpection(
-                    (Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) /
-                    (2.0 * Math.Sin(Α.GetBasicVal()) * dur.GetBasicVal())
+                    dur.GetBasicVal() == 0 && H.GetBasicVal() == 0
+                        ? 0
+                        :
+                        (Math.Pow(dur.GetBasicVal(), 2.0) * G.GetBasicVal() - 2 * H.GetBasicVal()) /
+                        (2.0 * Math.Sin(Α.GetBasicVal()) * dur.GetBasicVal())
                 ),
                 UnitVelocity.Basic).Convert(Units.Velocity);
 
@@ -124,14 +131,19 @@ namespace ProjectileMotionSource.Func
             V = v;
             Α = α;
             G = g;
+
             H = new InitialHeight(
-                GetResultWithComputeExpection((
-                        Math.Pow(l.GetBasicVal(), 2.0) * G.GetBasicVal() /
-                        Math.Pow(Math.Cos(Α.GetBasicVal()), 2.0) -
-                        2.0 * l.GetBasicVal() * Math.Pow(V.GetBasicVal(), 2.0) * Math.Tan(Α.GetBasicVal())
-                    ) / (2.0 * Math.Pow(V.GetBasicVal(), 2.0))
+                GetResultWithComputeExpection(
+                    Α.IsRight() ?
+                        double.NaN
+                        : (
+                            Math.Pow(l.GetBasicVal(), 2.0) * G.GetBasicVal() /
+                            Math.Pow(Math.Cos(Α.GetBasicVal()), 2.0) -
+                            2.0 * l.GetBasicVal() * Math.Pow(V.GetBasicVal(), 2.0) * Math.Tan(Α.GetBasicVal())
+                        ) / (2.0 * Math.Pow(V.GetBasicVal(), 2.0))
                 ),
-                UnitLength.Basic).Convert(Units.Length);
+                UnitLength.Basic
+            ).Convert(Units.Length);
 
             UsedAssignmentType = AssignmentsTypes.InitialHeightByLength;
         }
@@ -152,14 +164,18 @@ namespace ProjectileMotionSource.Func
             H = h;
             G = g;
             V = new InitialVelocity(
-               GetResultWithComputeExpection(
-                   l.GetBasicVal() * Math.Sqrt(G.GetBasicVal() / Math.Cos(Α.GetBasicVal())) /
-                   Math.Sqrt(
-                       2.0 * l.GetBasicVal() * Math.Sin(Α.GetBasicVal()) +
-                       2.0 * H.GetBasicVal() * Math.Cos(Α.GetBasicVal())
-                   )
-               ),
-               UnitVelocity.Basic
+                GetResultWithComputeExpection(
+                    Α.IsRight() ?
+                        double.NaN
+                        :
+                        l.GetBasicVal() == 0 && H.GetBasicVal() == 0 && Α.GetBasicVal() > 0 ? 0 :
+                        l.GetBasicVal() * Math.Sqrt(G.GetBasicVal() / Math.Cos(Α.GetBasicVal())) /
+                        Math.Sqrt(
+                            2.0 * l.GetBasicVal() * Math.Sin(Α.GetBasicVal()) +
+                            2.0 * H.GetBasicVal() * Math.Cos(Α.GetBasicVal())
+                        )
+                ),
+                UnitVelocity.Basic
             ).Convert(Units.Velocity);
 
             UsedAssignmentType = AssignmentsTypes.InitialVelocityByLength;
@@ -182,15 +198,18 @@ namespace ProjectileMotionSource.Func
             G = g;
             Α = new ElevationAngle(
                 GetResultWithComputeExpection(
-                    EquationSolver.BisectionFindRoot(
-                        a => V.GetBasicVal() * Math.Cos(a) * (
-                            V.GetBasicVal() * Math.Sin(a) + Math.Sqrt(Math.Pow(V.GetBasicVal() *
-                            Math.Sin(a), 2) + 2.0 * G.GetBasicVal() * H.GetBasicVal())
-                        ) / G.GetBasicVal() - l.GetBasicVal(),
-                        0,
-                        new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right).Val,
-                        1E-4
-                    )
+                    l.GetBasicVal() == 0 && H.GetBasicVal() == 0 ?
+                        double.NaN 
+                        :
+                        EquationSolver.BisectionFindRoot(
+                            a => V.GetBasicVal() * Math.Cos(a) * (
+                                V.GetBasicVal() * Math.Sin(a) + Math.Sqrt(Math.Pow(V.GetBasicVal() *
+                                Math.Sin(a), 2) + 2.0 * G.GetBasicVal() * H.GetBasicVal())
+                            ) / G.GetBasicVal() - l.GetBasicVal(),
+                            0,
+                            new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right).Val,
+                            1E-4
+                        )
                 ),
                 UnitAngle.Basic
             ).Convert(Units.Angle);
@@ -214,13 +233,17 @@ namespace ProjectileMotionSource.Func
             H = h;
             G = g;
             V = new InitialVelocity(
-               GetResultWithComputeExpection(
-                   Math.Sqrt(
-                       2.0 * G.GetBasicVal() * (maxHeight.GetBasicVal() - H.GetBasicVal()) /
-                       Math.Pow(Math.Sin(Α.GetBasicVal()), 2.0)
-                   )
-               ),
-               UnitVelocity.Basic
+                GetResultWithComputeExpection(
+                    maxHeight.GetBasicVal() == 0 && H.GetBasicVal() == 0 ?
+                        Α.GetBasicVal() == 0 ?
+                            double.NaN : 0
+                        :
+                        Math.Sqrt(
+                            2.0 * G.GetBasicVal() * (maxHeight.GetBasicVal() - H.GetBasicVal()) /
+                            Math.Pow(Math.Sin(Α.GetBasicVal()), 2.0)
+                        )
+                ),
+                UnitVelocity.Basic
             ).Convert(Units.Velocity);
 
             UsedAssignmentType = AssignmentsTypes.InitialVelocityByMaxHeight;
@@ -268,7 +291,13 @@ namespace ProjectileMotionSource.Func
             G = g;
             Α = new ElevationAngle(
                 GetResultWithComputeExpection(
-                    Math.Asin(Math.Sqrt(2.0 * G.GetBasicVal() * maxHeight.GetBasicVal() / Math.Pow(V.GetBasicVal(), 2)))
+                    maxHeight.GetBasicVal() == 0 && H.GetBasicVal() == 0 ?
+                        double.NaN
+                        :
+                        Math.Asin(Math.Sqrt(
+                            2.0 * G.GetBasicVal() * (maxHeight.GetBasicVal() - H.GetBasicVal()) /
+                            Math.Pow(V.GetBasicVal(), 2)
+                        ))
                 ),
                 UnitAngle.Basic
             ).Convert(Units.Angle);
@@ -322,7 +351,10 @@ namespace ProjectileMotionSource.Func
             G = g;
             V = new InitialVelocity(
                 GetResultWithComputeExpection(
-                    l.GetBasicVal() / (Math.Cos(Α.GetBasicVal()) * dur.GetBasicVal())
+                    l.GetBasicVal() == 0 && dur.GetBasicVal() == 0 && Α.GetBasicVal() > 0 ?
+                        0
+                        :
+                        l.GetBasicVal() / (Math.Cos(Α.GetBasicVal()) * dur.GetBasicVal())
                 ),
                 UnitVelocity.Basic
             ).Convert(Units.Velocity);
@@ -354,7 +386,10 @@ namespace ProjectileMotionSource.Func
             V = v;
             Α = new ElevationAngle(
                 GetResultWithComputeExpection(
-                    Math.Acos(l.GetBasicVal()/(V.GetBasicVal() * dur.GetBasicVal()))
+                    l.GetBasicVal() == 0 && dur.GetBasicVal() == 0 && V.GetBasicVal() > 0 ?
+                        0
+                        :
+                        Math.Acos(l.GetBasicVal()/(V.GetBasicVal() * dur.GetBasicVal()))
                 ),
                 UnitAngle.Basic
             ).Convert(Units.Angle);

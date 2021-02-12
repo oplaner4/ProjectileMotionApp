@@ -14,14 +14,13 @@ namespace ProjectileMotionWeb.Models
 
         [Required(ErrorMessage = SetPropertiesModel.REQUIREDTEXT)]
         [Range(0, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
-        [RangeIf(nameof(ElevationAngle), 0.0, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
         [Display(Name = "Initial height")]
         public double InitialHeight { get; set; }
 
         public string InitialHeightUnit { get; set; }
 
         [Required(ErrorMessage = SetPropertiesModel.REQUIREDTEXT)]
-        [Range(double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
+        [Range(0, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
         [Display(Name = "Initial velocity")]
         public double InitialVelocity { get; set; }
 
@@ -74,10 +73,7 @@ namespace ProjectileMotionWeb.Models
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLengthAndDur, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLengthAndDur, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
 
-        [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByDuration, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
-        [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByDuration, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
-        [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByDuration, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
-
+        [Range(0, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
         [Display(Name = "Duration")]
         public double? Duration { get; set; }
 
@@ -87,10 +83,7 @@ namespace ProjectileMotionWeb.Models
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByMaxHeight, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByMaxHeight, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
 
-        [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByMaxHeight, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
-        [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByMaxHeight, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
-        [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByMaxHeight, double.Epsilon, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGERTHANZEROTEXT)]
-
+        [Range(0, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
         [Display(Name = "Maximal height")]
         public double? MaxHeight { get; set; }
 
@@ -103,10 +96,7 @@ namespace ProjectileMotionWeb.Models
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLengthAndDur, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
         [RequiredIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLengthAndDur, ErrorMessage = SetPropertiesModel.REQUIREDFORASSIGNMENT)]
 
-        [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialHeightByLength, 0, double.MaxValue,ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
-        [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.ElevationAngleByLength, 0, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
-        [RangeIf(nameof(SelectedAssignmentType), ProjectileMotionQuantities.AssignmentsTypes.InitialVelocityByLength, 0, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
-
+        [Range(0, double.MaxValue, ErrorMessage = SetPropertiesModel.LARGEROREQUALTOZEROTEXT)]
         [Display(Name = "Length")]
         public double? Length { get; set; }
 

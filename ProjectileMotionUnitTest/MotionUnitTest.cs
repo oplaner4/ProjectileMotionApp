@@ -12,6 +12,8 @@ namespace ProjectileMotionUnitTest
     [TestClass]
     public class MotionUnitTest
     {
+        public int UsePoints = 6000;
+
         private readonly MaximalHeight MaxH = new MaximalHeight(10.077991469230138, UnitLength.Metre);
         private readonly Length Len = new Length(41.835561907661194, UnitLength.Metre);
         private readonly Duration Dur = new Duration(2.7716331533676772, UnitTime.Second);
@@ -20,13 +22,67 @@ namespace ProjectileMotionUnitTest
         private readonly InitialHeight H = new InitialHeight(130, UnitLength.Centimetre);
         private readonly GravAcceleration G = new GravAcceleration(GravAcceleration.GravAccelerations.Earth);
 
-        public int UsePoints = 6000;
-
         public MotionUnitTestUtilities Utilities { get; set; }
 
         public MotionUnitTest()
         {
-            Utilities = new MotionUnitTestUtilities(0.09);
+            Utilities = new MotionUnitTestUtilities(0.02);
+        }
+
+        [TestMethod]
+        public void TestAssignmentsSpecialCases()
+        {
+            Duration nullDur = new Duration(0, UnitTime.Second);
+            Duration largeDur = new Duration(20, UnitTime.Second);
+            Length nullLen = new Length(0, UnitLength.Metre);
+            MaximalHeight nullMaxH = new MaximalHeight(0, UnitLength.Metre);
+            MaximalHeight smallMaxH = new MaximalHeight(2, UnitLength.Metre);
+            Length smallLen = new Length(4, UnitLength.Metre);
+            InitialVelocity nullV = new InitialVelocity(0, UnitVelocity.MetrePerSecond);
+            ElevationAngle nullΑ = new ElevationAngle(ElevationAngle.ElevationAngleTypes.Horizontal);
+            ElevationAngle rightΑ = new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right);
+            InitialHeight nullH = new InitialHeight(0, UnitLength.Metre);
+
+            // should not throw the compute exception
+            new ProjectileMotionQuantities(Dur, nullΑ, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(Dur, rightΑ, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(Dur, Α, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullDur, Α, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullDur, nullΑ, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullDur, rightΑ, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullDur, nullΑ, V, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullDur, rightΑ, nullH, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullDur, Α, nullH, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullDur, nullΑ, nullH, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullDur, V, nullH, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(smallLen, V, nullH, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullLen, nullV, H, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(Len, nullΑ, V, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullLen, nullΑ, V, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(smallLen, nullΑ, H, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(smallLen, Α, nullH, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullLen, Α, nullH, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullLen, Α, H, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullLen, nullΑ, H, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(smallMaxH, V, nullH, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(MaxH, V, new InitialHeight(MaxH.GetConvertedVal(UnitLength.Metre), UnitLength.Metre),
+                G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(MaxH, Α, new InitialHeight(MaxH.GetConvertedVal(UnitLength.Metre), UnitLength.Metre),
+                G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullMaxH, Α, nullH, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(MaxH, Α, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(MaxH, nullΑ, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(MaxH, rightΑ, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullMaxH, rightΑ, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullMaxH, nullΑ, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullMaxH, Α, nullV, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullMaxH, nullΑ, V, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullΑ, Len, Dur, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(nullΑ, nullLen, Dur, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(Α, nullLen, Dur, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(Α, nullLen, nullDur, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(V, nullLen, nullDur, G, Utilities.UnitsOfResults);
+            new ProjectileMotionQuantities(V, nullLen, largeDur, G, Utilities.UnitsOfResults);
         }
 
         [TestMethod]
@@ -34,14 +90,14 @@ namespace ProjectileMotionUnitTest
         {
             List<ProjectileMotionQuantities> setQuantities = new List<ProjectileMotionQuantities> {
                 new ProjectileMotionQuantities(Dur, Α, V, G, Utilities.UnitsOfResults),
+                new ProjectileMotionQuantities(Dur, Α, H, G, Utilities.UnitsOfResults),
+                new ProjectileMotionQuantities(Dur, V, H, G, Utilities.UnitsOfResults),
                 new ProjectileMotionQuantities(Len, V, H, G, Utilities.UnitsOfResults),
                 new ProjectileMotionQuantities(Len, Α, V, G, Utilities.UnitsOfResults),
                 new ProjectileMotionQuantities(Len, Α, H, G, Utilities.UnitsOfResults),
                 new ProjectileMotionQuantities(MaxH, V, H, G, Utilities.UnitsOfResults),
                 new ProjectileMotionQuantities(MaxH, Α, H, G, Utilities.UnitsOfResults),
                 new ProjectileMotionQuantities(MaxH, Α, V, G, Utilities.UnitsOfResults),
-                new ProjectileMotionQuantities(Dur, Α, H, G, Utilities.UnitsOfResults),
-                new ProjectileMotionQuantities(Dur, V, H, G, Utilities.UnitsOfResults),
                 new ProjectileMotionQuantities(Α, Len, Dur, G, Utilities.UnitsOfResults),
                 new ProjectileMotionQuantities(V, Len, Dur, G, Utilities.UnitsOfResults),
             };
@@ -60,28 +116,140 @@ namespace ProjectileMotionUnitTest
                 ).Settings.Quantities.Α == new ElevationAngle(45, UnitAngle.Degree)
             );
 
-            Assert.IsTrue(
-                new ProjectileMotion(
+            Utilities.AlmostSame(new ElevationAngle(44.115006, UnitAngle.Degree), new ProjectileMotion(
                     new ProjectileMotionSettings(new ProjectileMotionQuantities(V, H, G))
-                ).Settings.Quantities.Α < new ElevationAngle(45, UnitAngle.Degree)
-            );
+                ).Settings.Quantities.Α);
         }
 
         [TestMethod]
         public void TestInvalidAssignments()
         {
+            int i = 0;
+
             foreach (Func<ProjectileMotionQuantities> quantitiesF in new List<Func<ProjectileMotionQuantities>>() {
-                () => new ProjectileMotionQuantities(Dur, Α, new InitialVelocity(2000, UnitVelocity.MetrePerSecond),
-                G, Utilities.UnitsOfResults),
-            })
+                /* 1 */ () => new ProjectileMotionQuantities(Dur, Α, new InitialVelocity(2000, UnitVelocity.MetrePerSecond),
+                            G, Utilities.UnitsOfResults),
+                /* 2 */ () => new ProjectileMotionQuantities(Dur, new ElevationAngle(85, UnitAngle.Degree), V,
+                            G, Utilities.UnitsOfResults),
+                /* 3 */ () => new ProjectileMotionQuantities(Dur, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Horizontal), H,
+                            G, Utilities.UnitsOfResults),
+                /* 4 */ () => new ProjectileMotionQuantities(Dur, Α, new InitialHeight(99, UnitLength.Kilometre),
+                            G, Utilities.UnitsOfResults),
+                /* 5 */ () => new ProjectileMotionQuantities(Dur, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Horizontal),
+                            new InitialHeight(0, UnitLength.Kilometre), G, Utilities.UnitsOfResults),
+                /* 6 */ () => new ProjectileMotionQuantities(Dur, new InitialVelocity(4, UnitVelocity.MetrePerSecond), H,
+                            G, Utilities.UnitsOfResults),
+                /* 7 */ () => new ProjectileMotionQuantities(Dur, new InitialVelocity(0, UnitVelocity.MetrePerSecond),
+                            new InitialHeight(0, UnitLength.Metre), G, Utilities.UnitsOfResults),
+                /* 8 */ () => new ProjectileMotionQuantities(Dur, V, new InitialHeight(10, UnitLength.Kilometre),
+                            G, Utilities.UnitsOfResults),
+                /* 9 */ () => new ProjectileMotionQuantities(Len, new InitialVelocity(5, UnitVelocity.MetrePerSecond), H,
+                            G, Utilities.UnitsOfResults),
+               /* 10 */ () => new ProjectileMotionQuantities(Len, new InitialVelocity(0, UnitVelocity.MetrePerSecond), H,
+                            G, Utilities.UnitsOfResults),
+               /* 11 */ () => new ProjectileMotionQuantities(Len, V, new InitialHeight(H.GetConvertedVal(UnitLength.Metre) - 1, UnitLength.Metre),
+                            G, Utilities.UnitsOfResults),
+               /* 12 */ () => new ProjectileMotionQuantities(Len, V, new InitialHeight(0, UnitLength.Metre),
+                            G, Utilities.UnitsOfResults),
+               /* 13 */ () => new ProjectileMotionQuantities(Len, Α, new InitialVelocity(0, UnitVelocity.MilePerHour),
+                            G, Utilities.UnitsOfResults),
+               /* 14 */ () => new ProjectileMotionQuantities(Len, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right), V,
+                            G, Utilities.UnitsOfResults),
+               /* 15 */ () => new ProjectileMotionQuantities(Len, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Horizontal),
+                            new InitialVelocity(0, UnitVelocity.MetrePerSecond), G, Utilities.UnitsOfResults),
+               /* 16 */ () => new ProjectileMotionQuantities(Len, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right), H,
+                            G, Utilities.UnitsOfResults),
+               /* 17 */ () => new ProjectileMotionQuantities(Len, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Horizontal),
+                            new InitialHeight(0, UnitLength.Metre), G, Utilities.UnitsOfResults),
+               /* 18 */ () => new ProjectileMotionQuantities(MaxH, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Horizontal), H,
+                            G, Utilities.UnitsOfResults),
+               /* 19 */ () => new ProjectileMotionQuantities(MaxH, V, new InitialHeight(MaxH.GetConvertedVal(UnitLength.Metre) + 1, UnitLength.Metre),
+                            G, Utilities.UnitsOfResults),
+               /* 20 */ () => new ProjectileMotionQuantities(MaxH, new InitialVelocity(0, UnitVelocity.MetrePerSecond),
+                            new InitialHeight(0, UnitLength.Metre), G, Utilities.UnitsOfResults),
+               /* 21 */ () => new ProjectileMotionQuantities(MaxH, new InitialVelocity(1, UnitVelocity.KilometrePerHour), H,
+                            G, Utilities.UnitsOfResults),
+               /* 22 */ () => new ProjectileMotionQuantities(MaxH, new InitialVelocity(0, UnitVelocity.KilometrePerHour), H,
+                            G, Utilities.UnitsOfResults),
+               /* 23 */ () => new ProjectileMotionQuantities(MaxH, new ElevationAngle(88, UnitAngle.Degree), V,
+                            G, Utilities.UnitsOfResults),
+               /* 24 */ () => new ProjectileMotionQuantities(MaxH, new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right), V,
+                            G, Utilities.UnitsOfResults),
+               /* 25 */ () => new ProjectileMotionQuantities(MaxH, Α, new InitialVelocity(100, UnitVelocity.MetrePerSecond),
+                            G, Utilities.UnitsOfResults),
+               /* 26 */ () => new ProjectileMotionQuantities(new ElevationAngle(78, UnitAngle.Degree), Len, Dur,
+                            G, Utilities.UnitsOfResults),
+               /* 27 */ () => new ProjectileMotionQuantities(new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right), Len, Dur,
+                            G, Utilities.UnitsOfResults),
+               /* 28 */ () => new ProjectileMotionQuantities(Α, Len, new Duration(0.1, UnitTime.Milisecond),
+                            G, Utilities.UnitsOfResults),
+               /* 29 */ () => new ProjectileMotionQuantities(Α, Len, new Duration(0, UnitTime.Milisecond),
+                            G, Utilities.UnitsOfResults),
+               /* 30 */ () => new ProjectileMotionQuantities(new ElevationAngle(ElevationAngle.ElevationAngleTypes.Horizontal),
+                            Len, new Duration(0, UnitTime.Milisecond), G, Utilities.UnitsOfResults),
+               /* 31 */ () => new ProjectileMotionQuantities(new InitialVelocity(2, UnitVelocity.MetrePerSecond), Len, Dur,
+                            G, Utilities.UnitsOfResults),
+               /* 32 */ () => new ProjectileMotionQuantities(new InitialVelocity(0, UnitVelocity.MetrePerSecond), Len, Dur,
+                            G, Utilities.UnitsOfResults),
+               /* 33 */ () => new ProjectileMotionQuantities(V, new Length(150, UnitLength.Kilometre), Dur,
+                            G, Utilities.UnitsOfResults),
+               /* 34 */ () => new ProjectileMotionQuantities(V, new Length(0, UnitLength.Kilometre), Dur,
+                            G, Utilities.UnitsOfResults),
+               /* 35 */ () => new ProjectileMotionQuantities(V, Len, new Duration(0.1, UnitTime.Second),
+                            G, Utilities.UnitsOfResults),
+               /* 36 */ () => new ProjectileMotionQuantities(V, Len, new Duration(0, UnitTime.Second),
+                            G, Utilities.UnitsOfResults),
+               /* 37 */ () => new ProjectileMotionQuantities(new Length(0, UnitLength.Metre), V, new InitialHeight(0, UnitLength.Metre),
+                            G, Utilities.UnitsOfResults),
+               /* 38 */ () => new ProjectileMotionQuantities(new Length(0, UnitLength.Metre), new InitialVelocity(0, UnitVelocity.MetrePerSecond),
+                            new InitialHeight(0, UnitLength.Metre), G, Utilities.UnitsOfResults),
+               /* 39 */ () => new ProjectileMotionQuantities(new Length(0, UnitLength.Metre), new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right),
+                            V, G, Utilities.UnitsOfResults),
+               /* 40 */ () => new ProjectileMotionQuantities(new Length(0, UnitLength.Metre), Α,
+                            new InitialVelocity(0, UnitVelocity.MetrePerSecond), G, Utilities.UnitsOfResults),
+               /* 41 */ () => new ProjectileMotionQuantities(new Length(0, UnitLength.Metre), new InitialVelocity(0, UnitVelocity.MetrePerSecond),
+                            new InitialHeight(0, UnitLength.Metre), G, Utilities.UnitsOfResults),
+               /* 42 */ () => new ProjectileMotionQuantities(new Length(0, UnitLength.Metre), new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right),
+                            H, G, Utilities.UnitsOfResults),
+               /* 43 */ () => new ProjectileMotionQuantities(MaxH, new InitialVelocity(0, UnitVelocity.MetrePerSecond),
+                            new InitialHeight(MaxH.GetConvertedVal(UnitLength.Metre), UnitLength.Metre), G, Utilities.UnitsOfResults),
+               /* 44 */ () => new ProjectileMotionQuantities(new MaximalHeight(0, UnitLength.Metre), new InitialVelocity(0, UnitVelocity.MetrePerSecond),
+                            new InitialHeight(0, UnitLength.Metre), G, Utilities.UnitsOfResults),
+               /* 45 */ () => new ProjectileMotionQuantities(new MaximalHeight(0, UnitLength.Metre), V, new InitialHeight(0, UnitLength.Metre),
+                            G, Utilities.UnitsOfResults),
+               /* 46 */ () => new ProjectileMotionQuantities(MaxH, new InitialVelocity(0, UnitVelocity.MetrePerSecond),
+                            new InitialHeight(MaxH.GetConvertedVal(UnitLength.Metre), UnitLength.Metre), G, Utilities.UnitsOfResults),
+               /* 47 */ () => new ProjectileMotionQuantities(new MaximalHeight(0, UnitLength.Metre), new ElevationAngle(ElevationAngle.ElevationAngleTypes.Horizontal),
+                            new InitialHeight(0, UnitLength.Metre), G, Utilities.UnitsOfResults),
+               /* 48 */ () => new ProjectileMotionQuantities(new MaximalHeight(0, UnitLength.Metre), new ElevationAngle(ElevationAngle.ElevationAngleTypes.Right),
+                            V, G, Utilities.UnitsOfResults),
+               /* 49 */ () => new ProjectileMotionQuantities(new MaximalHeight(0, UnitLength.Metre), Α,
+                            V, G, Utilities.UnitsOfResults),
+               /* 50 */ () => new ProjectileMotionQuantities(new ElevationAngle(0, UnitAngle.Degree), new Length(0, UnitLength.Metre),
+                            new Duration(0, UnitTime.Second), G, Utilities.UnitsOfResults),
+               /* 51 */ () => new ProjectileMotionQuantities(new ElevationAngle(0, UnitAngle.Degree), Len,
+                            new Duration(0, UnitTime.Second), G, Utilities.UnitsOfResults),
+               /* 52 */ () => new ProjectileMotionQuantities(Α, Len, new Duration(0, UnitTime.Second),
+                            G, Utilities.UnitsOfResults),
+               /* 53 */ () => new ProjectileMotionQuantities(V, Len, new Duration(0, UnitTime.Second),
+                            G, Utilities.UnitsOfResults),
+               /* 54 */ () => new ProjectileMotionQuantities(new InitialVelocity(0, UnitVelocity.MetrePerSecond), Len,
+                            new Duration(0, UnitTime.Second), G, Utilities.UnitsOfResults),
+               /* 55 */ () => new ProjectileMotionQuantities(new InitialVelocity(0, UnitVelocity.MetrePerSecond), new Length(0, UnitLength.Metre),
+                            Dur, G, Utilities.UnitsOfResults),
+               /* 56 */ () => new ProjectileMotionQuantities(new InitialVelocity(0, UnitVelocity.MetrePerSecond), new Length(0, UnitLength.Metre),
+                            new Duration(0, UnitTime.Second), G, Utilities.UnitsOfResults),
+        })
             {
                 Assert.ThrowsException<UnableToComputeQuantityException>(
-                    () => quantitiesF(), "should have thrown"
+                    () => quantitiesF(), string.Format("{0}. assignment should have been invalid.", i + 1)
                 );
+
+                i++;
             }
 
             Assert.ThrowsException<InvalidElevationAngleException>(
-                () => new ElevationAngle(91, UnitAngle.Degree), "should have thrown"
+                () => new ElevationAngle(91, UnitAngle.Degree), "The elevation angle 91 degrees should have thrown exception."
             );
         }
 
@@ -98,7 +266,6 @@ namespace ProjectileMotionUnitTest
             );
 
             Utilities.AlmostSame(motionRight.GetLength(), new Length(0, UnitLength.Basic));
-            Utilities.AlmostSame(motionRight.GetTimeHighest(), new Time(motionRight.GetDur().GetBasicVal() / 2, UnitTime.Basic));
             Utilities.AlmostSame(motionRight.GetTimeFarthest(), motionRight.GetTimeHighest());
             Utilities.AlmostSame(motionRight.GetMaxDistance(), new Length(motionRight.GetMaxHeight().GetBasicVal() - H.GetBasicVal(), UnitLength.Basic));
             Utilities.AlmostSame(motionRight.GetMaxDistance(), motionRight.Trajectory.GetInitialPoint().GetDistanceFromPoint(motionRight.Trajectory.GetHighestPoint()));
